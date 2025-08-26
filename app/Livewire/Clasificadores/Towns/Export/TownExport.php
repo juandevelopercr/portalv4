@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Livewire\Clasificadores\Towns\Export;
+
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+
+class TownExport implements FromCollection, WithHeadings
+{
+  protected $records;
+
+  public function __construct($records)
+  {
+    $this->records = $records;
+  }
+
+  public function collection()
+  {
+    return $this->records;
+  }
+
+  public function headings(): array
+  {
+    return ["ID", "name"];
+  }
+}

@@ -1,0 +1,222 @@
+{
+  "menu": [
+    {
+      "url": "users",
+      "name": "Users",
+      "icon": "menu-icon tf-icons bx bx-group",
+      "slug": "users.index",
+      "permissions": [
+        "view-users"
+      ]
+    },
+    {
+      "name": "Roles & Permissions",
+      "icon": "menu-icon tf-icons bx bx-check-shield",
+      "slug": "access",
+      "permissions": [
+        "view-roles",
+        "manage-permissions-roles"
+      ],
+      "submenu": [
+        {
+          "url": "app/access-roles",
+          "name": "Roles",
+          "slug": "access-roles",
+          "permissions": [
+            "view-roles"
+          ]
+        },
+        {
+          "url": "app/access-permission",
+          "name": "Permission",
+          "slug": "access-permission",
+          "permissions": [
+            "manage-permissions-roles"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "customers",
+      "name": "Customers",
+      "icon": "menu-icon tf-icons bx bx-id-card",
+      "slug": "customers.index",
+      "permissions": [
+        "view-clients"
+      ]
+    },
+    {
+      "url": "suppliers",
+      "name": "Suppliers",
+      "icon": "menu-icon tf-icons bx bx-package",
+      "slug": "suppliers.index",
+      "permissions": [
+        "view-suppliers"
+      ]
+    },
+    {
+      "url": "products",
+      "name": "Products",
+      "icon": "menu-icon tf-icons bx bx-cube",
+      "slug": "products.index",
+      "permissions": [
+        "view-services"
+      ]
+    },
+    {
+      "name": "Billing",
+      "icon": "menu-icon tf-icons bx bx-receipt",
+      "slug": "billing",
+      "permissions": [
+        "view-trips",
+        "view-electronicinvoices",
+        "view-notascreditoelectronicas",
+        "view-notasdebitoelectronicas"
+      ],
+      "submenu": [
+        {
+          "url": "billing/trips",
+          "name": "Viajes",
+          "slug": "billing-trips",
+          "permissions": [
+            "view-trips"
+          ]
+        },
+        {
+          "url": "billing/invoices",
+          "name": "Facturas electrónicas",
+          "slug": "billing-invoices",
+          "permissions": [
+            "view-electronicinvoices"
+          ]
+        },
+        {
+          "url": "billing/factura-compra",
+          "name": "Facturas compras electrónicas",
+          "slug": "billing-factura-compra",
+          "permissions": [
+            "view-facturascompras"
+          ]
+        },
+        {
+          "url": "billing/recibo-pago",
+          "name": "Recibos de pagos",
+          "slug": "billing-recibo-pago",
+          "permissions": [
+            "view-recibospago"
+          ]
+        },
+        {
+          "url": "billing/credit-note",
+          "name": "Notas de crédito electrónicas",
+          "slug": "billing-credit-note",
+          "permissions": [
+            "view-notascreditoelectronicas"
+          ]
+        },
+        {
+          "url": "billing/debit-note",
+          "name": "Notas de débito electrónicas",
+          "slug": "billing-debit-note",
+          "permissions": [
+            "view-notasdebitoelectronicas"
+          ]
+        },
+        {
+          "url": "billing/comprobantes",
+          "name": "Comprobantes electrónicos",
+          "slug": "billing-comprobantes-electronicos",
+          "permissions": [
+            "view-comprobantess"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "providers-and-sellers",
+      "name": "Proveedores y vendedores",
+      "icon": "menu-icon tf-icons bx bx-cube",
+      "slug": "providers-and-sellers",
+      "permissions": [
+        "view-providerandseller"
+      ]
+    },
+    {
+      "name": "Administración de CxC",
+      "icon": "menu-icon tf-icons bx bx-arch",
+      "slug": "administracion",
+      "permissions": [
+        "view-cuentascobrar"
+      ],
+      "submenu": [
+        {
+          "url": "administracion/cuentas-por-cobrar",
+          "name": "Cuentas por cobrar",
+          "slug": "administracion-cuentas-por-cobrar",
+          "permissions": [
+            "view-cuentascobrar"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Classifiers",
+      "icon": "menu-icon tf-icons bx bx-table",
+      "slug": "classifiers",
+      "permissions": [
+        "view-classifiers"
+      ],
+      "submenu": [
+        {
+          "url": "classifiers/towns",
+          "name": "Ciudades",
+          "slug": "classifiers-towns",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "url": "classifiers/departments",
+          "name": "Departments",
+          "slug": "classifiers-departments",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "url": "classifiers/sellers",
+          "name": "Vendedores",
+          "slug": "classifiers-sellers",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "url": "classifiers/companies",
+          "name": "Compañias",
+          "slug": "classifiers-companies",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "url": "classifiers/services-providers",
+          "name": "Servicios de proveedores",
+          "slug": "classifiers-services-providers",
+          "permissions": [
+            "view-classifiers"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "settings/business",
+      "name": "Settings",
+      "icon": "menu-icon tf-icons bx bx-cog",
+      "slug": "settings-business",
+      "permissions": [
+        "view-settings"
+      ]
+    }
+  ]
+}

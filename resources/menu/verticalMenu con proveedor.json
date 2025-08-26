@@ -1,0 +1,415 @@
+{
+  "menu": [
+    {
+      "url": "users",
+      "name": "Users",
+      "icon": "menu-icon tf-icons bx bx-group",
+      "slug": "users.index",
+      "permissions": [
+        "view-users"
+      ]
+    },
+    {
+      "name": "Roles & Permissions",
+      "icon": "menu-icon tf-icons bx bx-check-shield",
+      "slug": "access",
+      "permissions": [
+        "view-roles",
+        "manage-permissions-roles"
+      ],
+      "submenu": [
+        {
+          "url": "app/access-roles",
+          "name": "Roles",
+          "slug": "access-roles",
+          "permissions": [
+            "view-roles"
+          ]
+        },
+        {
+          "url": "app/access-permission",
+          "name": "Permission",
+          "slug": "access-permission",
+          "permissions": [
+            "manage-permissions-roles"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "customers",
+      "name": "Customers",
+      "icon": "menu-icon tf-icons bx bx-id-card",
+      "slug": "customers.index",
+      "permissions": [
+        "view-clients"
+      ]
+    },
+    {
+      "url": "suppliers",
+      "name": "Suppliers",
+      "icon": "menu-icon tf-icons bx bx-package",
+      "slug": "suppliers.index",
+      "permissions": [
+        "view-suppliers"
+      ]
+    },
+    {
+      "url": "products",
+      "name": "Products",
+      "icon": "menu-icon tf-icons bx bx-cube",
+      "slug": "products.index",
+      "permissions": [
+        "view-services"
+      ]
+    },
+    {
+      "name": "Billing",
+      "icon": "menu-icon tf-icons bx bx-receipt",
+      "slug": "billing",
+      "permissions": [
+        "view-proformas",
+        "view-documenthistory",
+        "view-seguimientofacturas",
+        "view-electronicinvoices",
+        "view-notascreditoelectronicas",
+        "view-notasdebitoelectronicas"
+      ],
+      "submenu": [
+        {
+          "url": "billing/proformas",
+          "name": "Proformas / Facturas",
+          "slug": "billing-proformas",
+          "permissions": [
+            "view-proformas"
+          ]
+        },
+        {
+          "url": "billing/calculo-registro",
+          "name": "Cálculo registro",
+          "slug": "billing-calculo-registro",
+          "permissions": [
+            "view-calculoregistro"
+          ]
+        },
+        {
+          "url": "billing/proformas-history",
+          "name": "Historial de documentos",
+          "slug": "billing-history",
+          "permissions": [
+            "view-documenthistory"
+          ]
+        },
+        {
+          "url": "billing/proformas-seguimiento",
+          "name": "Seguimiento de facturas",
+          "slug": "billing-seguimiento",
+          "permissions": [
+            "view-seguimientofacturas"
+          ]
+        },
+        {
+          "url": "billing/invoices",
+          "name": "Facturas electrónicas",
+          "slug": "billing-invoices",
+          "permissions": [
+            "view-electronicinvoices"
+          ]
+        },
+        {
+          "url": "billing/factura-compra",
+          "name": "Facturas compras electrónicas",
+          "slug": "billing-factura-compra",
+          "permissions": [
+            "view-electronicinvoices"
+          ]
+        },
+        {
+          "url": "billing/credit-note",
+          "name": "Notas de crédito electrónicas",
+          "slug": "billing-credit-note",
+          "permissions": [
+            "view-notascreditoelectronicas"
+          ]
+        },
+        {
+          "url": "billing/debit-note",
+          "name": "Notas de débito electrónicas",
+          "slug": "billing-debit-note",
+          "permissions": [
+            "view-notasdebitoelectronicas"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bancos",
+      "icon": "menu-icon tf-icons bx bx-wallet",
+      "slug": "banks",
+      "permissions": [
+        "view-movimientos",
+        "view-movimientos"
+      ],
+      "submenu": [
+        {
+          "url": "banks/movements",
+          "name": "Movements",
+          "slug": "banks-movements.index",
+          "permissions": [
+            "view-movimientos"
+          ]
+        },
+        {
+          "url": "banks/revisions",
+          "name": "Revisiones",
+          "slug": "banks-revisions.index",
+          "permissions": [
+            "view-movimientos"
+          ]
+        },
+        {
+          "url": "classifiers/cuentas",
+          "name": "Cuentas",
+          "slug": "classifiers-cuentas",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "url": "banks/movements-notifications",
+          "name": "Notification",
+          "slug": "banks-movements-notifications",
+          "permissions": [
+            "view-movimientos"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "casos",
+      "name": "Casos",
+      "icon": "menu-icon tf-icons bx bx-archive",
+      "slug": "casos.index",
+      "permissions": [
+        "view-casos"
+      ]
+    },
+    {
+      "name": "Administración de CxC",
+      "icon": "menu-icon tf-icons bx bx-arch",
+      "slug": "administracion",
+      "permissions": [
+        "view-cuentascobrar"
+      ],
+      "submenu": [
+        {
+          "url": "administracion/cuentas-por-cobrar",
+          "name": "Cuentas por cobrar",
+          "slug": "administracion-cuentas-por-cobrar",
+          "permissions": [
+            "view-cuentascobrar"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bx-image",
+      "slug": "dashboard",
+      "permissions": [
+        "view-firmas-dashboard",
+        "view-honorarios-dashboard",
+        "view-control-mensual-dashboard",
+        "view-carga-trabajo-dashboard",
+        "view-formalizaciones-dashboard",
+        "view-tipos-caratulas-dashboard",
+        "view-volumen-banco-dashboard",
+        "view-facturacion-abogado-dashboard",
+        "view-tipos-garantias-dashboard",
+        "view-facturacion-centro-costo-dashboard"
+      ],
+      "submenu": [
+        {
+          "url": "dashboard/firmas",
+          "name": "Firmas",
+          "slug": "dashboard-firmas.index",
+          "permissions": [
+            "view-firmas-dashboard"
+          ]
+        },
+        {
+          "url": "dashboard/honorarios-anno",
+          "name": "Honorarios",
+          "slug": "dashboard-honorarios-anno.index",
+          "permissions": [
+            "view-honorarios-dashboard"
+          ]
+        },
+        {
+          "url": "dashboard/control-mensual",
+          "name": "Control mensual",
+          "slug": "dashboard-control-mensual.index",
+          "permissions": [
+            "view-control-mensual-dashboard"
+          ]
+        },
+        {
+          "url": "dashboard/carga-trabajo",
+          "name": "Carga de trabajo",
+          "slug": "dashboard-carga-trabajo.index",
+          "permissions": [
+            "view-carga-trabajo-dashboard"
+          ]
+        },
+        {
+          "url": "dashboard/formalizaciones",
+          "name": "Formalizaciones",
+          "slug": "dashboard-formalizaciones.index",
+          "permissions": [
+            "view-formalizaciones-dashboard"
+          ]
+        },
+        {
+          "url": "dashboard/tipos-caratulas",
+          "name": "Carátulas y precarátulas",
+          "slug": "dashboard-tipos-caratulas.index",
+          "permissions": [
+            "view-tipos-caratulas-dashboard"
+          ]
+        },
+        {
+          "url": "dashboard/volumen-banco",
+          "name": "Volumen por banco",
+          "slug": "dashboard-volumen-banco.index",
+          "permissions": [
+            "view-volumen-banco-dashboard"
+          ]
+        },
+        {
+          "url": "dashboard/facturacion-abogado",
+          "name": "facturación por abogado",
+          "slug": "dashboard-facturacion-abogado.index",
+          "permissions": [
+            "view-facturacion-abogado-dashboard"
+          ]
+        },
+        {
+          "url": "dashboard/tipos-garantias",
+          "name": "Tipos Garantías / actos",
+          "slug": "dashboard-tipos-garantias.index",
+          "permissions": [
+            "view-tipos-garantias-dashboard"
+          ]
+        },
+        {
+          "url": "dashboard/facturacion-centro-costo",
+          "name": "Facturación / centro de costo",
+          "slug": "dashboard-facturacion-centro-costo.index",
+          "permissions": [
+            "view-facturacion-centro-costo-dashboard"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Classifiers",
+      "icon": "menu-icon tf-icons bx bx-table",
+      "slug": "classifiers",
+      "permissions": [
+        "view-classifiers"
+      ],
+      "submenu": [
+        {
+          "url": "classifiers/catalogo-cuentas",
+          "name": "Catalogo de Cuentas",
+          "slug": "classifiers-catalogo-cuentas",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "url": "classifiers/centro-costos",
+          "name": "Centros de Costo",
+          "slug": "classifiers-centro-costos",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "url": "classifiers/departments",
+          "name": "Departments",
+          "slug": "classifiers-departments",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "url": "classifiers/banks",
+          "name": "Banks",
+          "slug": "classifiers-banks",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "url": "classifiers/honorarios",
+          "name": "Honorarios",
+          "slug": "classifiers-honorarios",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "url": "classifiers/timbres",
+          "name": "Timbres",
+          "slug": "classifiers-timbres",
+          "permissions": [
+            "view-classifiers"
+          ]
+        },
+        {
+          "name": "Casos",
+          "slug": "classifiers-casos",
+          "permissions": [
+            "view-classifiers"
+          ],
+          "submenu": [
+            {
+              "url": "classifiers/caratulas",
+              "name": "Carátulas",
+              "slug": "classifiers-casos-caratulas",
+              "permissions": [
+                "view-classifiers"
+              ]
+            },
+            {
+              "url": "classifiers/garantias",
+              "name": "Garantias",
+              "slug": "classifiers-casos-garantias",
+              "permissions": [
+                "view-classifiers"
+              ]
+            },
+            {
+              "url": "classifiers/casos-estados",
+              "name": "Estados",
+              "slug": "classifiers-casos-casos-estados",
+              "permissions": [
+                "view-classifiers"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "settings/business",
+      "name": "Settings",
+      "icon": "menu-icon tf-icons bx bx-cog",
+      "slug": "settings-business",
+      "permissions": [
+        "view-settings"
+      ]
+    }
+  ]
+}
