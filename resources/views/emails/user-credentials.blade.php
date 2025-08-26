@@ -276,7 +276,7 @@
                               <td class="pad">
                                 <div
                                   style="color:#3f4d75;font-family:Roboto Slab, Arial, Helvetica Neue, Helvetica, sans-serif;font-size:12px;line-height:1.2;text-align:center;mso-line-height-alt:14px;">
-                                  <p>{{ __('This message was sent by the Consortium Legal administration team') }}</p>
+                                  <p>{{ __('This message was sent by the Portal General administration team') }}</p>
                                    
                                 </div>
                               </td>

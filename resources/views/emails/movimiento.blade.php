@@ -66,7 +66,7 @@
 <body>
 
     <div class="header">
-        <h2>Consortium - {{ now()->format('d/m/Y') }}</h2>
+        <h2>Portal General - {{ now()->format('d/m/Y') }}</h2>
         <p>Agradecemos emitir y enviarnos su factura electrónica con los siguientes detalles</p>
     </div>
 

@@ -41,7 +41,7 @@
               <p class="tm_mb2"><b class="tm_primary_color">Proforma Para:</b></p>
               <p>
                 <b class="tm_primary_color">Nombre:</b> COTIZACION 111111121 <br>
-                <b class="tm_primary_color">Email:</b> raguero@consortiumlegal.com <br>
+                <b class="tm_primary_color">Email:</b> portalgeneral@portalgeneral-cr.com <br>
                 <b class="tm_primary_color">Email CC:</b> mumana@consortiumlegal.com
                 jmunoz@consortiumlegal.com
                 emorales@consortiumlegal.com<br>
@@ -50,7 +50,7 @@
             <div class="tm_invoice_right tm_text_right">
               <p class="tm_mb2"><b class="tm_primary_color">Pagar a:</b></p>
               <p>
-                <b class="tm_primary_color">CONSORTIUM DERECHO INMOBILIARIO S.R.L</b><br>
+                <b class="tm_primary_color">Portal General</b><br>
                 <b class="tm_primary_color">3102694446</b>
                 <br>
                 Trejos Montealegre, 150 oeste del Oficentro <br>

@@ -104,9 +104,9 @@
               <p>
                 <b class="tm_primary_color">{{ strtoupper($transaction->location->name) }}</b><br>
                 <b class="tm_primary_color">{{ $transaction->location->identification }}</b>
-                <br>Sunset y Waves Tropical Tours RyV SA<br>
+                <br>Portal Genral de Facturación Electrónica<br>
                 <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
-                  data-cfemail="3054555d5f70575d51595c1e535f5d">portaltropical@tropicaltourscr.com</a>
+                  data-cfemail="3054555d5f70575d51595c1e535f5d">portal@portal-cr.com</a>
               </p>
               <p class="tm_mb2"><b class="tm_primary_color">Detalle del pago:</b></p>
               <p class="tm_mb2"><b class="tm_primary_color">Condición de venta:</b> {{ $sellCondition }}</p>

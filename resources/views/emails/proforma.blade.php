@@ -51,7 +51,7 @@
       {{ $data['message'] }}
     </div>
     <div class="footer">
-      <p>&copy; {{ date('Y') }} Consortium Legal</p>
+      <p>&copy; {{ date('Y') }} Portal General de Facturación Electrónica de Costa Rica</p>
     </div>
   </div>
 </body>

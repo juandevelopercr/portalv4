@@ -1566,24 +1566,6 @@ class ProformaManager extends TransactionManager
       }
     }
 
-    if ($propertyName == 'department_id') {
-      if (!in_array(session('current_role_name'), User::ROLES_ALL_DEPARTMENTS) && $this->department_id == 4) {
-        $this->codigo_contable_id = 2;
-      }
-      // emitir el evento para que actualice la info en las lineas
-      $this->dispatch('departmentChange', $this->department_id); // Enviar evento al frontend
-    }
-
-    if ($propertyName == 'bank_id' || $propertyName == 'proforma_type') {
-      if (!in_array(session('current_role_name'), User::ROLES_ALL_DEPARTMENTS) && $this->bank_id == Bank::SANJOSE && $this->proforma_type == 'HONORARIO') {
-        $this->location_id = 7; // CONSORTIUM DERECHO FINANCIERO S.R.L. id = 7
-      } else
-      if (!in_array(session('current_role_name'), User::ROLES_ALL_DEPARTMENTS))
-        $this->location_id = NULL;
-      // emitir el evento para que actualice la info en las lineas
-      $this->dispatch('bankChange', $this->bank_id); // Enviar evento al frontend
-    }
-
     if ($propertyName == 'email_cc') {
       $this->updatedEmails();
     }
@@ -1593,17 +1575,6 @@ class ProformaManager extends TransactionManager
     }
 
     $this->dispatch('reinitSelect2Controls');
-    /*
-    if ($propertyName == 'location_id') {
-      if ($this->location_id == '' | is_null($this->location_id))
-        $this->location_economic_activity_id = null;
-    }
-
-    if ($propertyName == 'contact_id') {
-      if ($this->contact_id == '' | is_null($this->contact_id))
-        $this->contact_economic_activity_id = null;
-    }
-    */
 
     $this->dispatch('updateExportFilters', [
       'search' => $this->search,

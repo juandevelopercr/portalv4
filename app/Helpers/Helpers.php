@@ -1135,7 +1135,7 @@ class Helpers
     $recipientName = $name;
 
     $fromEmail = env('MAIL_USERNAME');
-    $subject = __('Consortium Legal login information');
+    $subject = __('Portal de facturación electrónica, información de acceso');
 
     $bussines = Business::find(1);
     $logoRelativePath = 'assets/img/logos/' . ($bussines->logo ?? 'default-logo.png');

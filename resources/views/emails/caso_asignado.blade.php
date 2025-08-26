@@ -45,7 +45,7 @@
 <body>
 
     <div class="header">
-        <h1>CONSORTIUM LEGAL - COSTA RICA</h1>
+        <h1>PORTAL DE FACTURACIÓN - COSTA RICA</h1>
         <h2>Notificación de caso asignado</h2>
     </div>
 

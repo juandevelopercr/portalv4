@@ -3,7 +3,7 @@
 return [
   "creatorName" => "Software Solutions",
   "creatorUrl" => "https://softwaresolutions.co.cr",
-  "templateName" => "Tropical Tours",
+  "templateName" => "Portal General",
   "templateSuffix" => "",
   "templateVersion" => "3.0.0",
   "templateFree" => false,

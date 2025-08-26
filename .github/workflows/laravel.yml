@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout del repositorio tropical V4.4
+      - name: Checkout del repositorio Portal V4.4
         uses: actions/checkout@v4
 
-      - name: Upload tropical V4.4
+      - name: Upload Portal V4.4
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: 207.XXX.XX.XX
