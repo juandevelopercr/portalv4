@@ -17,6 +17,6 @@ jobs:
       - name: Upload tropical V4.4
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: 207.244.XX.XX
+          server: 207.XXX.XX.XX
           username: ${{ secrets.FTPUSERNAMEPRINCIPAL }}
           password: ${{ secrets.FTPPASSWORD }}
