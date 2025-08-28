@@ -162,7 +162,8 @@ class BusinessLocationManager extends BaseComponent
     $this->business_id = $business_id;
     $this->refresDatatable();
 
-    $this->location = Session::get('user.location');
+    $location_id = 1;
+    $this->location = BusinessLocation::findOrFail($location_id);
 
     // Inicializar secuencias
     foreach (array_keys($this->documentTypes) as $type) {

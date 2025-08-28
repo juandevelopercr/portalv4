@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Institution extends Model
+class Institution extends TenantModel
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $table = 'institutions'; // Nombre de la tabla
+  protected $table = 'institutions'; // Nombre de la tabla
 
-    protected $fillable = [
-        'name',
-        'code',
-    ];
+  protected $fillable = [
+    'name',
+    'code',
+  ];
 }

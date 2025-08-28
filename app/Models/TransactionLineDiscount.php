@@ -4,11 +4,12 @@ namespace App\Models;
 
 use App\Models\DiscountType;
 use App\Models\FactoryLevelTax;
+use App\Models\TenantModel;
 use App\Models\TransactionLine;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TransactionLineDiscount extends Model
+class TransactionLineDiscount extends TenantModel
 {
   use HasFactory;
 

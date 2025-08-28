@@ -64,24 +64,26 @@
       ]
     },
     {
+      "url": "services",
+      "name": "Services",
+      "icon": "menu-icon tf-icons bx bx-briefcase",
+      "slug": "services.index",
+      "permissions": [
+        "view-services"
+      ]
+    },
+    {
       "name": "Billing",
       "icon": "menu-icon tf-icons bx bx-receipt",
       "slug": "billing",
       "permissions": [
-        "view-trips",
         "view-electronicinvoices",
+        "view-facturascompras",
         "view-notascreditoelectronicas",
-        "view-notasdebitoelectronicas"
+        "view-notasdebitoelectronicas",
+        "view-comprobantes"
       ],
       "submenu": [
-        {
-          "url": "billing/trips",
-          "name": "Viajes",
-          "slug": "billing-trips",
-          "permissions": [
-            "view-trips"
-          ]
-        },
         {
           "url": "billing/invoices",
           "name": "Facturas electrónicas",
@@ -127,18 +129,9 @@
           "name": "Comprobantes electrónicos",
           "slug": "billing-comprobantes-electronicos",
           "permissions": [
-            "view-comprobantess"
+            "view-comprobantes"
           ]
         }
-      ]
-    },
-    {
-      "url": "providers-and-sellers",
-      "name": "Proveedores y vendedores",
-      "icon": "menu-icon tf-icons bx bx-cube",
-      "slug": "providers-and-sellers",
-      "permissions": [
-        "view-providerandseller"
       ]
     },
     {
@@ -168,41 +161,9 @@
       ],
       "submenu": [
         {
-          "url": "classifiers/towns",
-          "name": "Ciudades",
-          "slug": "classifiers-towns",
-          "permissions": [
-            "view-classifiers"
-          ]
-        },
-        {
           "url": "classifiers/departments",
           "name": "Departments",
           "slug": "classifiers-departments",
-          "permissions": [
-            "view-classifiers"
-          ]
-        },
-        {
-          "url": "classifiers/sellers",
-          "name": "Vendedores",
-          "slug": "classifiers-sellers",
-          "permissions": [
-            "view-classifiers"
-          ]
-        },
-        {
-          "url": "classifiers/companies",
-          "name": "Compañias",
-          "slug": "classifiers-companies",
-          "permissions": [
-            "view-classifiers"
-          ]
-        },
-        {
-          "url": "classifiers/services-providers",
-          "name": "Servicios de proveedores",
-          "slug": "classifiers-services-providers",
           "permissions": [
             "view-classifiers"
           ]

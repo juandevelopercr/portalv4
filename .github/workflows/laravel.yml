@@ -17,6 +17,6 @@ jobs:
       - name: Upload Portal V4.4
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: 207.XXX.XX.XX
+          server: 195.26.251.12
           username: ${{ secrets.FTPUSERNAMEPRINCIPAL }}
           password: ${{ secrets.FTPPASSWORD }}

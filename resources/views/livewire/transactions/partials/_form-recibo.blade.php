@@ -78,36 +78,6 @@
     </div>
 
     <div class="col-md-3 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="department_id">{{ __('Department') }}</label>
-      <div wire:ignore>
-        <select wire:model="department_id" id="department_id" class="select2 form-select @error('department_id') is-invalid @enderror">
-          <option value="">{{ __('Seleccione...') }}</option>
-          @foreach ($this->departments as $department)
-            <option value="{{ $department->id }}">{{ $department->name }}</option>
-          @endforeach
-        </select>
-      </div>
-      @error('department_id')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="bank_id">{{ __('Bank') }}</label>
-      <div wire:ignore>
-        <select wire:model="bank_id" id="bank_id" class="select2 form-select @error('bank_id') is-invalid @enderror">
-          <option value="">{{ __('Seleccione...') }}</option>
-          @foreach ($this->banks as $bank)
-            <option value="{{ $bank->id }}">{{ $bank->name }}</option>
-          @endforeach
-        </select>
-      </div>
-      @error('bank_id')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 select2-primary fv-plugins-icon-container">
       <label class="form-label" for="currency_id">{{ __('Currency') }}</label>
       <div wire:ignore>
         <select wire:model="currency_id" id="currency_id" class="select2 form-select @error('currency_id') is-invalid @enderror">
@@ -196,35 +166,6 @@
           </select>
         </div>
       @error('location_economic_activity_id')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="codigo_contable_id">{{ __('Accounting Code') }}</label>
-      <div wire:ignore>
-        <select wire:model="codigo_contable_id" id="codigo_contable_id" class="select2 form-select @error('codigo_contable_id') is-invalid @enderror">
-          <option value="">{{ __('Seleccione...') }}</option>
-          @foreach ($this->codigosContables as $codigoContable)
-            <option value="{{ $codigoContable->id }}">{{ $codigoContable->descrip }}</option>
-          @endforeach
-        </select>
-      </div>
-      @error('codigo_contable_id')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="proforma_type">{{ __('Type of Act') }}</label>
-      <div wire:ignore>
-        <select wire:model="proforma_type" id="proforma_type" class="select2 form-select @error('proforma_type') is-invalid @enderror">
-          <option value="">{{ __('Seleccione...') }}</option>
-          <option value="HONORARIO">HONORARIO</option>
-          <option value="GASTO">GASTO</option>
-        </select>
-      </div>
-      @error('proforma_type')
       <div class="text-danger mt-1">{{ $message }}</div>
       @enderror
     </div>
@@ -347,94 +288,7 @@
   </div>
 
   <br>
-  <h6 class="mt-4">2. {{ __('Bank Information') }}</h6>
-  <div class="row g-6">
-
-    <div class="col-md-3 fv-plugins-icon-container">
-      <label class="form-label" for="oc">{{ __('O.C') }}</label>
-      <textarea class="form-control" wire:model="oc" name="oc" id="oc" rows="3" {{ !$this->enableoc ? 'disabled': ''}}
-                placeholder="{{ __('O.C') }}"></textarea>
-      @error('oc')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 fv-plugins-icon-container">
-      <label class="form-label" for="migo">{{ __('MIGO') }}</label>
-      <textarea class="form-control" wire:model="migo" name="migo" id="migo" rows="3" {{ !$this->enablemigo ? 'disabled': ''}}
-                placeholder="{{ __('MIGO') }}"></textarea>
-      @error('migo')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 fv-plugins-icon-container">
-      <label class="form-label" for="or">{{ __('O.R') }}</label>
-      <textarea class="form-control" wire:model="or" name="or" id="or" rows="3" {{ !$this->enableor ? 'disabled': ''}}
-                placeholder="{{ __('O.R') }}"></textarea>
-      @error('or')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 fv-plugins-icon-container">
-      <label class="form-label" for="gln">{{ __('GLN') }}</label>
-      <textarea class="form-control" wire:model="gln" name="gln" id="gln" rows="3" {{ !$this->enablegln ? 'disabled': ''}}
-                placeholder="{{ __('GLN') }}"></textarea>
-      @error('gln')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 fv-plugins-icon-container">
-      <label class="form-label" for="prebill">{{ __('Prebill') }}</label>
-      <textarea class="form-control" wire:model="prebill" name="prebill" id="prebill" rows="3" {{ !$this->enableprebill ? 'disabled': ''}}
-                placeholder="{{ __('Prebill') }}"></textarea>
-      @error('prebill')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 fv-plugins-icon-container">
-      <label class="form-label" for="detalle_adicional">{{ __('Additional Information') }}</label>
-      <textarea class="form-control" wire:model="detalle_adicional" name="detalle_adicional" id="detalle_adicional"
-        rows="3" placeholder="{{ __('Additional Information') }}"></textarea>
-      @error('detalle_adicional')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="area_id">{{ __('Area') }}</label>
-      <div wire:ignore>
-        <select wire:model="area_id" id="area_id" class="select2 form-select @error('area_id') is-invalid @enderror" disabled>
-          <option value="">{{ __('Seleccione...') }}</option>
-          @foreach ($this->areas as $area)
-            <option value="{{ $area->id }}">{{ $area->name }}</option>
-          @endforeach
-        </select>
-      </div>
-      @error('area_id')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 fv-plugins-icon-container">
-      <label class="form-label" for="contacto_banco">{{ __('Bank Contact') }}</label>
-      <div class="input-group input-group-merge has-validation">
-        <span class="input-group-text"><i class="bx bx-user"></i></span>
-        <input type="text" wire:model="contacto_banco" name="contacto_banco" id="contacto_banco"
-          class="form-control @error('contacto_banco') is-invalid @enderror" placeholder="{{ __('Bank Contact') }}"
-          aria-label="{{ __('Bank Contact') }}" aria-describedby="spancontacto_banco">
-      </div>
-      @error('contacto_banco')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-  </div>
-
-  <br>
-  <h6 class="mt-4">3. {{ __('Additional Information') }}</h6>
+  <h6 class="mt-4">2. {{ __('Additional Information') }}</h6>
   <div class="row g-6">
     <div class="col-md-6 fv-plugins-icon-container">
       <label class="form-label" for="message">{{ __('Message') }}</label>
@@ -453,87 +307,10 @@
       <div class="text-danger mt-1">{{ $message }}</div>
       @enderror
     </div>
-
-    @can('view-instruccion-pago-proformas')
-    <div class="col-md-6 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="cuenta_id">{{ __('Cuenta de instrucciones de pago') }}</label>
-      <div wire:ignore>
-        <select wire:model="cuenta_id" id="cuenta_id" class="select2 form-select @error('cuenta_id') is-invalid @enderror">
-          <option value="">{{ __('Seleccione...') }}</option>
-          @foreach ($this->cuentas as $cuenta)
-            <option value="{{ $cuenta->id }}">{{ $cuenta->nombre_cuenta }}</option>
-          @endforeach
-        </select>
-      </div>
-      @error('cuenta_id')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="showInstruccionesPago">{{ __('Mostrar Instrucción de Pago') }}</label>
-      <div wire:ignore>
-        <select wire:model="showInstruccionesPago" id="showInstruccionesPago" class="select2 form-select @error('showInstruccionesPago') is-invalid @enderror">
-          <option value="">{{ __('Seleccione...') }}</option>
-          @foreach ($this->instruccionesPagos as $instruccion)
-            <option value="{{ $instruccion['id'] }}">{{ $instruccion['name'] }}</option>
-          @endforeach
-        </select>
-      </div>
-      @error('showInstruccionesPago')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-    @endcan
   </div>
 
   <br>
-  <h6 class="mt-4">4. {{ __('Case Information') }}</h6>
-  <div class="row g-6">
-    <div class="col-md-3 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="caso_id">{{ __('Caso') }}</label>
-      <div wire:ignore>
-        <select id="caso_id" class="form-select select2-ajax" data-placeholder="Buscar caso por número o deudor">
-        </select>
-      </div>
-    </div>
-    <div class="col-md-3 fv-plugins-icon-container">
-      <label class="form-label" for="nombreDeudor">{{ __('Nombre del deudor') }}</label>
-      <div class="input-group input-group-merge has-validation">
-        <span class="input-group-text"><i class="bx bx-user"></i></span>
-        <input type="text" wire:model="nombreDeudor" name="nombreDeudor" id="nombreDeudor"
-          class="form-control @error('nombreDeudor') is-invalid @enderror" placeholder="{{ __('Nombre del deudor') }}" disabled>
-      </div>
-      @error('nombreDeudor')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-    <div class="col-md-3 fv-plugins-icon-container">
-      <label class="form-label" for="tipoGarantia">{{ __('Tipo de garantía') }}</label>
-      <div class="input-group input-group-merge has-validation">
-        <span class="input-group-text"><i class="bx bx-user"></i></span>
-        <input type="text" wire:model="tipoGarantia" name="tipoGarantia" id="tipoGarantia"
-          class="form-control @error('tipoGarantia') is-invalid @enderror" placeholder="{{ __('Tipo de garantía') }}" disabled>
-      </div>
-      @error('tipoGarantia')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-    <div class="col-md-3 fv-plugins-icon-container">
-      <label class="form-label" for="nombre_caso">{{ __('Nombre de caso o referencia') }}</label>
-      <div class="input-group input-group-merge has-validation">
-        <span class="input-group-text"><i class="bx bx-user"></i></span>
-        <input type="text" wire:model="nombre_caso" name="nombre_caso" id="nombre_caso"
-          class="form-control @error('nombre_caso') is-invalid @enderror" placeholder="{{ __('Nombre de caso o referencia') }}">
-      </div>
-      @error('nombre_caso')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-  </div>
-
-  <br>
-  <h6 class="mt-4">5. {{ __('Payment Information') }}</h6>
+  <h6 class="mt-4">3. {{ __('Payment Information') }}</h6>
   @include('livewire.transactions.partials._form-payment')
 
   <br>
@@ -564,19 +341,12 @@
     // Para la busqueda del caso
     // Configuración AJAX para caso_id
     window.select2Config = {
-      department_id: {fireEvent: true},
-      bank_id: {fireEvent: true},
-      cuenta_id: {fireEvent: false},
-      showInstruccionesPago: {fireEvent: false},
       currency_id: {fireEvent: false},
       contact_economic_activity_id: {fireEvent: false},
       location_economic_activity_id: {fireEvent: false},
       condition_sale: {fireEvent: true},
       location_id: {fireEvent: true},
-      codigo_contable_id: {fireEvent: false},
-      proforma_type: {fireEvent: false},
-      proforma_status: {fireEvent: false},
-      area_id: {fireEvent: false}
+      proforma_status: {fireEvent: false}
     };
 
     $('#caso_id').select2({

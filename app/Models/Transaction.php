@@ -15,6 +15,7 @@ use App\Models\Contact;
 use App\Models\Cuenta;
 use App\Models\Currency;
 use App\Models\Department;
+use App\Models\TenantModel;
 use App\Models\TransactionCommission;
 use App\Models\TransactionLine;
 use App\Models\TransactionOtherCharge;
@@ -33,7 +34,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Transaction extends Model implements HasMedia
+class Transaction extends TenantModel implements HasMedia
 {
   use InteractsWithMedia;
   use LogsActivity;
@@ -363,18 +364,22 @@ class Transaction extends Model implements HasMedia
       'vuelto',
     ];
 
+    $masterUsers = DB::connection('mysql')->table('users')->select('id', 'name');
+
     // Añadimos el reference_id optimizado mediante joins
     $query->select($columns)
       ->join('business', 'transactions.business_id', '=', 'business.id')
       ->leftJoin('business_locations', 'transactions.location_id', '=', 'business_locations.id')
       ->join('contacts', 'transactions.contact_id', '=', 'contacts.id')
       ->join('currencies', 'transactions.currency_id', '=', 'currencies.id')
-      ->join('users', 'transactions.created_by', '=', 'users.id')
+      ->leftJoinSub($masterUsers, 'master_users', function ($join) {
+        $join->on('transactions.created_by', '=', 'master_users.id');
+      })
       ->leftJoin('condition_sales', 'transactions.condition_sale', '=', 'condition_sales.id')
 
       ->leftJoin(DB::raw('(
-            SELECT transactions.RefNumero, MAX(transactions.id) as ref_id 
-            FROM transactions             
+            SELECT transactions.RefNumero, MAX(transactions.id) as ref_id
+            FROM transactions
             GROUP BY transactions.RefNumero
         ) ref'), function ($join) {
         $join->on('ref.RefNumero', '=', 'transactions.key');
@@ -1781,141 +1786,6 @@ class Transaction extends Model implements HasMedia
 
 
     return $html;
-  }
-
-  public function getFechaDepositoHtmlColumn(): string
-  {
-    $formatted = $this->fecha_deposito_pago
-      ? \Carbon\Carbon::parse($this->fecha_deposito_pago)->format('d-m-Y')
-      : 'Asignar fecha';
-
-    $id = $this->id;
-
-    return <<<HTML
-        <span class="d-inline-flex align-items-center">
-            <a href="#"
-                class="text-primary text-decoration-underline me-1"
-                wire:click.prevent="openFechaDepositoModal($id)"
-                wire:loading.attr="disabled"
-                wire:target="openFechaDepositoModal($id)">
-                $formatted
-            </a>
-            <span wire:loading wire:target="openFechaDepositoModal($id)">
-                <i class="spinner-border spinner-border-sm text-primary" role="status"></i>
-            </span>
-        </span>
-    HTML;
-  }
-
-  public function getNumeroDepositoHtmlColumn(): string
-  {
-    $numero = $this->numero_deposito_pago ?: 'Asignar número';
-    $id = $this->id;
-
-    return <<<HTML
-        <span class="d-inline-flex align-items-center">
-            <a href="#"
-                class="text-primary text-decoration-underline me-1"
-                wire:click.prevent="openNumeroDepositoModal($id)"
-                wire:loading.attr="disabled"
-                wire:target="openNumeroDepositoModal($id)">
-                $numero
-            </a>
-            <span wire:loading wire:target="openNumeroDepositoModal($id)">
-                <i class="spinner-border spinner-border-sm text-primary" role="status"></i>
-            </span>
-        </span>
-    HTML;
-  }
-
-  public function getFechaTrasladoHonorarioHtmlColumn(): string
-  {
-    $formatted = $this->fecha_traslado_honorario
-      ? \Carbon\Carbon::parse($this->fecha_traslado_honorario)->format('d-m-Y')
-      : 'Asignar fecha';
-
-    $id = $this->id;
-
-    return <<<HTML
-        <span class="d-inline-flex align-items-center">
-            <a href="#"
-                class="text-primary text-decoration-underline me-1"
-                wire:click.prevent="openFechaTrasladoHonoarioModal($id)"
-                wire:loading.attr="disabled"
-                wire:target="openFechaTrasladoHonoarioModal($id)">
-                $formatted
-            </a>
-            <span wire:loading wire:target="openFechaTrasladoHonoarioModal($id)">
-                <i class="spinner-border spinner-border-sm text-primary" role="status"></i>
-            </span>
-        </span>
-    HTML;
-  }
-
-  public function getNumeroTrasladoHonorarioHtmlColumn(): string
-  {
-    $numero = $this->numero_traslado_honorario ?: 'Asignar número';
-    $id = $this->id;
-
-    return <<<HTML
-        <span class="d-inline-flex align-items-center">
-            <a href="#"
-                class="text-primary text-decoration-underline me-1"
-                wire:click.prevent="openNumeroTrasladoHonoarioModal($id)"
-                wire:loading.attr="disabled"
-                wire:target="openNumeroTrasladoHonoarioModal($id)">
-                $numero
-            </a>
-            <span wire:loading wire:target="openNumeroTrasladoHonoarioModal($id)">
-                <i class="spinner-border spinner-border-sm text-primary" role="status"></i>
-            </span>
-        </span>
-    HTML;
-  }
-
-  public function getFechaTrasladoGastoHtmlColumn(): string
-  {
-    $formatted = $this->fecha_traslado_gasto
-      ? \Carbon\Carbon::parse($this->fecha_traslado_gasto)->format('d-m-Y')
-      : 'Asignar fecha';
-
-    $id = $this->id;
-
-    return <<<HTML
-        <span class="d-inline-flex align-items-center">
-            <a href="#"
-                class="text-primary text-decoration-underline me-1"
-                wire:click.prevent="openFechaTrasladoGastoModal($id)"
-                wire:loading.attr="disabled"
-                wire:target="openFechaTrasladoGastoModal($id)">
-                $formatted
-            </a>
-            <span wire:loading wire:target="openFechaTrasladoGastoModal($id)">
-                <i class="spinner-border spinner-border-sm text-primary" role="status"></i>
-            </span>
-        </span>
-    HTML;
-  }
-
-  public function getNumeroTrasladoGastoHtmlColumn(): string
-  {
-    $numero = $this->numero_traslado_gasto ?: 'Asignar número';
-    $id = $this->id;
-
-    return <<<HTML
-        <span class="d-inline-flex align-items-center">
-            <a href="#"
-                class="text-primary text-decoration-underline me-1"
-                wire:click.prevent="openNumeroTrasladoGastoModal($id)"
-                wire:loading.attr="disabled"
-                wire:target="openNumeroTrasladoGastoModal($id)">
-                $numero
-            </a>
-            <span wire:loading wire:target="openNumeroTrasladoGastoModal($id)">
-                <i class="spinner-border spinner-border-sm text-primary" role="status"></i>
-            </span>
-        </span>
-    HTML;
   }
 
   public function getCotizacionHtmlColumnAction(): string

@@ -62,10 +62,10 @@ class ProductManager extends BaseComponent
   public $code;
   public $description;
   public $business_id;
-  public $type = 'service';
+  public $type;
   public $unit_type_id;
   public $caby_code;
-  public $price = 0;
+  public $price;
   public $is_expense;
   public $enable_quantity;
 
@@ -106,8 +106,9 @@ class ProductManager extends BaseComponent
     $this->caby_code = $code['code'];
   }
 
-  public function mount()
+  public function mount($type)
   {
+    $this->type = $type;
     $this->business_id = 1;
     $this->unitTypes = UnitType::where('active', 1)->orderBy('name', 'ASC')->get();
     $this->listActives = [['id' => 1, 'name' => 'Activo'], ['id' => 0, 'name' => 'Inactivo']];
@@ -123,6 +124,7 @@ class ProductManager extends BaseComponent
       ->when($this->active !== '', function ($query) {
         $query->where('products.active', $this->active);
       })
+      ->where('type', $this->type)
       ->orderBy($this->sortBy, $this->sortDir)
       ->paginate($this->perPage);
 
@@ -161,9 +163,10 @@ class ProductManager extends BaseComponent
       'name' => 'required|string|max:191',
       'code' => 'required|string|max:5',
       'unit_type_id' => 'required|exists:unit_types,id',
-      //'price' => 'required|numeric|min:0',
+      'price' => 'nullable|numeric|min:0',
       'caby_code' => 'required|string|max:13',
       'enable_quantity' => 'nullable|numeric|min:0',
+      'type'  => 'required|in:single,variable,service,combo',
       //'sku' => 'required|string|max:20|unique:products,sku',
       'active' => 'required|integer|in:0,1',
     ];
@@ -204,6 +207,7 @@ class ProductManager extends BaseComponent
   public function store()
   {
     $this->active = empty($this->active) ? 0 : $this->active;
+    $this->price = (float) str_replace(',', '', $this->price);
     $this->validate();
 
     $this->created_by = Auth::user()->id;
@@ -255,13 +259,13 @@ class ProductManager extends BaseComponent
       return; // Ya se lanzó la notificación desde getRecordAction
     }
 
-    $record = Product::with('departments')->findOrFail($recordId);
+    $record = Product::findOrFail($recordId);
     $this->recordId = $recordId;
 
     $this->name = $record->name;
     $this->code = $record->code;
     $this->unit_type_id = $record->unit_type_id;
-    //$this->price = $record->price;
+    $this->price = Helpers::formatDecimal($record->price);
     $this->caby_code = $record->caby_code;
     $this->enable_quantity = $record->enable_quantity;
     //'sku' => 'required|string|max:20|unique:products,sku',
@@ -276,6 +280,7 @@ class ProductManager extends BaseComponent
   public function update()
   {
     $recordId = $this->recordId;
+    $this->price = (float) str_replace(',', '', $this->price);
     $this->active = empty($this->active) ? 0 : $this->active;
     $this->validate();
 
@@ -392,7 +397,6 @@ class ProductManager extends BaseComponent
   {
     $this->reset(
       'name',
-      'type',
       'unit_type_id',
       'caby_code',
       'code',
@@ -462,6 +466,7 @@ class ProductManager extends BaseComponent
     'filter_code' => NULL,
     'filter_name' => NULL,
     'filter_caby_code' => NULL,
+    'filter_price' => NULL,
     'filter_unit_type' => NULL,
     'filter_active' => NULL,
   ];
@@ -523,6 +528,25 @@ class ProductManager extends BaseComponent
         'sumary' => '',
         'openHtmlTab' => '<span class="emp_name text-truncate">',
         'closeHtmlTab' => '</span>',
+        'width' => NULL,
+        'visible' => true,
+      ],
+      [
+        'field' => 'price',
+        'orderName' => 'price',
+        'label' => __('Price'),
+        'filter' => 'filter_price',
+        'filter_type' => 'input',
+        'filter_sources' => '',
+        'filter_source_field' => '',
+        'columnType' => 'decimal',
+        'columnAlign' => 'right',
+        'columnClass' => '',
+        'function' => '',
+        'parameters' => [],
+        'sumary' => '',
+        'openHtmlTab' => '',
+        'closeHtmlTab' => '',
         'width' => NULL,
         'visible' => true,
       ],

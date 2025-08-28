@@ -12,8 +12,6 @@ use Livewire\Component;
 class TransactionTotals extends Component
 {
   public $transaction_id;
-  public $totalHonorarios;
-  public $totalTimbres;
   public $totalDiscount;
   public $totalTax;
   public $totalAditionalCharge;
@@ -54,8 +52,6 @@ class TransactionTotals extends Component
     $transaction = Transaction::find($transaction_id);
     if ($transaction) {
 
-      $this->totalHonorarios = Helpers::formatDecimal($transaction->totalHonorarios ?? 0);
-      $this->totalTimbres = Helpers::formatDecimal($transaction->totalTimbres ?? 0);
       $this->totalAditionalCharge = Helpers::formatDecimal($transaction->totalAditionalCharge ?? 0);
 
       $this->totalServGravados = Helpers::formatDecimal($transaction->totalServGravados ?? 0);
@@ -93,8 +89,6 @@ class TransactionTotals extends Component
   {
     $transaction = Transaction::where('id', $transaction_id)->first();
     if ($transaction) {
-      $this->totalHonorarios = Helpers::formatDecimal($transaction->totalHonorarios ?? 0);
-      $this->totalTimbres = Helpers::formatDecimal($transaction->totalTimbres ?? 0);
       $this->totalAditionalCharge = Helpers::formatDecimal($transaction->totalAditionalCharge ?? 0);
 
       $this->totalServGravados = Helpers::formatDecimal($transaction->totalServGravados ?? 0);
@@ -123,14 +117,6 @@ class TransactionTotals extends Component
       $this->totalComprobante = Helpers::formatDecimal($transaction->totalComprobante ?? 0);
 
       $this->currencyCode = $transaction->currency->code;
-
-
-      $this->dispatch('honorarios-changed', $this->totalHonorarios);
-      /*
-      if ($this->honorarios > 0)
-        Log::debug('Honorarios actualizado', ['honorarios' => $this->honorarios]);
-      */
-      //$this->dispatch('honorarioUpdated', $this->honorarios);  // Emitir evento para otros componentes
     }
   }
 

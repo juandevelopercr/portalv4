@@ -27,24 +27,16 @@ class CotizacionManager extends TransactionManager
   public $filters = [
     'filter_proforma_no' => NULL,
     'filter_customer_name' => NULL,
-    'filter_department_name' => NULL,
     'filter_user_name' => NULL,
     'filter_transaction_date' => NULL,
-    'filter_bank_name' => NULL,
     'filter_currency_code' => NULL,
-    'filter_proforma_type' => NULL,
-    'filter_fecha_envio_email' => NULL,
     'filter_status' => NULL,
     'filter_totalComprobante' => NULL,
-    'filter_total_usd' => NULL,
-    'filter_total_crc' => NULL,
     'filter_action' => NULL,
   ];
 
-  public $showModalCaso = false;
   // Esto para almacenar el id de la cotización a convertir a proforma
   public $cotizacionId;
-  public $bankCotizacionId;
 
   public function mount()
   {
@@ -111,25 +103,6 @@ class CotizacionManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'department_name',
-        'orderName' => 'departments.name',
-        'label' => __('Department'),
-        'filter' => 'filter_department_name',
-        'filter_type' => 'select',
-        'filter_sources' => 'departments',
-        'filter_source_field' => 'name',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'user_name',
         'orderName' => 'users.name',
         'label' => __('User'),
@@ -168,25 +141,6 @@ class CotizacionManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'bank_name',
-        'orderName' => 'banks.name',
-        'label' => __('Bank'),
-        'filter' => 'filter_bank_name',
-        'filter_type' => 'select',
-        'filter_sources' => 'banks',
-        'filter_source_field' => 'name',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'currency_code',
         'orderName' => 'currencies.code',
         'label' => __('Currency'),
@@ -195,44 +149,6 @@ class CotizacionManager extends TransactionManager
         'filter_sources' => 'currencies',
         'filter_source_field' => 'code',
         'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'proforma_type',
-        'orderName' => 'transactions.proforma_type',
-        'label' => __('Type of Notarial Act'),
-        'filter' => 'filter_proforma_type',
-        'filter_type' => 'select',
-        'filter_sources' => 'proformaTypes',
-        'filter_source_field' => 'name',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'fecha_envio_email',
-        'orderName' => 'transactions.fecha_envio_email',
-        'label' => __('Fecha de envio de email'),
-        'filter' => 'filter_fecha_envio_email',
-        'filter_type' => 'date',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'date',
         'columnAlign' => '',
         'columnClass' => '',
         'function' => '',
@@ -276,44 +192,6 @@ class CotizacionManager extends TransactionManager
         'function' => '',
         'parameters' => [],
         'sumary' => 'tComprobante',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'total_usd',
-        'orderName' => '',
-        'label' => __('Total USD'),
-        'filter' => 'filter_total_usd',
-        'filter_type' => '',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'decimal',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => 'getTotalComprobante',
-        'parameters' => ['USD', true],
-        'sumary' => 'tComprobanteUsd',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'total_crc',
-        'orderName' => '',
-        'label' => __('Total CRC'),
-        'filter' => 'filter_total_crc',
-        'filter_type' => '',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'decimal',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => 'getTotalComprobante',
-        'parameters' => ['CRC', true], // Parámetro a pasar a la función
-        'sumary' => 'tComprobanteCrc',
         'openHtmlTab' => '',
         'closeHtmlTab' => '',
         'width' => NULL,
@@ -407,7 +285,6 @@ class CotizacionManager extends TransactionManager
     $this->proforma_change_type = Helpers::formatDecimal(Session::get('exchange_rate'));
 
     $departments = session('current_department');
-    $this->department_id = (int)$departments[0];
     $this->created_by = Auth::user()->id;
     $this->invoice_type = 'FACTURA';
 
@@ -433,24 +310,15 @@ class CotizacionManager extends TransactionManager
       'business_id'           => 'required|integer|exists:business,id',
       'location_id'           => 'nullable|integer|exists:business_locations,id',
       'location_economic_activity_id'  => 'nullable|integer|exists:economic_activities,id',
-      'cuenta_id'             => 'nullable|integer|exists:cuentas,id',
       'contact_id'            => 'required|integer|exists:contacts,id',
       'contact_economic_activity_id' => 'nullable|integer|exists:economic_activities,id',
       'currency_id'           => 'required|integer|exists:currencies,id',
-      'department_id'         => 'required|integer|exists:departments,id',
-      'area_id'               => 'nullable|integer|exists:areas,id',
-      'bank_id'               => 'nullable|integer|exists:banks,id',
-      'codigo_contable_id'    => 'nullable|integer|exists:codigo_contables,id',
-      'caso_id'               => 'nullable|integer|exists:casos,id',
       //'created_by'          => 'required|integer|exists:users,id',
 
       // Enums
       'document_type'         => 'required|in:CT',
-      'proforma_type'         => 'required|in:HONORARIO,GASTO',
       'proforma_status'       => 'nullable|in:PROCESO,SOLICITADA,FACTURADA,RECHAZADA,ANULADA',
       'status'                => 'nullable|in:PENDIENTE,RECIBIDA,ACEPTADA,RECHAZADA,ANULADA',
-      'showInstruccionesPago' => 'nullable|in:NACIONAL,INTERNACIONAL,AMBAS',
-      //'payment_status'        => 'nullable|in:paid,due,partial',
       'pay_term_type'         => 'nullable|in:days,months',
 
       'invoice_type'          => 'required|in:FACTURA,TIQUETE',
@@ -460,52 +328,19 @@ class CotizacionManager extends TransactionManager
       'customer_comercial_name' => 'nullable|string|max:150',
       'customer_email'        => 'nullable|email|max:150',
       'email_cc'              => 'nullable|string',
-      'nombre_caso'           => 'nullable|string|max:191',
 
-      //'proforma_no'           => 'nullable|string|max:20',
-      //'consecutivo'           => 'nullable|string|max:20',
-      //'key'                   => 'nullable|string|max:50',
-      //'access_token'          => 'nullable|string|max:191',
-      //'response_xml'          => 'nullable|string|max:191',
-      //'filexml'               => 'nullable|string|max:191',
-      //'filepdf'               => 'nullable|string|max:191',
-      //'transaction_reference' => 'nullable|string|max:50',
-      //'transaction_reference_id' => 'nullable|string|max:50',
       'condition_sale' => 'required|string|in:01,02,03,04,05,06,06,08,09,10,11,12,13,14,15,99|max:2',
       'condition_sale_other' => 'nullable|required_if:condition_sale,99|max:100|string',
-      //'numero_deposito_pago'  => 'nullable|string|max:191',
-      //'numero_traslado_honorario' => 'nullable|string|max:20',
-      //'numero_traslado_gasto' => 'nullable|string|max:20',
-      'contacto_banco'        => 'nullable|string|max:100',
-
-      // Numerics
-      //'pay_term_number'     => 'nullable|integer|min:0',
-      //'pay_term_number'       => 'required_if:condition_sale,02|numeric|min:1|max:100',
-      //'pay_term_number' => 'sometimes|required_if:condition_sale,02|numeric|max:100',
       'proforma_change_type'  => 'nullable|numeric|required_if:document_type,PR|min:0.1|max:999999999999999.99999',
       'factura_change_type'   => 'nullable|numeric|min:0|max:999999999999999.99999',
-      //'num_request_hacienda_set' => 'nullable|integer|min:0',
-      //'num_request_hacienda_get' => 'nullable|integer|min:0',
-      //'comision_pagada'       => 'nullable|boolean',
-      //'is_retencion'          => 'nullable|boolean',
 
       // Texts
       'message'               => 'nullable|string',
       'notes'                 => 'nullable|string',
       'detalle_adicional'     => 'nullable|string',
-      'oc'                    => 'nullable|string',
-      'migo'                  => 'nullable|string',
-      'or'                    => 'nullable|string',
-      'gln'                   => 'nullable|string',
-      'prebill'               => 'nullable|string',
 
       // Dates
       'transaction_date'         => 'required|date',
-      'fecha_pago'               => 'nullable|date',
-      'fecha_deposito_pago'      => 'nullable|date',
-      'fecha_traslado_honorario' => 'nullable|date',
-      'fecha_traslado_gasto'     => 'nullable|date',
-      'fecha_solicitud_factura'  => 'nullable|date',
       'fecha_envio_email'        => 'nullable|date',
 
       'totalHonorarios' => 'nullable|numeric|min:0',
@@ -582,8 +417,6 @@ class CotizacionManager extends TransactionManager
       'document_type'         => 'tipo de documento',
       'currency_id'           => 'moneda',
       'condition_sale'        => 'condición de venta',
-      'department_id'         => 'departamento',
-      'proforma_type'         => 'tipo de acto',
       'status'                => 'estado',
       'transaction_date'      => 'fecha de transacción',
       'customer_name'         => 'nombre del cliente',
@@ -704,16 +537,9 @@ class CotizacionManager extends TransactionManager
     $this->location_economic_activity_id = $record->location_economic_activity_id;
     $this->contact_id             = $record->contact_id;
     $this->contact_economic_activity_id = $record->contact_economic_activity_id;
-    $this->cuenta_id              = $record->cuenta_id;
     $this->currency_id            = $record->currency_id;
-    $this->department_id          = $record->department_id;
-    $this->area_id                = $record->area_id;
-    $this->bank_id                = $record->bank_id;
-    $this->caso_id                = $record->caso_id;
-    $this->codigo_contable_id     = $record->codigo_contable_id;
     $this->created_by             = $record->created_by;
     $this->document_type          = $record->document_type;
-    $this->proforma_type          = $record->proforma_type;
     $this->proforma_status        = $record->proforma_status;
     $this->status                 = $record->status;
     $this->payment_status         = $record->payment_status;
@@ -725,7 +551,6 @@ class CotizacionManager extends TransactionManager
     $this->proforma_no            = $record->proforma_no;
     $this->consecutivo            = $record->consecutivo;
     $this->key                    = $record->key;
-    $this->nombre_caso            = $record->nombre_caso;
     $this->access_token           = $record->access_token;
     $this->response_xml           = $record->response_xml;
     $this->filexml                = $record->filexml;
@@ -734,30 +559,16 @@ class CotizacionManager extends TransactionManager
     $this->transaction_reference_id = $record->transaction_reference_id;
     $this->condition_sale         = $record->condition_sale;
     $this->condition_sale_other   = $record->condition_sale_other;
-    $this->numero_deposito_pago   = $record->numero_deposito_pago;
-    $this->numero_traslado_honorario = $record->numero_traslado_honorario;
-    $this->numero_traslado_gasto  = $record->numero_traslado_gasto;
-    $this->contacto_banco         = $record->contacto_banco;
     $this->pay_term_number        = $record->pay_term_number;
     $this->proforma_change_type   = Helpers::formatDecimal($record->proforma_change_type);
     //$this->proforma_change_type   = $record->proforma_change_type;
     $this->factura_change_type    = $record->factura_change_type;
     $this->num_request_hacienda_set = $record->num_request_hacienda_set;
     $this->num_request_hacienda_get = $record->num_request_hacienda_get;
-    $this->comision_pagada        = $record->comision_pagada;
-    $this->is_retencion           = $record->is_retencion;
     $this->message                = $record->message;
     $this->notes                  = $record->notes;
-    $this->migo                   = $record->migo;
     $this->detalle_adicional      = $record->detalle_adicional;
-    $this->gln                    = $record->gln;
     $this->transaction_date       = $record->transaction_date;
-    $this->fecha_pago             = $record->fecha_pago;
-    $this->fecha_deposito_pago    = $record->fecha_deposito_pago;
-    $this->fecha_traslado_honorario = $record->fecha_traslado_honorario;
-    $this->fecha_traslado_gasto   = $record->fecha_traslado_gasto;
-    $this->fecha_solicitud_factura = $record->fecha_solicitud_factura;
-    $this->showInstruccionesPago   = $record->showInstruccionesPago;
     $this->invoice_type            = $record->invoice_type;
 
     // Totales
@@ -801,9 +612,6 @@ class CotizacionManager extends TransactionManager
     // Se emite este evento para los componentes hijos
     $this->dispatch('updateTransactionContext', [
       'transaction_id'    => $record->id,
-      'department_id'     => $record->department_id,
-      'bank_id'           => $record->bank_id,
-      'type_notarial_act' => $record->proforma_type,
     ]);
 
     $this->payments = $record->payments->map(fn($p) => [
@@ -846,13 +654,6 @@ class CotizacionManager extends TransactionManager
       }
     }
 
-    if ($record->caso) {
-      $text = $record->caso->numero . ' - ' . $record->caso->deudor;
-      $this->dispatch('setSelect2Value', id: 'caso_id', value: $this->caso_id, text: $text);
-    }
-
-    $this->setInfoCaso();
-
     $this->dispatch('reinitSelect2Controls');
 
     //$this->dispatch('select2');
@@ -864,11 +665,6 @@ class CotizacionManager extends TransactionManager
 
     // Limpia las claves foráneas antes de validar
     $this->cleanEmptyForeignKeys();
-
-    // Eliminar comas del número en el servidor
-    //dd($this->proforma_change_type);
-    //$this->proforma_change_type = str_replace(',', '', $this->proforma_change_type);
-    //$this->transaction_date = Carbon::parse($this->show_transaction_date)->format('Y-m-d');
 
     $this->transaction_date = Carbon::parse($this->show_transaction_date)
       ->setTime(now()->hour, now()->minute, now()->second)
@@ -897,9 +693,6 @@ class CotizacionManager extends TransactionManager
 
       $this->dispatch('updateTransactionContext', [
         'transaction_id'    => $record->id,
-        'department_id'     => $record->department_id,
-        'bank_id'           => $record->bank_id,
-        'type_notarial_act' => $record->proforma_type,
       ]);
 
       // --- Sincronizar pagos ---
@@ -950,50 +743,6 @@ class CotizacionManager extends TransactionManager
     }
   }
 
-  /*
-  #[On('solicitarFacturacion')]
-  public function solicitarFacturacion($recordId)
-  {
-    try {
-      DB::transaction(function () use ($recordId) {
-        $record = Transaction::findOrFail($recordId);
-
-        $msgs = Helpers::validateProformaToRequestInvoice($record);
-        if (!empty($msgs)) {
-          $this->dispatch('show-notification', [
-            'type' => 'warning',
-            'message' => implode('<br>', $msgs),
-          ]);
-        } else {
-          $record->proforma_status = Transaction::SOLICITADA;
-          $record->fecha_solicitud_factura = \Carbon\Carbon::now();
-
-          if ($record->save()) {
-            $this->dispatch('show-notification', [
-              'type' => 'success',
-              'message' => __('Billing request was successfully completed'),
-            ]);
-          } else
-            $this->dispatch('show-notification', [
-              'type' => 'error',
-              'message' => __('An error occurred and the request could not be made'),
-            ]);
-        }
-      });
-    } catch (QueryException $e) {
-      $this->dispatch('show-notification', [
-        'type' => 'error',
-        'message' => __('An unexpected database error occurred.') . ' ' . $e->getMessage(),
-      ]);
-    } catch (\Exception $e) {
-      $this->dispatch('show-notification', [
-        'type' => 'error',
-        'message' => __('An error occurred while updating the registro') . ' ' . $e->getMessage(),
-      ]);
-    }
-  }
-  */
-
   public function resetControls()
   {
     $this->reset(
@@ -1003,12 +752,7 @@ class CotizacionManager extends TransactionManager
       'contact_id',
       'contact_economic_activity_id',
       'currency_id',
-      'department_id',
-      'area_id',
-      'bank_id',
-      'codigo_contable_id',
       'created_by',
-      'proforma_type',
       'proforma_status',
       'status',
       'payment_status',
@@ -1027,28 +771,15 @@ class CotizacionManager extends TransactionManager
       'transaction_reference_id',
       'condition_sale',
       'condition_sale_other',
-      'numero_deposito_pago',
-      'numero_traslado_honorario',
-      'numero_traslado_gasto',
-      'contacto_banco',
       'pay_term_number',
       'proforma_change_type',
       'factura_change_type',
       'num_request_hacienda_set',
       'num_request_hacienda_get',
-      'comision_pagada',
-      'is_retencion',
       'message',
       'notes',
-      'migo',
       'detalle_adicional',
-      'gln',
       'transaction_date',
-      'fecha_pago',
-      'fecha_deposito_pago',
-      'fecha_traslado_honorario',
-      'fecha_traslado_gasto',
-      'fecha_solicitud_factura',
       'activeTab',
       'closeForm',
       'payments',
@@ -1058,7 +789,6 @@ class CotizacionManager extends TransactionManager
       'identificacion',
       'showModalCaso',
       'cotizacionId',
-      'bankCotizacionId'
     );
 
     $this->selectedIds = [];
@@ -1078,16 +808,6 @@ class CotizacionManager extends TransactionManager
       if ($this->condition_sale !== '99') {
         $this->condition_sale_other = null;
       }
-    }
-
-    if ($propertyName == 'department_id') {
-      // emitir el evento para que actualice la info en las lineas
-      $this->dispatch('departmentChange', $this->department_id); // Enviar evento al frontend
-    }
-
-    if ($propertyName == 'bank_id') {
-      // emitir el evento para que actualice la info en las lineas
-      $this->dispatch('bankChange', $this->bank_id); // Enviar evento al frontend
     }
 
     if ($propertyName == 'email_cc') {
@@ -1161,36 +881,6 @@ class CotizacionManager extends TransactionManager
     }
   }
 
-  public function setEnableControl()
-  {
-    $this->enableoc = false;
-    $this->enablemigo = false;
-    $this->enableor = false;
-    $this->enablegln = false;
-    $this->enableprebill = false;
-
-    if ($this->bank_id == Bank::SANJOSE) {
-      $this->enableoc = true;
-      $this->enablemigo = true;
-
-      $this->or = '';
-      $this->gln = '';
-      $this->prebill = '';
-    } else
-    if ($this->bank_id == Bank::TERCEROS) {
-      $this->enableoc = true;
-      $this->enablemigo = true;
-      $this->enableor = true;
-      $this->enablegln = true;
-      $this->enableprebill = true;
-    } else {
-      $this->oc = '';
-      $this->migo = '';
-      $this->or = '';
-      $this->gln = '';
-      $this->prebill = '';
-    }
-  }
 
   public function beforeclonar()
   {
@@ -1213,94 +903,4 @@ class CotizacionManager extends TransactionManager
       __('Sí, proceed')
     );
   }
-
-  public function asociarCasoBeforeConvertToProforma($id)
-  {
-    $cotizacion = Transaction::find($id);
-    $this->cotizacionId = $id;
-    $this->bankCotizacionId = $cotizacion->bank_id;
-    $this->showModalCaso = true;
-    $this->dispatch('showModalCaso');
-  }
-
-  //#[On('convertirProforma')]
-  public function asignarCaso()
-  {
-    if (!$this->caso_id) {
-      $this->dispatch('show-notification', [
-        'type' => 'warning',
-        'message' => __('Debe seleccionar un caso'),
-      ]);
-      return;
-    }
-
-    $record = Transaction::find($this->cotizacionId);
-
-    // Validación por tipo
-    $record->document_type = Transaction::PROFORMA;
-    $record->caso_id = $this->caso_id;
-
-    if ($record->proforma_type === 'HONORARIO') {
-      $msgs = Helpers::validateCotizacionToConvertProforma($record);
-    } elseif ($record->proforma_type === 'GASTO') {
-      $msgs = Helpers::validateCotizacionToConvertProforma($record); // puedes usar otro helper si difieren
-    } else {
-      $this->dispatch('show-notification', [
-        'type' => 'warning',
-        'message' => __('Unknown proforma type'),
-      ]);
-      return;
-    }
-
-    // Validación con mensajes
-    if (!empty($msgs)) {
-      $this->dispatch('show-notification', [
-        'type' => 'error',
-        'message' => implode('<br>', $msgs),
-      ]);
-      return;
-    }
-
-    // Lógica transaccional
-    DB::beginTransaction();  // Comienza la transacción principal
-
-    try {
-      $record->save();
-
-      DB::commit();  // Commit de la transacción principal
-
-      $this->showModalCaso = false;
-      $this->resetControls();
-
-      $this->dispatch('show-notification', [
-        'type' => 'success',
-        'message' => __('La cotización ha sido convertida en proforma satisfactoriamente')
-      ]);
-    } catch (\Throwable $e) {
-      DB::rollBack();  // Si ocurre un error, hacer rollback de la transacción
-
-      // Enviar notificación de error
-      $this->dispatch('show-notification', [
-        'type' => 'error',
-        'message' => __('An unexpected error occurred:') . ' ' . $e->getMessage()
-      ]);
-
-      // Registrar el error en el log
-      logger()->error('Error en converti cotización a proforma:' . ' ' . $e->getMessage(), ['exception' => $e]);
-    }
-  }
-
-
-  /*
-  public function beforeConvertirProforma($id, $consecutivo)
-  {
-    $this->confirmarAccion(
-      $id,
-      'convertirProforma',
-      "¿Está seguro que desea convertir a proforma la cotización con consecutivo número: " . $consecutivo . "?",
-      'Después de confirmar la cotización será convertida en proforma',
-      __('Sí, proceed')
-    );
-  }
-  */
 }

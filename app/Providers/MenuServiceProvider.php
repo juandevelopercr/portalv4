@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\View;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class MenuServiceProvider extends ServiceProvider
@@ -27,6 +28,16 @@ class MenuServiceProvider extends ServiceProvider
     $horizontalMenuJson = file_get_contents(base_path('resources/menu/horizontalMenu.json'));
     $horizontalMenuData = json_decode($horizontalMenuJson);
 
+    /*
+    $user = auth()->user();
+    dd($user);
+    if ($user) {
+
+      $verticalMenuData['menu'] = $this->filterMenu($verticalMenuData['menu'], $user);
+      $horizontalMenuData['menu'] = $this->filterMenu($horizontalMenuData['menu'], $user);
+    }
+    */
+
     // Share all menuData to all the views
     $this->app->make('view')->share('menuData', [$verticalMenuData, $horizontalMenuData]);
   }
@@ -35,6 +46,13 @@ class MenuServiceProvider extends ServiceProvider
   {
     $filtered = [];
     foreach ($menu as $item) {
+      if (
+        in_array($item['name'], ['Users', 'Roles & Permissions', 'Roles', 'Permission']) &&
+        !$user->hasRole('SuperAdmin')
+      ) {
+        continue; // no mostrar
+      }
+
       // Verificar permisos del ítem principal
       $hasMainPermissions = true;
       if (!empty($item['permissions'])) {

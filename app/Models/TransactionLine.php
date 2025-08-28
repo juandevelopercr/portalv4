@@ -3,17 +3,18 @@
 namespace App\Models;
 
 use App\Models\Currency;
+use App\Models\Hacienda\ComprobanteElectronico\ImpuestoType\DatosImpuestoEspecificoAType;
 use App\Models\HonorarioReceta;
 use App\Models\Product;
 use App\Models\ProductHonorariosTimbre;
+use App\Models\TenantModel;
 use App\Models\Transaction;
 use App\Models\TransactionLineDiscount;
 use App\Models\TransactionLineTax;
-use App\Models\Hacienda\ComprobanteElectronico\ImpuestoType\DatosImpuestoEspecificoAType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TransactionLine extends Model
+class TransactionLine extends TenantModel
 {
   use HasFactory;
 

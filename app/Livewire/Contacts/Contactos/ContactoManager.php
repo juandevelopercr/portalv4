@@ -2,14 +2,10 @@
 
 namespace App\Livewire\Contacts\Contactos;
 
-use App\Livewire\BaseComponent;
 use App\Models\AreaPractica;
-use App\Models\Bank;
 use App\Models\ContactContacto;
 use App\Models\DataTableConfig;
 use App\Models\Department;
-use App\Models\GrupoEmpresarial;
-use App\Models\Sector;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,7 +22,7 @@ use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
-class ContactoManager extends BaseComponent
+class ContactoManager extends Component
 {
   use WithFileUploads;
   use WithPagination;

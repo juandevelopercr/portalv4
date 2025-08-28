@@ -20,28 +20,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
+use App\Models\BusinessLocation;
 
 class FacturaCompraManager extends TransactionManager
 {
-  public $proforma_type = 'HONORARIO';
   public $document_type = ['PRC', 'FEC'];
 
   public $filters = [
     'filter_proforma_no' => NULL,
     'filter_consecutivo' => NULL,
     'filter_customer_name' => NULL,
-    'filter_department_name' => NULL,
     'filter_user_name' => NULL,
     'filter_transaction_date' => NULL,
-    'filter_fecha_solicitud_factura' => NULL,
     'filter_issuer_name' => NULL,
-    'filter_codigosContables' => NULL,
-    'filter_bank_name' => NULL,
     'filter_currency_code' => NULL,
     'filter_status' => NULL,
     'filter_totalComprobante' => NULL,
-    'filter_total_usd' => NULL,
-    'filter_total_crc' => NULL,
     'filter_action' => NULL,
   ];
 
@@ -129,25 +123,6 @@ class FacturaCompraManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'department_name',
-        'orderName' => 'departments.name',
-        'label' => __('Department'),
-        'filter' => 'filter_department_name',
-        'filter_type' => 'select',
-        'filter_sources' => 'departments',
-        'filter_source_field' => 'name',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'user_name',
         'orderName' => 'users.name',
         'label' => __('User'),
@@ -186,25 +161,6 @@ class FacturaCompraManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'fecha_solicitud_factura',
-        'orderName' => 'transactions.fecha_solicitud_factura',
-        'label' => __('Application Date'),
-        'filter' => 'filter_fecha_solicitud_factura',
-        'filter_type' => 'date',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'date',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'issuer_name',
         'orderName' => 'business_locations.name',
         'label' => __('Issuer'),
@@ -220,44 +176,6 @@ class FacturaCompraManager extends TransactionManager
         'sumary' => '',
         'openHtmlTab' => '<span class="emp_name text-truncate">',
         'closeHtmlTab' => '</span>',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'codigosContables',
-        'orderName' => 'codigo_contables.codigo',
-        'label' => __('Accounting Code'),
-        'filter' => 'filter_codigosContables',
-        'filter_type' => 'select',
-        'filter_sources' => 'codigosContables',
-        'filter_source_field' => 'descrip',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'bank_name',
-        'orderName' => 'banks.name',
-        'label' => __('Bank'),
-        'filter' => 'filter_bank_name',
-        'filter_type' => 'select',
-        'filter_sources' => 'banks',
-        'filter_source_field' => 'name',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
         'width' => NULL,
         'visible' => true,
       ],
@@ -319,44 +237,6 @@ class FacturaCompraManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'total_usd',
-        'orderName' => '',
-        'label' => __('Total USD'),
-        'filter' => 'filter_total_usd',
-        'filter_type' => '',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'decimal',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => 'getTotalComprobante',
-        'parameters' => ['USD', true],
-        'sumary' => 'tComprobanteUsd',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'total_crc',
-        'orderName' => '',
-        'label' => __('Total CRC'),
-        'filter' => 'filter_total_crc',
-        'filter_type' => '',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'decimal',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => 'getTotalComprobante',
-        'parameters' => ['CRC', true], // Parámetro a pasar a la función
-        'sumary' => 'tComprobanteCrc',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'action',
         'orderName' => '',
         'label' => __('Actions'),
@@ -394,23 +274,6 @@ class FacturaCompraManager extends TransactionManager
     $query = Transaction::search($this->search, $this->filters)
       ->whereIn('document_type', $document_type);
 
-    // Condiciones según el rol del usuario
-    $allowedRoles = User::ROLES_ALL_DEPARTMENTS;
-    if (in_array(Session::get('current_role_name'), $allowedRoles)) {
-    } else {
-      // Obtener departamentos y bancos de la sesión
-      $departments = Session::get('current_department', []);
-      $banks = Session::get('current_banks', []);
-
-      // Filtrar por departamento y banco
-      if (!empty($departments)) {
-        $query->whereIn('transactions.department_id', $departments);
-      }
-
-      if (!empty($banks)) {
-        $query->whereIn('transactions.bank_id', $banks);
-      }
-    }
     return $query;
   }
 
@@ -442,6 +305,10 @@ class FacturaCompraManager extends TransactionManager
     $this->status = 'PENDIENTE';
     $this->proforma_change_type = Helpers::formatDecimal(Session::get('exchange_rate'));
 
+    $location = BusinessLocation::where('id', 1)->first();
+    $this->location_id = $location->id;
+    $this->location_economic_activity_id = $location->economicActivities[0]->id;
+
     $this->payments = [[
       'tipo_medio_pago' => '04', // Transferencia
       'medio_pago_otros' => '',
@@ -463,22 +330,14 @@ class FacturaCompraManager extends TransactionManager
       'business_id'           => 'required|integer|exists:business,id',
       'location_id'           => 'required|integer|exists:business_locations,id',
       'location_economic_activity_id'  => 'nullable|integer|exists:economic_activities,id',
-      'cuenta_id'             => 'nullable|integer|exists:cuentas,id',
       'contact_id'            => 'required|integer|exists:contacts,id',
       'contact_economic_activity_id' => 'nullable|integer|exists:economic_activities,id',
       'currency_id'           => 'required|integer|exists:currencies,id',
-      'department_id'         => 'required|integer|exists:departments,id',
-      'area_id'               => 'nullable|integer|exists:areas,id',
-      'bank_id'               => 'nullable|integer|exists:banks,id',
-      'codigo_contable_id'    => 'nullable|integer|exists:codigo_contables,id',
-      'caso_id'               => 'nullable|integer|exists:casos,id',
       //'created_by'          => 'required|integer|exists:users,id',
 
       // Enums
       'document_type'         => 'required|in:PR,FE,TE,ND,NC,PRC,FEC,FEE,REP',
-      'proforma_type'         => 'required|in:HONORARIO,GASTO',
       'status'                => 'nullable|in:PENDIENTE,RECIBIDA,ACEPTADA,RECHAZADA,ANULADA',
-      'showInstruccionesPago' => 'nullable|in:NACIONAL,INTERNACIONAL,AMBAS',
       //'payment_status'        => 'nullable|in:paid,due,partial',
       'pay_term_type'         => 'nullable|in:days,months',
 
@@ -487,7 +346,6 @@ class FacturaCompraManager extends TransactionManager
       'customer_comercial_name' => 'nullable|string|max:150',
       'customer_email'        => 'nullable|email|max:150',
       'email_cc'              => 'nullable|string',
-      'nombre_caso'           => 'nullable|string|max:191',
 
       'RefTipoDoc'            => 'nullable|string|min:2|max:2',
       'RefTipoDocOtro'        => 'nullable|string|max:100',
@@ -497,50 +355,19 @@ class FacturaCompraManager extends TransactionManager
       'RefCodigoOtro'         => 'nullable|string|max:100',
       'RefRazon'              => 'nullable|string|max:180',
 
-      //'proforma_no'           => 'nullable|string|max:20',
-      //'consecutivo'           => 'nullable|string|max:20',
-      //'key'                   => 'nullable|string|max:50',
-      //'access_token'          => 'nullable|string|max:191',
-      //'response_xml'          => 'nullable|string|max:191',
-      //'filexml'               => 'nullable|string|max:191',
-      //'filepdf'               => 'nullable|string|max:191',
-      //'transaction_reference' => 'nullable|string|max:50',
-      //'transaction_reference_id' => 'nullable|string|max:50',
       'condition_sale' => 'required|string|in:01,02,03,04,05,06,06,08,09,10,11,12,13,14,15,99|max:2',
       'condition_sale_other' => 'nullable|required_if:condition_sale,99|max:100|string',
-      //'numero_deposito_pago'  => 'nullable|string|max:191',
-      //'numero_traslado_honorario' => 'nullable|string|max:20',
-      //'numero_traslado_gasto' => 'nullable|string|max:20',
-      'contacto_banco'        => 'nullable|string|max:100',
 
-      // Numerics
-      //'pay_term_number'     => 'nullable|integer|min:0',
-      //'pay_term_number'       => 'required_if:condition_sale,02|numeric|min:1|max:100',
-      //'pay_term_number' => 'sometimes|required_if:condition_sale,02|numeric|max:100',
       'proforma_change_type'  => 'nullable|numeric|required_if:document_type,PR|min:0.1|max:999999999999999.99999',
       'factura_change_type'   => 'nullable|numeric|min:0|max:999999999999999.99999',
-      //'num_request_hacienda_set' => 'nullable|integer|min:0',
-      //'num_request_hacienda_get' => 'nullable|integer|min:0',
-      //'comision_pagada'       => 'nullable|boolean',
-      //'is_retencion'          => 'nullable|boolean',
 
       // Texts
       'message'               => 'nullable|string',
       'notes'                 => 'nullable|string',
       'detalle_adicional'     => 'nullable|string',
-      'oc'                    => 'nullable|string',
-      'migo'                  => 'nullable|string',
-      'or'                    => 'nullable|string',
-      'gln'                   => 'nullable|string',
-      'prebill'               => 'nullable|string',
 
       // Dates
       'transaction_date'         => 'required|date',
-      'fecha_pago'               => 'nullable|date',
-      'fecha_deposito_pago'      => 'nullable|date',
-      'fecha_traslado_honorario' => 'nullable|date',
-      'fecha_traslado_gasto'     => 'nullable|date',
-      'fecha_solicitud_factura'  => 'nullable|date',
       'fecha_envio_email'        => 'nullable|date',
 
       'totalHonorarios' => 'nullable|numeric|min:0',
@@ -617,8 +444,6 @@ class FacturaCompraManager extends TransactionManager
       'document_type'         => 'tipo de documento',
       'currency_id'           => 'moneda',
       'condition_sale'        => 'condición de venta',
-      'department_id'         => 'departamento',
-      'proforma_type'         => 'tipo de acto',
       'status'                => 'estado',
       'transaction_date'      => 'fecha de transacción',
       'customer_name'         => 'nombre del cliente',
@@ -745,16 +570,9 @@ class FacturaCompraManager extends TransactionManager
     $this->location_economic_activity_id = $record->location_economic_activity_id;
     $this->contact_id             = $record->contact_id;
     $this->contact_economic_activity_id = $record->contact_economic_activity_id;
-    $this->cuenta_id              = $record->cuenta_id;
     $this->currency_id            = $record->currency_id;
-    $this->department_id          = $record->department_id;
-    $this->area_id                = $record->area_id;
-    $this->bank_id                = $record->bank_id;
-    $this->caso_id                = $record->caso_id;
-    $this->codigo_contable_id     = $record->codigo_contable_id;
     $this->created_by             = $record->created_by;
     $this->document_type          = $record->document_type;
-    $this->proforma_type          = $record->proforma_type;
     $this->proforma_status        = $record->proforma_status;
     $this->status                 = $record->status;
     $this->payment_status         = $record->payment_status;
@@ -766,7 +584,6 @@ class FacturaCompraManager extends TransactionManager
     $this->proforma_no            = $record->proforma_no;
     $this->consecutivo            = $record->consecutivo;
     $this->key                    = $record->key;
-    $this->nombre_caso            = $record->nombre_caso;
     $this->access_token           = $record->access_token;
     $this->response_xml           = $record->response_xml;
     $this->filexml                = $record->filexml;
@@ -775,30 +592,16 @@ class FacturaCompraManager extends TransactionManager
     $this->transaction_reference_id = $record->transaction_reference_id;
     $this->condition_sale         = $record->condition_sale;
     $this->condition_sale_other   = $record->condition_sale_other;
-    $this->numero_deposito_pago   = $record->numero_deposito_pago;
-    $this->numero_traslado_honorario = $record->numero_traslado_honorario;
-    $this->numero_traslado_gasto  = $record->numero_traslado_gasto;
-    $this->contacto_banco         = $record->contacto_banco;
     $this->pay_term_number        = $record->pay_term_number;
     $this->proforma_change_type   = Helpers::formatDecimal($record->proforma_change_type);
     //$this->proforma_change_type   = $record->proforma_change_type;
     $this->factura_change_type    = $record->factura_change_type;
     $this->num_request_hacienda_set = $record->num_request_hacienda_set;
     $this->num_request_hacienda_get = $record->num_request_hacienda_get;
-    $this->comision_pagada        = $record->comision_pagada;
-    $this->is_retencion           = $record->is_retencion;
     $this->message                = $record->message;
     $this->notes                  = $record->notes;
-    $this->migo                   = $record->migo;
     $this->detalle_adicional      = $record->detalle_adicional;
-    $this->gln                    = $record->gln;
     $this->transaction_date       = $record->transaction_date;
-    $this->fecha_pago             = $record->fecha_pago;
-    $this->fecha_deposito_pago    = $record->fecha_deposito_pago;
-    $this->fecha_traslado_honorario = $record->fecha_traslado_honorario;
-    $this->fecha_traslado_gasto   = $record->fecha_traslado_gasto;
-    $this->fecha_solicitud_factura = $record->fecha_solicitud_factura;
-    $this->showInstruccionesPago   = $record->showInstruccionesPago;
 
     // Totales
     $this->totalHonorarios = $record->totalHonorarios;
@@ -835,9 +638,6 @@ class FacturaCompraManager extends TransactionManager
     // Se emite este evento para los componentes hijos
     $this->dispatch('updateTransactionContext', [
       'transaction_id'    => $record->id,
-      'department_id'     => $record->department_id,
-      'bank_id'           => $record->bank_id,
-      'type_notarial_act' => $record->proforma_type,
     ]);
 
     $this->payments = $record->payments->map(fn($p) => [
@@ -897,9 +697,6 @@ class FacturaCompraManager extends TransactionManager
     // Limpia las claves foráneas antes de validar
     $this->cleanEmptyForeignKeys();
 
-    // Eliminar comas del número en el servidor
-    //dd($this->proforma_change_type);
-    //$this->proforma_change_type = str_replace(',', '', $this->proforma_change_type);
     $this->pay_term_number = trim($this->pay_term_number);
 
     if ($this->pay_term_number === '' || $this->pay_term_number === null) {
@@ -923,9 +720,6 @@ class FacturaCompraManager extends TransactionManager
 
       $this->dispatch('updateTransactionContext', [
         'transaction_id'    => $record->id,
-        'department_id'     => $record->department_id,
-        'bank_id'           => $record->bank_id,
-        'type_notarial_act' => $record->proforma_type,
       ]);
 
       // --- Sincronizar pagos ---
@@ -1101,13 +895,8 @@ class FacturaCompraManager extends TransactionManager
       'contact_id',
       'contact_economic_activity_id',
       'currency_id',
-      'department_id',
       'document_type',
-      'area_id',
-      'bank_id',
-      'codigo_contable_id',
       'created_by',
-      'proforma_type',
       'proforma_status',
       'status',
       'payment_status',
@@ -1126,28 +915,15 @@ class FacturaCompraManager extends TransactionManager
       'transaction_reference_id',
       'condition_sale',
       'condition_sale_other',
-      'numero_deposito_pago',
-      'numero_traslado_honorario',
-      'numero_traslado_gasto',
-      'contacto_banco',
       'pay_term_number',
       'proforma_change_type',
       'factura_change_type',
       'num_request_hacienda_set',
       'num_request_hacienda_get',
-      'comision_pagada',
-      'is_retencion',
       'message',
       'notes',
-      'migo',
       'detalle_adicional',
-      'gln',
       'transaction_date',
-      'fecha_pago',
-      'fecha_deposito_pago',
-      'fecha_traslado_honorario',
-      'fecha_traslado_gasto',
-      'fecha_solicitud_factura',
       'activeTab',
       'closeForm',
       'payments',
@@ -1173,35 +949,9 @@ class FacturaCompraManager extends TransactionManager
       }
     }
 
-    if ($propertyName == 'department_id') {
-      // emitir el evento para que actualice la info en las lineas
-      $this->dispatch('departmentChange', $this->department_id); // Enviar evento al frontend
-    }
-
-    if ($propertyName == 'bank_id') {
-      // emitir el evento para que actualice la info en las lineas
-      $this->dispatch('bankChange', $this->bank_id); // Enviar evento al frontend
-    }
-
     if ($propertyName == 'email_cc') {
       $this->updatedEmails();
     }
-
-    if ($propertyName == 'bank_id') {
-      $this->setEnableControl();
-    }
-
-    /*
-    if ($propertyName == 'location_id') {
-      if ($this->location_id == '' | is_null($this->location_id))
-        $this->location_economic_activity_id = null;
-    }
-
-    if ($propertyName == 'contact_id') {
-      if ($this->contact_id == '' | is_null($this->contact_id))
-        $this->contact_economic_activity_id = null;
-    }
-    */
 
     $this->dispatch('updateExportFilters', [
       'search' => $this->search,
@@ -1261,37 +1011,6 @@ class FacturaCompraManager extends TransactionManager
       $this->addError('email_cc', 'Hay correos inválidos: ' . implode(', ', $this->invalidEmails));
     } else {
       $this->resetErrorBag('email_cc'); // Limpiar errores si todos son válidos
-    }
-  }
-
-  public function setEnableControl()
-  {
-    $this->enableoc = false;
-    $this->enablemigo = false;
-    $this->enableor = false;
-    $this->enablegln = false;
-    $this->enableprebill = false;
-
-    if ($this->bank_id == Bank::SANJOSE) {
-      $this->enableoc = true;
-      $this->enablemigo = true;
-
-      $this->or = '';
-      $this->gln = '';
-      $this->prebill = '';
-    } else
-    if ($this->bank_id == Bank::TERCEROS) {
-      $this->enableoc = true;
-      $this->enablemigo = true;
-      $this->enableor = true;
-      $this->enablegln = true;
-      $this->enableprebill = true;
-    } else {
-      $this->oc = '';
-      $this->migo = '';
-      $this->or = '';
-      $this->gln = '';
-      $this->prebill = '';
     }
   }
 

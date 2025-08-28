@@ -32,5 +32,5 @@ $configData = Helper::appClasses();
 @endsection
 
 @section('content')
-@livewire('products.product-manager')
+@livewire('products.product-manager', ['type'=>'single'])
 @endsection

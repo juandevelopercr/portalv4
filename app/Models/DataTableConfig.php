@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DataTableConfig extends Model
+class DataTableConfig extends TenantModel
 {
   use HasFactory;
 

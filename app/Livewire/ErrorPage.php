@@ -23,15 +23,15 @@ class ErrorPage extends Component
 
   protected function setErrorImage()
   {
-      $errorImages = [
-          403 => asset('images/errors/403.svg'),
-          404 => asset('images/errors/404.svg'),
-          419 => asset('images/errors/419.svg'),
-          500 => asset('images/errors/500.svg'),
-          503 => asset('images/errors/503.svg'),
-      ];
+    $errorImages = [
+      403 => asset('images/errors/403.svg'),
+      404 => asset('images/errors/404.svg'),
+      419 => asset('images/errors/419.svg'),
+      500 => asset('images/errors/500.svg'),
+      503 => asset('images/errors/503.svg'),
+    ];
 
-      $this->image = $errorImages[$this->code] ?? asset('images/errors/generic.svg');
+    $this->image = $errorImages[$this->code] ?? asset('images/errors/generic.svg');
   }
 
   /*

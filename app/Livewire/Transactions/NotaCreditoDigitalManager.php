@@ -16,24 +16,13 @@ class NotaCreditoDigitalManager extends TransactionManager
     'filter_proforma_no' => NULL,
     'filter_consecutivo' => NULL,
     'filter_customer_name' => NULL,
-    'filter_department_name' => NULL,
     'filter_user_name' => NULL,
     'filter_transaction_date' => NULL,
-    'filter_fecha_solicitud_factura' => NULL,
     'filter_issuer_name' => NULL,
-    'filter_codigosContables' => NULL,
-    'filter_numero_caso' => NULL,
-    'filter_referencia' => NULL,
-    'filter_oc' => NULL,
-    'filter_migo' => NULL,
-    'filter_bank_name' => NULL,
     'filter_currency_code' => NULL,
-    'filter_proforma_type' => NULL,
     'filter_fecha_envio_email' => NULL,
     'filter_status' => NULL,
     'filter_totalComprobante' => NULL,
-    'filter_total_usd' => NULL,
-    'filter_total_crc' => NULL,
     'filter_action' => NULL,
   ];
 
@@ -128,25 +117,6 @@ class NotaCreditoDigitalManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'department_name',
-        'orderName' => 'departments.name',
-        'label' => __('Department'),
-        'filter' => 'filter_department_name',
-        'filter_type' => 'select',
-        'filter_sources' => 'departments',
-        'filter_source_field' => 'name',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'user_name',
         'orderName' => 'users.name',
         'label' => __('User'),
@@ -185,25 +155,6 @@ class NotaCreditoDigitalManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'fecha_solicitud_factura',
-        'orderName' => 'transactions.fecha_solicitud_factura',
-        'label' => __('Application Date'),
-        'filter' => 'filter_fecha_solicitud_factura',
-        'filter_type' => 'date',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'date',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'issuer_name',
         'orderName' => 'business_locations.name',
         'label' => __('Issuer'),
@@ -223,120 +174,6 @@ class NotaCreditoDigitalManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'codigosContables',
-        'orderName' => 'codigo_contables.codigo',
-        'label' => __('Accounting Code'),
-        'filter' => 'filter_codigosContables',
-        'filter_type' => 'select',
-        'filter_sources' => 'codigosContables',
-        'filter_source_field' => 'descrip',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'caso_info',
-        'orderName' => '',
-        'label' => __('Case Number'),
-        'filter' => 'filter_numero_caso',
-        'filter_type' => 'input',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'nombre_caso',
-        'orderName' => '',
-        'label' => __('Case/Reference'),
-        'filter' => 'filter_referencia',
-        'filter_type' => 'input',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'oc',
-        'orderName' => 'oc',
-        'label' => __('O.C'),
-        'filter' => 'filter_oc',
-        'filter_type' => 'input',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'migo',
-        'orderName' => 'migo',
-        'label' => __('MIGO'),
-        'filter' => 'filter_migo',
-        'filter_type' => 'input',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'bank_name',
-        'orderName' => 'banks.name',
-        'label' => __('Bank'),
-        'filter' => 'filter_bank_name',
-        'filter_type' => 'select',
-        'filter_sources' => 'banks',
-        'filter_source_field' => 'name',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'currency_code',
         'orderName' => 'currencies.code',
         'label' => __('Currency'),
@@ -345,44 +182,6 @@ class NotaCreditoDigitalManager extends TransactionManager
         'filter_sources' => 'currencies',
         'filter_source_field' => 'code',
         'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'proforma_type',
-        'orderName' => 'transactions.proforma_type',
-        'label' => __('Type of Notarial Act'),
-        'filter' => 'filter_proforma_type',
-        'filter_type' => 'select',
-        'filter_sources' => 'proformaTypes',
-        'filter_source_field' => 'name',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'fecha_envio_email',
-        'orderName' => 'transactions.fecha_envio_email',
-        'label' => __('Fecha de envio de email'),
-        'filter' => 'filter_fecha_envio_email',
-        'filter_type' => 'date',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'date',
         'columnAlign' => '',
         'columnClass' => '',
         'function' => '',
@@ -432,44 +231,6 @@ class NotaCreditoDigitalManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'total_usd',
-        'orderName' => '',
-        'label' => __('Total USD'),
-        'filter' => 'filter_total_usd',
-        'filter_type' => '',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'decimal',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => 'getTotalComprobante',
-        'parameters' => ['USD', true],
-        'sumary' => 'tComprobanteUsd',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'total_crc',
-        'orderName' => '',
-        'label' => __('Total CRC'),
-        'filter' => 'filter_total_crc',
-        'filter_type' => '',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'decimal',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => 'getTotalComprobante',
-        'parameters' => ['CRC', true], // Parámetro a pasar a la función
-        'sumary' => 'tComprobanteCrc',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'action',
         'orderName' => '',
         'label' => __('Actions'),
@@ -508,48 +269,6 @@ class NotaCreditoDigitalManager extends TransactionManager
 
     $query = Transaction::search($this->search, $this->filters)
       ->whereIn('document_type', $document_type);
-
-    $allowedRoles = User::ROLES_ALL_DEPARTMENTS;
-
-    // Condiciones según el rol del usuario
-    if (in_array(Session::get('current_role_name'), $allowedRoles)) {
-      $query->where(function ($q) use ($allowedRoles) {
-        // Condición 1: Estado PROCESO creado por usuario con rol especial
-        $q->where('proforma_status', Transaction::PROCESO)
-          ->whereExists(function ($subquery) use ($allowedRoles) {
-            $subquery->select(DB::raw(1))
-              ->from('role_user')
-              ->join('roles', 'roles.id', '=', 'role_user.role_id')
-              ->whereColumn('role_user.user_id', 'transactions.created_by')
-              ->whereIn('roles.name', $allowedRoles);
-          });
-
-        // Condición 2: Estado SOLICITADA (sin filtro de usuario)
-        $q->orWhere('proforma_status', Transaction::FACTURADA);
-      });
-    } else {
-      // Obtener departamentos y bancos de la sesión
-      $departments = Session::get('current_department', []);
-      $banks = Session::get('current_banks', []);
-
-      // Filtrar por departamento y banco
-      if (!empty($departments)) {
-        $query->whereIn('transactions.department_id', $departments);
-      }
-
-      if (!empty($banks)) {
-        $query->whereIn('transactions.bank_id', $banks);
-      }
-
-      // Excluir transacciones creadas por usuarios con roles especiales
-      $query->whereNotExists(function ($subquery) use ($allowedRoles) {
-        $subquery->select(DB::raw(1))
-          ->from('role_user')
-          ->join('roles', 'roles.id', '=', 'role_user.role_id')
-          ->whereColumn('role_user.user_id', 'transactions.created_by')
-          ->whereIn('roles.name', $allowedRoles);
-      });
-    }
 
     return $query;
   }

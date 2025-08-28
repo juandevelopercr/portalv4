@@ -3,7 +3,6 @@
 namespace App\Livewire\TransactionsLines;
 
 use App\Helpers\Helpers;
-use App\Livewire\BaseComponent;
 use App\Models\Currency;
 use App\Models\DataTableConfig;
 use App\Models\DiscountType;
@@ -35,7 +34,7 @@ use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
-class TransactionLineManager extends BaseComponent
+class TransactionLineManager extends Component
 {
   use WithFileUploads;
   use WithPagination;

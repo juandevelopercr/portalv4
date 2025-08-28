@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\TenantModel;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TransactionPayment extends Model
+class TransactionPayment extends TenantModel
 {
   use HasFactory;
 

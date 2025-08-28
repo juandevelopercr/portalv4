@@ -63,8 +63,6 @@
       </div>
     </div>
 
-
-
     <div class="row g-6">
       <div class="col-md-6 fv-plugins-icon-container">
         <label class="form-label" for="name">{{ __('Name') }}</label>
@@ -181,6 +179,24 @@
           <div class="text-danger mt-1">{{ $message }}</div>
         @enderror
       </div>
+
+      @if (auth()->user()->hasRole(User::SUPERADMIN))
+      <div class="col-md-3 select2-primary fv-plugins-icon-container">
+        <label class="form-label" for="tenant_id">{{ __('Cliente') }}</label>
+        <div wire:ignore>
+          <select wire:model="tenant_id" id="tenant_id" class="select2 form-select @error('tenant_id') is-invalid @enderror">
+            <option value="">{{ __('Seleccione...') }}</option>
+            @foreach ($this->tenants as $tenant)
+              <option value="{{ $tenant->id }}">{{ $tenant->name }}</option>
+            @endforeach
+          </select>
+        </div>
+        @error('tenant_id')
+        <div class="text-danger mt-1">{{ $message }}</div>
+        @enderror
+      </div>
+      @endif
+
     </div>
 
     <div class="pt-6">
@@ -202,3 +218,58 @@
 
   {{-- @livewire('users.user-activity-timeline') --}}
 </div>
+
+
+@script()
+<script>
+  (function() {
+    // Función para inicializar Select2
+    const initializeSelect2 = () => {
+      const selects = [
+        'tenant_id',
+      ];
+
+      selects.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) {
+          //console.log(`Inicializando Select2 para: ${id}`);
+
+          $(`#${id}`).select2();
+
+          $(`#${id}`).on('change', function() {
+            const newValue = $(this).val();
+            const livewireValue = @this.get(id);
+
+            if (newValue !== livewireValue) {
+              // Actualiza Livewire solo si es el select2 de `condition_sale`
+              // Hay que poner wire:ignore en el select2 para que todo vaya bien
+              const specificIds = ['tenant_id']; // Lista de IDs específicos
+
+              if (specificIds.includes(id)) {
+                @this.set(id, newValue);
+              } else {
+                // Para los demás select2, actualiza localmente sin llamar al `updated`
+                @this.set(id, newValue, false);
+              }
+            }
+          });
+        }
+
+        // Sincroniza el valor actual desde Livewire al Select2
+        const currentValue = @this.get(id);
+        $(`#${id}`).val(currentValue).trigger('change');
+      });
+
+    };
+
+    // Re-ejecuta las inicializaciones después de actualizaciones de Livewire
+    Livewire.on('reinitFormControls', () => {
+      console.log('Reinicializando controles después de Livewire update reinitFormControls');
+      setTimeout(() => {
+        initializeSelect2();
+      }, 200); // Retraso para permitir que el DOM se estabilice
+    });
+
+  })();
+</script>
+@endscript

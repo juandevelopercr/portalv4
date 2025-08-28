@@ -1,13 +1,9 @@
 <?php
 
-use App\Http\Middleware\LocaleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
-use \App\Http\Middleware\EncryptCookies;
-
-
 
 return Application::configure(basePath: dirname(__DIR__))
   ->withRouting(
@@ -17,7 +13,16 @@ return Application::configure(basePath: dirname(__DIR__))
     health: '/up',
   )
   ->withMiddleware(function (Middleware $middleware) {
-    //$middleware->web(LocaleMiddleware::class);
+
+
+    // Middleware solo para rutas web
+    $middleware->group('web', [
+      \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+      \Illuminate\Session\Middleware\StartSession::class,
+      \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+      \App\Http\Middleware\SetTenantDatabase::class, // <-- tu middleware aquí
+      \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    ]);
 
     // Configura los proxies confiables
     $middleware->trustProxies(
@@ -41,44 +46,6 @@ return Application::configure(basePath: dirname(__DIR__))
       'api/mensaje-call-back',
       'api/factura-compra-call-back',
     ]);
-
-    /*
-    $middleware->alias([
-      'prevent.duplicate' => \App\Http\Middleware\PreventDuplicateAuth::class,
-    ]);
-
-    $middleware->prependToGroup('web', \App\Http\Middleware\PreventDuplicateAuth::class);
-    */
-
-    /*
-    $middleware->alias([
-      'prevent.duplicate' => \App\Http\Middleware\PreventDuplicateLogin::class,
-    ]);
-
-    $middleware->prependToGroup('web', \App\Http\Middleware\PreventDuplicateLogin::class);
-
-    $middleware->web(append: [
-      //\App\Http\Middleware\EncryptCookies::class,
-      \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-      \Illuminate\Session\Middleware\StartSession::class, // Asegurar que está antes de CheckSession
-      \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-      //\App\Http\Middleware\VerifyCsrfToken::class,
-      \Illuminate\Routing\Middleware\SubstituteBindings::class,
-      \App\Http\Middleware\CheckSession::class, // Nuestro middleware al final
-    ]);
-    */
-    /*
-    $middleware->alias([
-      'context' => \App\Http\Middleware\CheckContext::class,
-    ]);
-    */
-
-    // Añade tu middleware personalizado al grupo 'web'
-    //$middleware->appendToGroup('web', \App\Http\Middleware\CheckContext::class);
-
-    //$middleware->trustProxies(at: '*'); // Confía en todos los proxies
-    // Alternativamente, puedes especificar IPs de proxies confiables:
-    // $middleware->trustProxies(['192.168.1.1', '192.168.1.2']);
   })
   ->withExceptions(function (Exceptions $exceptions) {
     //

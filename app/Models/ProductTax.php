@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductTax extends Model
+class ProductTax extends TenantModel
 {
   use HasFactory;
 

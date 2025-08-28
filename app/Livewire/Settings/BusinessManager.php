@@ -7,11 +7,11 @@ use App\Models\BusinessLocation;
 use App\Models\CentroCosto;
 use App\Models\Currency;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Artisan;
 
 class BusinessManager extends Component
 {
@@ -62,7 +62,6 @@ class BusinessManager extends Component
 
   public $currencies;
 
-  public $centrosCostos;
   public $emisores;
 
   public $validatedEmails; // Almacena correos válidos
@@ -72,7 +71,6 @@ class BusinessManager extends Component
   {
     // Cargar el registro con id = 1 al iniciar el componente
     $this->loadRecord();
-    $this->centrosCostos = CentroCosto::orderBy('descrip', 'ASC')->get();
     $this->emisores = BusinessLocation::orderBy('name', 'ASC')->get();
     $this->currencies = Currency::orderBy('code', 'ASC')->get();
 

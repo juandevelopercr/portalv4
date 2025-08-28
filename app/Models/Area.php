@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Area extends Model
+class Area extends TenantModel
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-        'name',
-    ];
+  protected $fillable = [
+    'name',
+  ];
 }

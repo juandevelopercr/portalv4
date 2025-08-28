@@ -58,18 +58,6 @@ use App\Models\User;
                   <i class="bx bx-dollar bx-lg d-sm-none"></i>
                 </button>
               </li>
-              @if (in_array(session('current_role_name'), User::ROLES_ALL_DEPARTMENTS))
-              <li class="nav-item">
-                <button type="button" class="nav-link @if ($this->activeTab == 'comisiones') show active @endif" role="tab" data-bs-toggle="tab"
-                  data-bs-target="#navs-justified-cost-center" aria-controls="navs-justified-cost-center"
-                  aria-selected="true" wire:click="setActiveTab('comisiones')">
-                  <span class="d-none d-sm-block"><i class="tf-icons bx bx-chart bx-lg me-1_5 align-text-center"></i>
-                    {{ __('Cost Centers and Commissions') }}
-                  </span>
-                  <i class="bx bx-chart bx-lg d-sm-none"></i>
-                </button>
-              </li>
-              @endif
               <li class="nav-item">
                 <button type="button" class="nav-link @if ($this->activeTab == 'documentos') show active @endif" role="tab" data-bs-toggle="tab"
                   data-bs-target="#navs-justified-document" aria-controls="navs-justified-document"
@@ -82,8 +70,6 @@ use App\Models\User;
                 </button>
               </li>
             </ul>
-
-
             <div class="tab-content">
               <div class="tab-pane fade show @if ($this->activeTab == 'invoice') show active @endif"
                   id="navs-justified-home" role="tabpanel">
@@ -133,31 +119,7 @@ use App\Models\User;
                   </div>
                 </div>
               </div>
-              @if (in_array(session('current_role_name'), User::ROLES_ALL_DEPARTMENTS))
-                <div class="tab-pane fade @if ($this->activeTab == 'comisiones') show active @endif" id="navs-justified-cost-center" role="tabpanel">
-                  <div class="{{ $this->recordId ? '' : 'd-none' }}">
-                    @livewire('transactions-commissions.transaction-commission-manager', [
-                      'transaction_id' => $this->recordId,
-                      'canview'   => auth()->user()->can('view-comision-proformas'),
-                      'cancreate' => auth()->user()->can('create-comision-proformas'),
-                      'canedit'   => auth()->user()->can('edit-comision-proformas'),
-                      'candelete' => auth()->user()->can('delete-comision-proformas'),
-                      'canexport' => auth()->user()->can('export-comision-proformas'),
-                    ])
-                  </div>
-
-                  <div class="{{ $this->recordId ? 'd-none' : '' }}">
-                    <div class="alert alert-solid-warning d-flex align-items-center" role="alert">
-                      <span class="alert-icon rounded-circle">
-                        <i class="bx bx-xs bx-wallet"></i>
-                      </span>
-                      {{ __('Information will be displayed here after you have created the proforma') }}
-                    </div>
-                  </div>
-                </div>
-              @endif
               <div class="tab-pane fade @if ($this->activeTab == 'documentos') show active @endif" id="navs-justified-document" role="tabpanel">
-
                 @if($this->recordId)
                   @livewire('transactions.documents-manager', [
                     'transaction_id' => $this->recordId,

@@ -273,18 +273,13 @@ class Helpers
     if (!file_exists(public_path("storage/assets/img/logos/{$logoFileName}"))) {
       $logo = public_path("storage/assets/default-image.png");
     }
-    /*
-    $transaction = Transaction::findOrFail($invoiceId);
-    $transaction_lines = TransactionLine::where('transaction_id', $invoiceId)->get();
-    $transaction_other_charges = TransactionOtherCharge::where('transaction_id', $invoiceId)->get();
-    */
+
     $transaction = Transaction::with(['lines', 'otherCharges', 'cuenta'])
       ->findOrFail($invoiceId);
 
     $transaction_lines = $transaction->lines;
     $transaction_other_charges = $transaction->otherCharges;
 
-    $type = $transaction->proforma_type;
     $email_cc = str_replace([';', ','], "\n", $transaction->email_cc);
 
     $titleFrom = 'Proforma';
@@ -313,7 +308,6 @@ class Helpers
       'title',
       'consecutivo',
       'titleFrom',
-      'type',
       'receipt_type',
       'email_cc',
       'watermark'
@@ -388,7 +382,6 @@ class Helpers
       $transaction_lines = $transaction->lines;
       $transaction_other_charges = $transaction->otherCharges;
 
-      $type = $transaction->proforma_type;
       $email_cc = str_replace([';', ','], "\n", $transaction->email_cc);
 
       $title = Helpers::getTitle($transaction);
@@ -468,7 +461,6 @@ class Helpers
         'logo',
         'title',
         'consecutivo',
-        'type',
         'receipt_type',
         'email_cc',
         'identification',
@@ -1500,14 +1492,10 @@ class Helpers
     }
 
     foreach ($movimiento->transactions as $invoice) {
-      if ($invoice->proforma_type === 'HONORARIO' && $retencion == 1) {
-        $base = $invoice->totalHonorarios - $invoice->totalDiscount;
-        $retencion2 = ($base * 2) / 100;
-        $subtotal = $base - $retencion2;
-        $saldoCancelar += $subtotal + $invoice->totalTax + $invoice->totalOtrosCargos;
-      } else {
-        $saldoCancelar += $invoice->totalComprobante;
-      }
+      $base = $invoice->totalHonorarios - $invoice->totalDiscount;
+      $retencion2 = ($base * 2) / 100;
+      $subtotal = $base - $retencion2;
+      $saldoCancelar += $subtotal + $invoice->totalTax + $invoice->totalOtrosCargos;
     }
 
     return $saldoCancelar;

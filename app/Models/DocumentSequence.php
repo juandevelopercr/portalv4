@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class DocumentSequence extends Model
+class DocumentSequence extends TenantModel
 {
   protected $table = 'document_sequences';
 

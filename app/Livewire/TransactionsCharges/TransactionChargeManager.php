@@ -2,7 +2,6 @@
 
 namespace App\Livewire\TransactionsCharges;
 
-use App\Livewire\BaseComponent;
 use App\Models\AdditionalChargeType;
 use App\Models\DataTableConfig;
 use App\Models\IdentificationType;
@@ -24,7 +23,7 @@ use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
-class TransactionChargeManager extends BaseComponent
+class TransactionChargeManager extends Component
 {
   use WithFileUploads;
   use WithPagination;

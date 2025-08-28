@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Altwaireb\World\Models\State as Model;
+use App\Models\TenantModel;
 
-class State extends Model
+class State extends TenantModel
 {
-    //
+  //
 }

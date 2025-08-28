@@ -6,6 +6,7 @@ use App\Exports\UsersExport;
 use App\Helpers\Helpers;
 use App\Livewire\BaseComponent;
 use App\Models\DataTableConfig;
+use App\Models\Tenant;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -51,6 +52,7 @@ class UserManager extends BaseComponent
   public $password;
   public $password_confirmation;
   public $profile_photo_path;
+  public $tenant_id;
 
   public $oldProfile_photo_path = NULL; // Imagen existente en la BD
 
@@ -59,6 +61,7 @@ class UserManager extends BaseComponent
   public $columns;
   public $defaultColumns;
   public $listActives;
+  public $tenants = [];
 
   #[Computed()]
   public function listroles()
@@ -88,6 +91,8 @@ class UserManager extends BaseComponent
   {
     $this->refresDatatable();
     $this->listActives = [['id' => 1, 'name' => 'Activo'], ['id' => 0, 'name' => 'Inactivo']];
+    if (auth()->user()->hasRole('SUPERADMIN'))
+      $this->tenants = Tenant::get();
   }
 
   public function render()
@@ -139,6 +144,7 @@ class UserManager extends BaseComponent
     $this->active = 1;
     $this->action = 'create';
     $this->dispatch('scroll-to-top');
+    $this->dispatch('reinitFormControls');
   }
 
   public function rules()
@@ -150,6 +156,7 @@ class UserManager extends BaseComponent
       'password'      => 'nullable|string|min:8|confirmed',
       'roles'         => 'required|array|min:1',
       'roles.*'       => 'exists:roles,name',
+      'tenant_id'     => 'nullable|integer',
       'active'        => 'required|integer|in:0,1',
     ];
 
@@ -252,6 +259,7 @@ class UserManager extends BaseComponent
     $this->email = $user->email;
     $this->initials = $user->initials;
     $this->profile_photo_path = $user->profile_photo_path;
+    $this->tenant_id = $user->tenant_id;
     $this->active = $user->active;
 
     $this->roles = $user->getRoleNames();
@@ -263,6 +271,7 @@ class UserManager extends BaseComponent
     $this->resetValidation(); // También puedes reiniciar los valores previos de val
 
     $this->action = 'edit';
+    $this->dispatch('reinitFormControls');
   }
 
   public function update()

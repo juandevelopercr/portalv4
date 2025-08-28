@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Models\AreaPractica;
 use App\Models\Contact;
 use App\Models\Sector;
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class ContactContacto extends Model
+class ContactContacto extends TenantModel
 {
   protected $table = 'contacts_contactos';
 

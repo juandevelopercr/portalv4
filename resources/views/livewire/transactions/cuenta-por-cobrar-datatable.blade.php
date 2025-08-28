@@ -2,7 +2,7 @@
   use App\Models\Transaction;
   use App\Models\User;
   use Illuminate\Support\Facades\Auth;
-  use Illuminate\Support\Facades\Session;
+  use Illuminate\Support\Facades\Session;  
 @endphp
 <div>
   @if($action == 'list')
@@ -85,7 +85,7 @@
             </div>
           </div>
 
-          @can("view-proformas")
+          @can("view-electronicinvoices")
             <div class="card-datatable table-responsive">
               <table class="table table-sm mb-0 border-top table-hover dataTable no-footer" id="transaction-table" style="width: 100%;">
                 <thead>

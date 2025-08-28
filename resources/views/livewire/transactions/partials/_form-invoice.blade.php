@@ -346,19 +346,12 @@
     // Para la busqueda del caso
     // Configuración AJAX para caso_id
     window.select2Config = {
-      department_id: {fireEvent: true},
-      bank_id: {fireEvent: true},
-      cuenta_id: {fireEvent: false},
-      showInstruccionesPago: {fireEvent: false},
       currency_id: {fireEvent: false},
       contact_economic_activity_id: {fireEvent: false},
       location_economic_activity_id: {fireEvent: false},
       condition_sale: {fireEvent: true},
       location_id: {fireEvent: true},
-      codigo_contable_id: {fireEvent: false},
-      proforma_type: {fireEvent: false},
-      status: {fireEvent: false},
-      area_id: {fireEvent: false}
+      status: {fireEvent: false}
     };
 
     //**************************************************************

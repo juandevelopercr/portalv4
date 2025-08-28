@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Helpers\Helpers;
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TransactionOtherCharge extends Model
+class TransactionOtherCharge extends TenantModel
 {
   use HasFactory;
 

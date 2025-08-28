@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Models\ContactContacto;
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class AreaPractica extends Model
+class AreaPractica extends TenantModel
 {
   protected $table = 'areas_practicas';
 

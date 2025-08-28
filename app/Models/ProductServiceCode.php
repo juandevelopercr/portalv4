@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductServiceCode extends Model
+class ProductServiceCode extends TenantModel
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'code',
-        'active'
-    ];
+  protected $fillable = [
+    'name',
+    'code',
+    'active'
+  ];
 
-    protected $casts = [
-        'active' => 'boolean',
-    ];
+  protected $casts = [
+    'active' => 'boolean',
+  ];
 }

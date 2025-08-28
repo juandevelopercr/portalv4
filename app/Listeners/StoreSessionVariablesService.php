@@ -32,15 +32,18 @@ class StoreSessionVariablesService
       // Esto lo pongo fijo de momento luego hay que ver la lógica a seguir
       $user->business_id = 1;
 
+      /*
       $bussines = Business::findOrFail($user->business_id);
       $location_id = 1;
-      $location = BusinessLocation::findOrFail($location_id);
+      $location = BusinessLocation::find($location_id);
+      */
+
 
       // Otras variables de sesión
-      Session::put('user.business_id', $user->business_id);
+      //Session::put('user.business_id', $user->business_id);
       Session::put('user.name', $user->name);
-      Session::put('user.business', $bussines);
-      Session::put('user.location', $location);
+      //Session::put('user.business', $bussines);
+      //Session::put('user.location', $location);
 
       // Llama al método para obtener el tipo de cambio
       $response = $this->apiBCCR->obtenerIndicadorEconomico(

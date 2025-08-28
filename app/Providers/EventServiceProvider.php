@@ -19,8 +19,6 @@ class EventServiceProvider extends ServiceProvider
   protected $listen = [
     Login::class => [
       StoreSessionVariables::class,
-      //SetSessionVariables::class,
-      // HandleUserLogin::class,
     ],
     /*
     \Illuminate\Auth\Events\Logout::class => [

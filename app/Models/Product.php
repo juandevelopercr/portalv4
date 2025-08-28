@@ -2,20 +2,17 @@
 
 namespace App\Models;
 
-use App\Models\Bank;
 use App\Models\Business;
-use App\Models\Department;
-use App\Models\ExonerationType;
-use App\Models\Institution;
 use App\Models\ProductHonorariosTimbre;
 use App\Models\UnitType;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
-class Product extends Model
+class Product extends TenantModel
 {
   use HasFactory;
 
@@ -49,7 +46,6 @@ class Product extends Model
     'rp_cumul',
     'commission',
     'suppliers',
-    'created_by',
     'active',
   ];
 
@@ -75,39 +71,9 @@ class Product extends Model
     return $this->belongsTo(UnitType::class);
   }
 
-  public function createdBy()
-  {
-    return $this->belongsTo(User::class, 'created_by');
-  }
-
-  public function departments()
-  {
-    return $this->belongsToMany(Department::class, 'department_products', 'product_id', 'department_id');
-  }
-
-  public function banks()
-  {
-    return $this->belongsToMany(Bank::class, 'products_banks', 'product_id', 'bank_id');
-  }
-
   public function taxes()
   {
     return $this->hasMany(ProductTax::class);
-  }
-
-  public function productsBanks()
-  {
-    return $this->hasMany(ProductsBank::class, 'product_id');
-  }
-
-  public function productsDepartments()
-  {
-    return $this->hasMany(DepartmentProduct::class, 'product_id');
-  }
-
-  public function honorariosTimbres()
-  {
-    return $this->hasMany(ProductHonorariosTimbre::class);
   }
 
   // En tu modelo
@@ -128,14 +94,17 @@ class Product extends Model
       'sku',
       'image',
       'description',
-      'products.created_by',
       'products.active'
     ];
+
+    $masterUsers = DB::connection('mysql')->table('users')->select('id', 'name');
 
     $query->select($columns)
       ->join('business', 'products.business_id', '=', 'business.id')
       ->join('unit_types', 'products.unit_type_id', '=', 'unit_types.id')
-      ->join('users', 'products.created_by', '=', 'users.id')
+      ->leftJoinSub($masterUsers, 'master_users', function ($join) {
+        $join->on('products.created_by', '=', 'master_users.id');
+      })
       ->where(function ($q) use ($value) {
         $q->where('products.name', 'like', "%{$value}%")
           ->orWhere('sku', 'like', "%{$value}%")

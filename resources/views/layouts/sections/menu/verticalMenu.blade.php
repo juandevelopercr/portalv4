@@ -25,6 +25,10 @@ $configData = Helper::appClasses();
     @foreach ($menuData[0]->menu as $menu)
       {{-- adding active and open class if child is active --}}
 
+      @php
+        $user = auth()->user();
+      @endphp
+
       {{-- menu headers --}}
       @if (isset($menu->menuHeader))
         <li class="menu-header small text-uppercase">
@@ -34,6 +38,11 @@ $configData = Helper::appClasses();
 
       {{-- active menu method --}}
       @php
+      $restricted = ['Users', 'Roles & Permissions', 'Roles', 'Permission'];
+      if (in_array($menu->name, $restricted) && !$user->hasRole('SuperAdmin')) {
+          continue;
+      }
+
       $activeClass = null;
       $currentRouteName = Route::currentRouteName();
 

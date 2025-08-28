@@ -71,51 +71,19 @@ class SendEmailModal extends Component
       if ($this->documentType == 'PROFORMA' || $this->documentType == 'COTIZACION') {
         if ($transaction->proforma_status == Transaction::FACTURADA) {
           $consecutivo = $transaction->consecutivo;
-          $prefijo_nombre = $transaction->proforma_type == 'HONORARIO' ? 'factura' : 'recibo-gasto';
-          $prefijo_asunto = $transaction->proforma_type == 'HONORARIO' ? 'Factura' : 'Recibo de Gasto';
+          $prefijo_asunto = 'Factura';
         } else {
           $consecutivo = $transaction->proforma_no;
-          $prefijo_nombre = $transaction->proforma_type == 'HONORARIO' ? 'proforma' : 'proforma-gasto';
-          $prefijo_asunto = $transaction->proforma_type == 'HONORARIO' ? 'Proforma' : 'Proforma de Gasto';
+          $prefijo_asunto = 'Proforma';
         }
 
-        if (!is_null($transaction->nombre_caso) && !empty($transaction->nombre_caso)) {
-          if (!is_null($transaction->caso)) {
-            if (strtoupper($transaction->caso->deudor) != strtoupper($transaction->nombre_caso)) {
-              if (!is_null($transaction->caso->deudor) && !empty($transaction->caso->deudor))
-                $titulo = $transaction->customer_name . '-' . $transaction->caso->numero . ' / ' . $transaction->caso->numero_gestion . ' / ' . $transaction->caso->deudor . '-' . $transaction->nombre_caso;
-              else
-                $titulo = $transaction->customer_name . '-' . $transaction->caso->numero . ' / ' . $transaction->caso->numero_gestion . ' / ' . $transaction->nombre_caso;
-            } else
-              $titulo = $transaction->customer_name . '-' . $transaction->caso->numero . ' / ' . $transaction->caso->numero_gestion . ' / ' . $transaction->nombre_caso;
-          } else
-            $titulo = $transaction->customer_name . '-' . $transaction->nombre_caso;
-        } else {
-          if (!is_null($transaction->caso)) {
-            $titulo = $transaction->customer_name . '-' . $transaction->caso->numero;
-            if (!is_null($transaction->caso->numero_gestion) && !empty($transaction->caso->numero_gestion))
-              $titulo .= ' / ' . $transaction->caso->numero_gestion;
-            if (!is_null($transaction->caso->deudor) && !empty($transaction->caso->deudor)) {
-              $titulo .= ' / ' . $transaction->caso->deudor;
-            }
-          } else
-            $titulo = $transaction->customer_name;
-        }
+        $titulo = $transaction->customer_name;
+
         $this->subject = $prefijo_asunto . ' No.' . $consecutivo . '-' . $titulo;
         $this->message = "Estimado/a " . $this->recipientName . ",\n\nAdjunto encontrará la proforma con los detalles solicitados.\n\nSaludos cordiales.";
       } else {
         // Documento electrónico
-        if (!is_null($transaction->nombre_caso) && !empty($transaction->nombre_caso)) {
-          if (strtoupper($transaction->customer_name) != strtoupper($transaction->customer_name))
-            $titulo = $transaction->customer_name . '-' . $transaction->nombre_caso;
-          else
-            $titulo = $transaction->customer_name;
-        } else
-          $titulo = $transaction->customer_name;
-
-        if (!is_null($transaction->caso)) {
-          $titulo .= '-' . $transaction->caso->numero;
-        }
+        $titulo = $transaction->customer_name;
 
         $typeComprobante = Helpers::getPdfTitle($transaction->document_type);
 

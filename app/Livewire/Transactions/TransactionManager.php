@@ -72,7 +72,6 @@ abstract class TransactionManager extends BaseComponent
   public $currency_id;
   public $created_by;
   public $document_type;
-  public $proforma_type;
   public $proforma_status;
   public $status;
   public $payment_status;
@@ -1153,12 +1152,12 @@ abstract class TransactionManager extends BaseComponent
       }
     }
 
-    if ($clonar == false && !in_array(session('current_role_name'), User::ROLES_ALL_DEPARTMENTS)) {
+    if ($clonar == false) {
       $transaction = Transaction::find($recordId);
       if ($transaction->proforma_status != Transaction::PROCESO) {
         $this->dispatch('show-notification', [
           'type' => 'warning',
-          'message' => 'No puede editar una proforma que se encuentra en estado solicitada'
+          'message' => 'No puede editar una proforma que se encuentra en estado distinto de PROCESO'
         ]);
         return;
       }
@@ -1172,4 +1171,3 @@ abstract class TransactionManager extends BaseComponent
     $this->activeTab = $tab;
   }
 }
-// ProformaManager, InvoiceManager, NotaCreditoManager y NotaDebitoManager extenderán esta clase y redefinirán lógica específica como afterTransactionSaved()

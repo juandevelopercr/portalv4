@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Models\ContactContacto;
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Sector extends Model
+class Sector extends TenantModel
 {
   protected $table = 'sectores';
 

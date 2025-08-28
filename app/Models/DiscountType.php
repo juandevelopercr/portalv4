@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DiscountType extends Model
+class DiscountType extends TenantModel
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'code',
-        'active',
-    ];
+  protected $fillable = [
+    'name',
+    'code',
+    'active',
+  ];
 }

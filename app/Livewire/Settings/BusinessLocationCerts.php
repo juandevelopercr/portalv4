@@ -4,8 +4,8 @@ namespace App\Livewire\Settings;
 
 use App\Models\BusinessLocation;
 use App\Services\CertValidationService;
-use Livewire\Component;
 use Illuminate\Support\Facades\Log;
+use Livewire\Component;
 
 class BusinessLocationCerts extends Component
 {

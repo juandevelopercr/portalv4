@@ -11,11 +11,12 @@ use App\Models\IdentificationType;
 use App\Models\InvoiceLayout;
 use App\Models\Province;
 use App\Models\SellingPriceGroup;
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BusinessLocation extends Model
+class BusinessLocation extends TenantModel
 {
   use HasFactory, SoftDeletes;
 

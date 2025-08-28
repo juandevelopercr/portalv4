@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Institution;
 use App\Models\ExonerationType;
+use App\Models\Institution;
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TransactionLineTax extends Model
+class TransactionLineTax extends TenantModel
 {
   use HasFactory;
 

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
+use App\Models\BusinessLocation;
 
 class InvoiceManager extends TransactionManager
 {
@@ -724,6 +725,10 @@ class InvoiceManager extends TransactionManager
     $this->status = 'PENDIENTE';
     $this->proforma_change_type = Helpers::formatDecimal(Session::get('exchange_rate'));
 
+    $location = BusinessLocation::where('id', 1)->first();
+    $this->location_id = $location->id;
+    $this->location_economic_activity_id = $location->economicActivities[0]->id;
+
     $this->payments = [[
       'tipo_medio_pago' => '04', // Transferencia
       'medio_pago_otros' => '',
@@ -749,7 +754,7 @@ class InvoiceManager extends TransactionManager
       'contact_id'            => 'required|integer|exists:contacts,id',
       'contact_economic_activity_id' => 'nullable|integer|exists:economic_activities,id',
       'currency_id'           => 'required|integer|exists:currencies,id',
-      'created_by'            => 'required|integer|exists:users,id',
+      'created_by'            => 'required|integer',
 
       // Enums
       'document_type'         => 'required|in:PR,FE,TE,ND,NC,FEC,FEE,REP',
@@ -850,7 +855,6 @@ class InvoiceManager extends TransactionManager
       'document_type'         => 'tipo de documento',
       'currency_id'           => 'moneda',
       'condition_sale'        => 'condición de venta',
-      'department_id'         => 'departamento',
       'status'                => 'estado',
       'transaction_date'      => 'fecha de transacción',
       'customer_name'         => 'nombre del cliente',
@@ -974,7 +978,6 @@ class InvoiceManager extends TransactionManager
     $this->currency_id            = $record->currency_id;
     $this->created_by             = $record->created_by;
     $this->document_type          = $record->document_type;
-    $this->proforma_type          = $record->proforma_type;
     $this->proforma_status        = $record->proforma_status;
     $this->status                 = $record->status;
     $this->payment_status         = $record->payment_status;
@@ -1046,9 +1049,6 @@ class InvoiceManager extends TransactionManager
     // Se emite este evento para los componentes hijos
     $this->dispatch('updateTransactionContext', [
       'transaction_id'    => $record->id,
-      'department_id'     => $record->department_id,
-      'bank_id'           => $record->bank_id,
-      'type_notarial_act' => $record->proforma_type,
     ]);
 
     $this->payments = $record->payments->map(fn($p) => [
@@ -1186,7 +1186,6 @@ class InvoiceManager extends TransactionManager
       'contact_economic_activity_id',
       'currency_id',
       'created_by',
-      'proforma_type',
       'proforma_status',
       'status',
       'payment_status',
@@ -1226,11 +1225,10 @@ class InvoiceManager extends TransactionManager
     );
 
     $this->currency_id = null;
-    $this->proforma_type = null;
 
     // Forzar actualización de Select2
     $this->dispatch('resetSelect2', [
-      'ids' => ['bank_id', 'currency_id', 'proforma_type']
+      'ids' => ['currency_id']
     ]);
 
     $this->selectedIds = [];

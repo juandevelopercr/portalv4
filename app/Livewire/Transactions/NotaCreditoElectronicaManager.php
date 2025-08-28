@@ -18,20 +18,14 @@ class NotaCreditoElectronicaManager extends TransactionManager
   public $filters = [
     'filter_consecutivo' => NULL,
     'filter_customer_name' => NULL,
-    'filter_department_name' => NULL,
     'filter_user_name' => NULL,
     'filter_transaction_date' => NULL,
     'filter_issuer_name' => NULL,
     'filter_numero_caso' => NULL,
     'filter_referencia' => NULL,
-    'filter_oc' => NULL,
-    'filter_migo' => NULL,
-    'filter_bank_name' => NULL,
     'filter_currency_code' => NULL,
     'filter_status' => NULL,
     'filter_totalComprobante' => NULL,
-    'filter_total_usd' => NULL,
-    'filter_total_crc' => NULL,
     'filter_action' => NULL,
   ];
 
@@ -100,25 +94,6 @@ class NotaCreditoElectronicaManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'department_name',
-        'orderName' => 'departments.name',
-        'label' => __('Department'),
-        'filter' => 'filter_department_name',
-        'filter_type' => 'select',
-        'filter_sources' => 'departments',
-        'filter_source_field' => 'name',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'user_name',
         'orderName' => 'users.name',
         'label' => __('User'),
@@ -172,101 +147,6 @@ class NotaCreditoElectronicaManager extends TransactionManager
         'sumary' => '',
         'openHtmlTab' => '<span class="emp_name text-truncate">',
         'closeHtmlTab' => '</span>',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'numero_caso',
-        'orderName' => '',
-        'label' => __('Case Number'),
-        'filter' => 'filter_numero_caso',
-        'filter_type' => 'input',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'referencia',
-        'orderName' => '',
-        'label' => __('Case/Reference'),
-        'filter' => 'filter_referencia',
-        'filter_type' => 'input',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'oc',
-        'orderName' => 'oc',
-        'label' => __('O.C'),
-        'filter' => 'filter_oc',
-        'filter_type' => 'input',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'migo',
-        'orderName' => 'migo',
-        'label' => __('MIGO'),
-        'filter' => 'filter_migo',
-        'filter_type' => 'input',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'bank_name',
-        'orderName' => 'banks.name',
-        'label' => __('Bank'),
-        'filter' => 'filter_bank_name',
-        'filter_type' => 'select',
-        'filter_sources' => 'banks',
-        'filter_source_field' => 'name',
-        'columnType' => 'string',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => '',
-        'parameters' => [],
-        'sumary' => '',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
         'width' => NULL,
         'visible' => true,
       ],
@@ -328,44 +208,6 @@ class NotaCreditoElectronicaManager extends TransactionManager
         'visible' => true,
       ],
       [
-        'field' => 'total_usd',
-        'orderName' => '',
-        'label' => __('Total USD'),
-        'filter' => 'filter_total_usd',
-        'filter_type' => '',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'decimal',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => 'getTotalComprobante',
-        'parameters' => ['USD', true],
-        'sumary' => 'tComprobanteUsd',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
-        'field' => 'total_crc',
-        'orderName' => '',
-        'label' => __('Total CRC'),
-        'filter' => 'filter_total_crc',
-        'filter_type' => '',
-        'filter_sources' => '',
-        'filter_source_field' => '',
-        'columnType' => 'decimal',
-        'columnAlign' => '',
-        'columnClass' => '',
-        'function' => 'getTotalComprobante',
-        'parameters' => ['CRC', true], // Parámetro a pasar a la función
-        'sumary' => 'tComprobanteCrc',
-        'openHtmlTab' => '',
-        'closeHtmlTab' => '',
-        'width' => NULL,
-        'visible' => true,
-      ],
-      [
         'field' => 'action',
         'orderName' => '',
         'label' => __('Actions'),
@@ -400,28 +242,7 @@ class NotaCreditoElectronicaManager extends TransactionManager
     $query = Transaction::search($this->search, $this->filters)
       ->where('document_type', $this->document_type);
 
-    // Condiciones según el rol del usuario
-    $allowedRoles = User::ROLES_ALL_DEPARTMENTS;
-    if (in_array(Session::get('current_role_name'), $allowedRoles)) {
-      $query->where(function ($q) {
-        $q->whereIn('status', [Transaction::PENDIENTE, Transaction::RECIBIDA, Transaction::ACEPTADA, Transaction::RECHAZADA, Transaction::ANULADA]);
-      });
-    } else {
-      // Obtener departamentos y bancos de la sesión
-      $departments = Session::get('current_department', []);
-      $banks = Session::get('current_banks', []);
-
-      // Filtrar por departamento y banco
-      if (!empty($departments)) {
-        $query->whereIn('transactions.department_id', $departments);
-      }
-
-      if (!empty($banks)) {
-        $query->whereIn('transactions.bank_id', $banks);
-      }
-
-      $query->whereIn('status', [Transaction::PENDIENTE, Transaction::RECIBIDA, Transaction::ACEPTADA, Transaction::RECHAZADA, Transaction::ANULADA]);
-    }
+    $query->whereIn('status', [Transaction::PENDIENTE, Transaction::RECIBIDA, Transaction::ACEPTADA, Transaction::RECHAZADA, Transaction::ANULADA]);
 
     return $query;
   }
@@ -453,22 +274,8 @@ class NotaCreditoElectronicaManager extends TransactionManager
       }
     }
 
-    if ($propertyName == 'department_id') {
-      // emitir el evento para que actualice la info en las lineas
-      $this->dispatch('departmentChange', $this->department_id); // Enviar evento al frontend
-    }
-
-    if ($propertyName == 'bank_id') {
-      // emitir el evento para que actualice la info en las lineas
-      $this->dispatch('bankChange', $this->bank_id); // Enviar evento al frontend
-    }
-
     if ($propertyName == 'email_cc') {
       $this->updatedEmails();
-    }
-
-    if ($propertyName == 'bank_id') {
-      $this->setEnableControl();
     }
 
     if ($propertyName == 'location_id') {
@@ -536,37 +343,6 @@ class NotaCreditoElectronicaManager extends TransactionManager
       $this->addError('email_cc', 'Hay correos inválidos: ' . implode(', ', $this->invalidEmails));
     } else {
       $this->resetErrorBag('email_cc'); // Limpiar errores si todos son válidos
-    }
-  }
-
-  public function setEnableControl()
-  {
-    $this->enableoc = false;
-    $this->enablemigo = false;
-    $this->enableor = false;
-    $this->enablegln = false;
-    $this->enableprebill = false;
-
-    if ($this->bank_id == Bank::SANJOSE) {
-      $this->enableoc = true;
-      $this->enablemigo = true;
-
-      $this->or = '';
-      $this->gln = '';
-      $this->prebill = '';
-    } else
-    if ($this->bank_id == Bank::TERCEROS) {
-      $this->enableoc = true;
-      $this->enablemigo = true;
-      $this->enableor = true;
-      $this->enablegln = true;
-      $this->enableprebill = true;
-    } else {
-      $this->oc = '';
-      $this->migo = '';
-      $this->or = '';
-      $this->gln = '';
-      $this->prebill = '';
     }
   }
 }

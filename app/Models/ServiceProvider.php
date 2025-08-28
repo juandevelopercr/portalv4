@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\TenantModel;
 use Illuminate\Database\Eloquent\Model;
 
-class ServiceProvider extends Model
+class ServiceProvider extends TenantModel
 {
   protected $table = 'services_providers';
 

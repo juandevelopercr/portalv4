@@ -140,13 +140,14 @@ class PermissionManager extends Component
     ]);
   }
 
-  public function beforedelete(){
+  public function beforedelete()
+  {
     $this->confirmarAccion(
-        null,
-        'delete',
-        '¿Está seguro que desea eliminar este registro?',
-        'Después de confirmar, el registro será eliminado',
-        __('Sí, proceed')
+      null,
+      'delete',
+      '¿Está seguro que desea eliminar este registro?',
+      'Después de confirmar, el registro será eliminado',
+      __('Sí, proceed')
     );
   }
 

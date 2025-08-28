@@ -78,36 +78,6 @@
     </div>
 
     <div class="col-md-3 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="department_id">{{ __('Department') }}</label>
-      <div wire:ignore>
-        <select wire:model="department_id" id="department_id" class="select2 form-select @error('department_id') is-invalid @enderror">
-          <option value="">{{ __('Seleccione...') }}</option>
-          @foreach ($this->departments as $department)
-            <option value="{{ $department->id }}">{{ $department->name }}</option>
-          @endforeach
-        </select>
-      </div>
-      @error('department_id')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="bank_id">{{ __('Bank') }}</label>
-      <div wire:ignore>
-        <select wire:model="bank_id" id="bank_id" class="select2 form-select @error('bank_id') is-invalid @enderror">
-          <option value="">{{ __('Seleccione...') }}</option>
-          @foreach ($this->banks as $bank)
-            <option value="{{ $bank->id }}">{{ $bank->name }}</option>
-          @endforeach
-        </select>
-      </div>
-      @error('bank_id')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 select2-primary fv-plugins-icon-container">
       <label class="form-label" for="currency_id">{{ __('Currency') }}</label>
       <div wire:ignore>
         <select wire:model="currency_id" id="currency_id" class="select2 form-select @error('currency_id') is-invalid @enderror">
@@ -196,21 +166,6 @@
           </select>
         </div>
       @error('location_economic_activity_id')
-      <div class="text-danger mt-1">{{ $message }}</div>
-      @enderror
-    </div>
-
-    <div class="col-md-3 select2-primary fv-plugins-icon-container">
-      <label class="form-label" for="codigo_contable_id">{{ __('Accounting Code') }}</label>
-      <div wire:ignore>
-        <select wire:model="codigo_contable_id" id="codigo_contable_id" class="select2 form-select @error('codigo_contable_id') is-invalid @enderror">
-          <option value="">{{ __('Seleccione...') }}</option>
-          @foreach ($this->codigosContables as $codigoContable)
-            <option value="{{ $codigoContable->id }}">{{ $codigoContable->descrip }}</option>
-          @endforeach
-        </select>
-      </div>
-      @error('codigo_contable_id')
       <div class="text-danger mt-1">{{ $message }}</div>
       @enderror
     </div>
@@ -355,19 +310,12 @@
     // Para la busqueda del caso
     // Configuración AJAX para caso_id
     window.select2Config = {
-      department_id: {fireEvent: true},
-      bank_id: {fireEvent: true},
-      cuenta_id: {fireEvent: false},
-      showInstruccionesPago: {fireEvent: false},
       currency_id: {fireEvent: false},
       contact_economic_activity_id: {fireEvent: false},
       location_economic_activity_id: {fireEvent: false},
       condition_sale: {fireEvent: true},
       location_id: {fireEvent: true},
-      codigo_contable_id: {fireEvent: false},
-      proforma_type: {fireEvent: false},
-      status: {fireEvent: false},
-      area_id: {fireEvent: false}
+      status: {fireEvent: false}
     };
 
     $('#caso_id').select2({
@@ -472,7 +420,6 @@
         let data = $(this).val();
         $wire.set(id, data, fireEvent);
         $wire.id = data;
-        //@this.department_id = data;
         console.log(data);
       });
     });

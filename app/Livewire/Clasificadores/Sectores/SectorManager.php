@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Clasificadores\Sectores;
 
-use App\Livewire\BaseComponent;
 use App\Models\DataTableConfig;
 use App\Models\Sector;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -11,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\View\Component;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
@@ -19,7 +19,7 @@ use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
-class SectorManager extends BaseComponent
+class SectorManager extends Component
 {
   use WithFileUploads;
   use WithPagination;
