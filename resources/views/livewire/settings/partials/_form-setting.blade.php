@@ -128,6 +128,8 @@
             @enderror
         </div>
     </div>
+    @php
+    /*
     <br>
     <h6>2. {{ __('Emails Setting') }}</h6>
     <div class="row g-6">
@@ -273,10 +275,11 @@
         @enderror
       </div>
     </div>
-
+    */
+    @endphp
 
     <br>
-    <h6>4. {{ __('Medication Registry') }}</h6>
+    <h6>2. {{ __('Medication Registry') }}</h6>
     <div class="row g-6">
       <div class="col-md-4 fv-plugins-icon-container">
           <label class="form-label" for="registro_medicamento">{{ __('Medication Registry') }}</label>
