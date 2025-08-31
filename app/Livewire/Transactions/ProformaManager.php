@@ -389,7 +389,6 @@ class ProformaManager extends TransactionManager
 
       'condition_sale' => 'required|string|in:01,02,03,04,05,06,06,08,09,10,11,12,13,14,15,99|max:2',
       'condition_sale_other' => 'nullable|required_if:condition_sale,99|max:100|string',
-
       'proforma_change_type'  => 'nullable|numeric|required_if:document_type,PR|min:0.1|max:999999999999999.99999',
       'factura_change_type'   => 'nullable|numeric|min:0|max:999999999999999.99999',
 
@@ -400,7 +399,6 @@ class ProformaManager extends TransactionManager
 
       // Dates
       'transaction_date'         => 'required|date',
-
       'totalHonorarios' => 'nullable|numeric|min:0',
       'totalTimbres' => 'nullable|numeric|min:0',
       'totalDiscount' => 'nullable|numeric|min:0',
