@@ -1,0 +1,357 @@
+body {
+  font-family: sans-serif;
+  font-size: 10pt;
+}
+h4 {
+  font-variant: small-caps;
+}
+h5 {
+  margin-bottom: 0;
+  color: #110044;
+}
+p {
+  margin-top: 0;
+}
+dl {
+  margin: 0;
+}
+
+.gradient {
+  border: 0.1mm solid #220044;
+  background-color: #f0f2ff;
+  background: linear-gradient(top, #c7cdde, #f0f2ff);
+}
+.rounded {
+  border: 0.1mm solid #220044;
+  background-color: #f0f2ff;
+  background: linear-gradient(top, #c7cdde, #f0f2ff);
+  border-radius: 2mm;
+  background-clip: border-box;
+}
+div.text {
+  padding: 1em;
+  margin: 1em 0;
+  text-align: justify;
+}
+.code {
+  font-family: mono;
+  font-size: 9pt;
+  background-color: #d5d5d5;
+  margin: 1em 1cm;
+  padding: 0 0.3cm;
+}
+
+.myButton {
+  background-color: #017dc3;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  border-radius: 7px;
+  border: 1px solid #4e6096;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 14px;
+  padding: 7px 15px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #283966;
+}
+
+.borde {
+  border: solid 0.5px #333333;
+}
+
+.bordeBootom {
+  border-bottom: solid 0.5px #000;
+}
+
+.bordeTop {
+  border-top: solid 0.5px #000;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.btnrounded {
+  border: 0.1mm solid #220044;
+  background-color: #017dc3;
+  color: #ffffff;
+  border-radius: 2mm;
+  padding: 2px 2px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.btnroundedsmall {
+  border: 0.1mm solid #220044;
+  background-color: #017dc3;
+  color: #ffffff;
+  border-radius: 2mm;
+  padding: 2px 2px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 9px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.boxrounded {
+  border: 0.1mm solid #220044;
+  /*background-color: #f0f2ff;
+	background-gradient: linear #c7cdde #f0f2ff 0 1 0 0.5;
+  */
+  border-radius: 1mm;
+  background-clip: border-box;
+  text-align: justify;
+}
+
+.boxroundedPadding {
+  border: 0.1mm solid #220044;
+  /*background-color: #f0f2ff;
+	background-gradient: linear #c7cdde #f0f2ff 0 1 0 0.5;
+  */
+  border-radius: 1mm;
+  background-clip: border-box;
+  padding: 1em;
+  margin-bottom: 1em;
+  text-align: justify;
+}
+
+table.tablaborder {
+  font-family: Verdana, Geneva, sans-serif;
+  border: 0.1mm solid #220044;
+  border-radius: 1mm;
+  background-clip: border-box;
+}
+
+.box {
+  border: 0.1mm solid #220044;
+  background-clip: border-box;
+  text-align: justify;
+}
+
+.titulo {
+  font-family:
+    Calibri,
+    Candara,
+    Segoe,
+    Segoe UI,
+    Optima,
+    Arial,
+    sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.subtitulo {
+  font-family:
+    Calibri,
+    Candara,
+    Segoe,
+    Segoe UI,
+    Optima,
+    Arial,
+    sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.titulo_azul {
+  font-family:
+    Calibri,
+    Candara,
+    Segoe,
+    Segoe UI,
+    Optima,
+    Arial,
+    sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 14px;
+  color: #017dc3;
+}
+
+.subtitulo_azul {
+  font-family:
+    Calibri,
+    Candara,
+    Segoe,
+    Segoe UI,
+    Optima,
+    Arial,
+    sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 14px;
+  color: #017dc3;
+}
+
+.campoNormal {
+  font-family:
+    Calibri,
+    Candara,
+    Segoe,
+    Segoe UI,
+    Optima,
+    Arial,
+    sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.campoBold {
+  font-family:
+    Calibri,
+    Candara,
+    Segoe,
+    Segoe UI,
+    Optima,
+    Arial,
+    sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.textoNormal {
+  font-family:
+    Calibri,
+    Candara,
+    Segoe,
+    Segoe UI,
+    Optima,
+    Arial,
+    sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+.textoBold {
+  font-family:
+    Calibri,
+    Candara,
+    Segoe,
+    Segoe UI,
+    Optima,
+    Arial,
+    sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.valores {
+  font-family:
+    Calibri,
+    Candara,
+    Segoe,
+    Segoe UI,
+    Optima,
+    Arial,
+    sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  text-align: right;
+  padding: 0px;
+}
+
+.boton-principal {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  color: #ffffff;
+  background-color: #017dc3;
+}
+
+.button,
+.button span {
+  display: inline-block;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.button {
+  white-space: nowrap;
+  line-height: 1em;
+  position: relative;
+  outline: none;
+  overflow: visible;
+  cursor: pointer;
+  border: 1px solid #999;
+  border: rgba(0, 0, 0, 0.2) 1px solid;
+  border-bottom: rgba(0, 0, 0, 0.4) 1px solid;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  background: -moz-linear-gradient(center top, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: -webkit-gradient(
+    linear,
+    center bottom,
+    center top,
+    from(rgba(0, 0, 0, 0.1)),
+    to(rgba(255, 255, 255, 0.1))
+  );
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  margin-bottom: 10px;
+}
+.button.full,
+.button.full span {
+  display: block;
+}
+.button:hover,
+.button.hover {
+  background: -moz-linear-gradient(center top, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+  background: -webkit-gradient(
+    linear,
+    center bottom,
+    center top,
+    from(rgba(255, 255, 255, 0.1)),
+    to(rgba(255, 255, 255, 0.2))
+  );
+}
+.button:active,
+.button.active {
+  top: 1px;
+}
+.button span {
+  position: relative;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  border-top: rgba(255, 255, 255, 0.2) 1px solid;
+  padding: 0.6em 1.3em;
+  line-height: 1em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.button.pequeno span {
+  font-size: 12px;
+}
+.button.mediano span {
+  font-size: 16px;
+}
+.button.grande span {
+  font-size: 16px;
+}
+
+.button.rojo {
+  background-color: #e62727;
+}
+.button.naranja {
+  background-color: #ff5c00;
+}
+
+.button.azul {
+  background-color: #00adee;
+}
