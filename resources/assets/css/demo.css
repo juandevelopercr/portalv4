@@ -1,0 +1,513 @@
+/*
+* demo.css
+* File include item demo only specific css only
+******************************************************************************/
+
+.menu .app-brand.demo {
+  height: 64px;
+  margin-top: 12px;
+}
+
+.app-brand-logo.demo svg {
+  width: 22px;
+  height: 38px;
+}
+
+.app-brand-text.demo {
+  font-size: 1.75rem;
+  letter-spacing: -0.5px;
+}
+
+/* ! For .layout-navbar-fixed added fix padding top to .layout-page */
+/* Detached navbar */
+.layout-navbar-fixed .layout-wrapper:not(.layout-horizontal):not(.layout-without-menu) .layout-page {
+  padding-top: 74px !important;
+}
+/* Default navbar */
+.layout-navbar-fixed .layout-wrapper:not(.layout-without-menu) .layout-page {
+  padding-top: 64px !important;
+}
+.docs-page .layout-navbar-fixed.layout-wrapper:not(.layout-without-menu) .layout-page,
+.docs-page .layout-menu-fixed.layout-wrapper:not(.layout-without-menu) .layout-page {
+  padding-top: 62px !important;
+}
+
+/* Navbar page z-index issue solution */
+.content-wrapper .navbar {
+  z-index: auto;
+}
+
+/*
+* Content
+******************************************************************************/
+
+.demo-blocks > * {
+  display: block !important;
+}
+
+.demo-inline-spacing > * {
+  margin: 1rem 0.375rem 0 0 !important;
+}
+
+/* ? .demo-vertical-spacing class is used to have vertical margins between elements. To remove margin-top from the first-child, use .demo-only-element class with .demo-vertical-spacing class. For example, we have used this class in forms-input-groups.html file. */
+.demo-vertical-spacing > * {
+  margin-top: 1rem !important;
+  margin-bottom: 0 !important;
+}
+.demo-vertical-spacing.demo-only-element > :first-child {
+  margin-top: 0 !important;
+}
+
+.demo-vertical-spacing-lg > * {
+  margin-top: 1.875rem !important;
+  margin-bottom: 0 !important;
+}
+.demo-vertical-spacing-lg.demo-only-element > :first-child {
+  margin-top: 0 !important;
+}
+
+.demo-vertical-spacing-xl > * {
+  margin-top: 5rem !important;
+  margin-bottom: 0 !important;
+}
+.demo-vertical-spacing-xl.demo-only-element > :first-child {
+  margin-top: 0 !important;
+}
+
+.rtl-only {
+  display: none !important;
+  text-align: left !important;
+  direction: ltr !important;
+}
+
+[dir='rtl'] .rtl-only {
+  display: block !important;
+}
+
+/* Dropdown buttons going out of small screens */
+@media (max-width: 576px) {
+  #dropdown-variation-demo .btn-group .text-truncate {
+    width: 231px;
+    position: relative;
+  }
+  #dropdown-variation-demo .btn-group .text-truncate::after {
+    position: absolute;
+    top: 45%;
+    right: 0.65rem;
+  }
+}
+
+/*
+* Layout demo
+******************************************************************************/
+
+.layout-demo-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+.layout-demo-placeholder img {
+  width: 900px;
+}
+.layout-demo-info {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.sort-icon {
+  font-size: 1.3em; /* Ajusta el tamaño del icono */
+  cursor: pointer; /* Cambia el cursor a una manito */
+  opacity: 0.3; /* Aplica opacidad del 30% */
+  transition: opacity 0.3s; /* Transición suave para cambiar la opacidad al pasar el cursor */
+}
+
+.sort-icon:hover {
+  opacity: 1; /* Al pasar el cursor, aumenta la opacidad al 100% */
+}
+
+/*
+.icon-hover:hover {
+  cursor: pointer;
+}
+
+.action-icons {
+  display: flex;
+  gap: 0px;
+}
+  */
+
+th {
+  white-space: nowrap; /* Evitar que el texto salte de línea */
+  text-align: left; /* Asegura alineación consistente */
+  vertical-align: middle; /* Centra el contenido verticalmente */
+  cursor: pointer;
+}
+
+.action-icons {
+  display: flex;
+  gap: 0rem; /* Espaciado uniforme entre botones */
+  justify-content: center; /* Centrar horizontalmente dentro de la celda */
+  align-items: center; /* Centrar verticalmente dentro de la celda */
+}
+
+.btn.btn-icon {
+  display: inline-flex; /* Asegura que los botones se comporten como elementos en línea flexibles */
+  align-items: center; /* Centra el contenido del botón verticalmente */
+  justify-content: center; /* Centra el contenido del botón horizontalmente */
+  padding: 0rem; /* Ajusta el tamaño del botón */
+}
+
+input.is-invalid ~ .invalid-feedback,
+select.is-invalid ~ .invalid-feedback {
+  display: block !important;
+}
+
+.is-invalid + .invalid-feedback {
+  display: block !important;
+}
+
+.invalid-feedback {
+  display: block !important;
+}
+
+.switch {
+  display: inline-block;
+  position: relative;
+}
+
+.switch-toggle-slider {
+  display: flex;
+  align-items: center;
+  min-width: 120px; /* Ajusta el ancho según sea necesario */
+  height: 40px;
+  background-color: #ccc;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+table.dataTable td.text-400 {
+  max-width: 400px;
+  max-width: 450px;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+th.wrap-col-200,
+td.wrap-col-200 {
+  min-width: 200px;
+  max-width: 250px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+th.wrap-col-300,
+td.wrap-col-300 {
+  min-width: 300px;
+  max-width: 350px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+th.wrap-col-400,
+td.wrap-col-400 {
+  min-width: 400px;
+  max-width: 450px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+th.wrap-col-500,
+td.wrap-col-500 {
+  min-width: 500px;
+  max-width: 550px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+th.wrap-col-600,
+td.wrap-col-600 {
+  min-width: 600px;
+  max-width: 650px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Permitir que los dropdowns se salgan visualmente del scroll horizontal */
+.card-datatable.table-responsive {
+  position: relative; /* Necesario para posicionar dropdowns absolutos */
+  overflow-x: auto; /* Mantenemos el scroll */
+}
+
+/* Hacer que el menú de dropdown se posicione correctamente */
+.card-datatable .dropdown-menu {
+  z-index: 1055;
+  position: absolute !important; /* fuera del flujo del td */
+  transform: translate3d(0, 0, 0); /* evita bugs en Bootstrap */
+  will-change: transform;
+}
+
+/* Asegura que el td permita posicionamiento relativo */
+.card-datatable td {
+  position: relative;
+}
+
+label.form-label {
+  font-weight: bold;
+}
+
+/* Ítem resaltado con flechas ↑ ↓ */
+body .select2-container--default .select2-results__option--highlighted.select2-results__option {
+  background-color: #696cff !important; /* azul oscuro */
+  color: #ffffff !important;
+}
+
+/* Ítem seleccionado con Enter o clic */
+body .select2-container--default .select2-results__option--selected {
+  background-color: #004080 !important; /* azul más suave */
+  color: #ffffff !important;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl; /* Rotates the text vertically */
+  transform: rotate(180deg); /* Adjusts the text direction */
+  text-align: center; /* Centers the text */
+  white-space: nowrap; /* Prevents text wrapping */
+  padding: 5px; /* Adds some padding */
+  display: inline-block; /* Ensures proper alignment */
+  height: 160px; /* Adjust the height as needed */
+}
+
+.registro-form-check {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 150px; /* Ajusta esta altura según tus necesidades */
+}
+
+.vertical-align-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra el checkbox horizontalmente */
+  justify-content: flex-start; /* Alinea el contenido en la parte superior verticalmente */
+  height: 100%; /* Asegura que el contenedor flex tome toda la altura de la celda */
+}
+
+.text-red {
+  color: red;
+}
+
+.text-negrita {
+  font-weight: bold;
+}
+
+.registro-bg-warning {
+  background-color: #fcf8e3 !important;
+}
+
+.registro-bg-danger {
+  background-color: #f2dede !important;
+}
+
+.registro-bg-success {
+  background-color: #dff0d8 !important;
+}
+
+.registro-bg-green {
+  background-color: #28a745 !important;
+}
+
+.flex-column-filter {
+  display: flex;
+  flex-direction: column;
+}
+
+.no-data-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin: 0 auto;
+}
+
+.no-data-content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 80%;
+}
+
+.no-data-icon {
+  font-size: 3rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+.no-data-title {
+  color: #343a40;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.no-data-message {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+.no-data-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.no-data-button:hover {
+  background-color: #0069d9;
+}
+
+/*Para los graficos */
+/* Loader para gráficos */
+.chart-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  text-align: center;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.chart-loader .spinner-border {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  color: #605ca8;
+}
+
+/* Estado sin datos */
+.no-data-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  text-align: center;
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.no-data-content {
+  max-width: 400px;
+}
+
+.no-data-icon {
+  font-size: 3rem;
+  color: #bbb;
+  margin-bottom: 1rem;
+}
+
+/* Estado de error */
+.chart-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  text-align: center;
+  padding: 20px;
+  background: #fff8f8;
+  border: 1px solid #ffdddd;
+  border-radius: 8px;
+}
+
+.chart-error i {
+  font-size: 3rem;
+  color: #ff5252;
+  margin-bottom: 1rem;
+}
+
+.chart-error h3 {
+  color: #d32f2f;
+}
+
+/* En tu archivo CSS */
+.select-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+#department-selection {
+  transition: all 0.3s ease;
+}
+
+html:not([dir='rtl']) div.card-datatable table.dataTable thead th:first-child,
+html:not([dir='rtl']) div.card-datatable table.dataTable tfoot th:first-child {
+  /*padding-left: 1.5rem;*/
+  /*padding-right: 1.5rem;*/
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.table thead tr th {
+  /*padding-block: 1.161rem;*/
+  padding-block: 0.7rem;
+}
+
+.table th {
+  letter-spacing: 0.2px;
+  color: #384551;
+}
+
+.table-sm > :not(caption) > * > * {
+  padding: 0.294rem 0.3rem;
+}
+
+th {
+  font-weight: 500;
+  text-align: inherit;
+  text-align: -webkit-match-parent;
+}
+
+.table-sm > :not(caption) > * > * {
+  padding: 0.5rem 0.5rem;
+  padding-top: 0.5rem;
+  padding-right: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+/*
+.table-sm > :not(caption) > * > * {
+  padding: .594rem .5rem;
+    padding-top: 0.594rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.594rem;
+    padding-left: 0.5rem;
+}
+*/
