@@ -18,9 +18,9 @@ return [
   'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
     '%s%s',
     'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
-    'consortiumlegals.com',
-    'www.consortiumlegals.com',
-    '*.consortiumlegals.com', // Para subdominios
+    'facturaelectronica-crc.com',
+    'www.facturaelectronica-crc.com',
+    '*.facturaelectronica-crc.com', // Para subdominios
     Sanctum::currentApplicationUrlWithPort()
   ))),
 
