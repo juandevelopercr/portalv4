@@ -55,6 +55,7 @@ class CertValidationService
   }
   */
 
+  /*
   public function getCertInfo(BusinessLocation $location): ?array
   {
     // Obtener la ruta relativa del archivo PEM
@@ -82,6 +83,54 @@ class CertValidationService
     // Devolver la información del certificado
     return $certData;
   }
+  */
+
+  public function getCertInfo(BusinessLocation $location): ?array
+  {
+    // Obtener la ruta relativa del archivo PEM
+    $pemRelativePath = $location->certificate_digital_file;
+    $pemPath = public_path("storage/assets/certificates/{$pemRelativePath}");
+
+    // Verificar si el archivo existe
+    if (!file_exists($pemPath) || empty($pemRelativePath) || is_null($pemRelativePath)) {
+      return null;
+    }
+
+    // Leer el contenido del archivo PEM
+    $pemContent = file_get_contents($pemPath);
+
+    // Manejo seguro de errores de OpenSSL
+    try {
+      // Convertir warnings de PHP en excepciones
+      set_error_handler(function ($severity, $message, $file, $line) {
+        throw new \Exception($message);
+      });
+
+      // Cargar el certificado desde el contenido PEM
+      $cert = openssl_x509_read($pemContent);
+      if (!$cert) {
+        restore_error_handler();
+        return null;
+      }
+
+      // Parsear la información del certificado
+      $certData = openssl_x509_parse($cert);
+
+      // Restaurar el handler original
+      restore_error_handler();
+
+      return $certData;
+    } catch (\Exception $e) {
+      // Restaurar el handler por seguridad
+      restore_error_handler();
+
+      // Opcional: registrar el error en logs de Laravel
+      // Log::warning("Error leyendo certificado para location ID {$location->id}: " . $e->getMessage());
+
+      return null;
+    }
+  }
+
 
   public function getSerialNumber(BusinessLocation $location): ?string
   {
