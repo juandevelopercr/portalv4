@@ -732,7 +732,7 @@ class ContactManager extends BaseComponent
         'condition_sale' => !is_null($customer->conditionSale) ? $customer->conditionSale->code : '',
         'pay_term_number' => (int)$customer->pay_term_number,
         'identification_type_id' => $customer->identification_type_id,
-        'tipoIdentificacion' => $customer->identificationType->name,
+        'tipoIdentificacion' => !is_null($customer->identificationType) ? $customer->identificationType->name : '',
         'identification' => $customer->identification,
         'invoice_type' => $customer->invoice_type,
       ];
