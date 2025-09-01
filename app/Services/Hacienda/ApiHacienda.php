@@ -26,7 +26,7 @@ class ApiHacienda
     Log::info('Entró al send de la api');
 
     $url_api = $emisor->environment == 'produccion' ?
-      'https://api.comprobanteselectronicos.go.cr/recepcion/v1/' :
+      'https://api.comprobanteselectronicos.go.cr/recepcion/v1/recepcion' :
       'https://api-sandbox.comprobanteselectronicos.go.cr/recepcion/v1/recepcion/';
 
     $fecha = Carbon::now('America/Costa_Rica')->toIso8601String(); // Usar Carbon para obtener la fecha en formato ISO 8601

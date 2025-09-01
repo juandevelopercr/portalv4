@@ -138,8 +138,8 @@ class Token
         'grant_type'    => 'refresh_token',
         'refresh_token' => $refreshToken,
         'client_secret' => '',
-        'scopes'        => ''
       ]);
+    //'scopes'        => ''
 
     // Verificar si la respuesta es exitosa
     if ($response->failed()) {
