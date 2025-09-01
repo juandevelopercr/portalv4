@@ -29,7 +29,6 @@ class Token
   {
     // Configuración según el entorno
     if (env('HACIENDA_ENVIRONMENT') == 'prod') {
-      dd("OK");
       $this->authUrl = 'https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect/token';
       $this->clientId = 'api-prod';
     } else {
@@ -91,8 +90,8 @@ class Token
         'password'      => $password,
         'grant_type'    => 'password',
         'client_secret' => '',
-        'scopes'        => '',
       ]);
+    //'scopes'        => '',
 
     // Verificar si la respuesta es exitosa
     if ($response->failed()) {
