@@ -987,7 +987,6 @@ abstract class TransactionManager extends BaseComponent
     try {
       $authService = new AuthService();
       $token = $authService->getToken($username, $password);
-      dd($token);
     } catch (\Exception $e) {
       //throw new \Exception("An error occurred when trying to obtain the token in the hacienda api" . ' ' . $e->getMessage());
       $this->dispatch('show-notification', [

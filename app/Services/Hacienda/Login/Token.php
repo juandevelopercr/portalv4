@@ -2,8 +2,9 @@
 
 namespace App\Services\Hacienda\Login;
 
-use Illuminate\Support\Facades\Http;
 use Exception;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Token
 {
@@ -50,6 +51,7 @@ class Token
    */
   public function getToken($username, $password)
   {
+    Log::debug("getToken", [$username, $password]);
     // Verificamos si el access_token es válido
     if ($this->tokenStorage->isAccessTokenValid($username)) {
       $tokenData = $this->tokenStorage->getTokens($username);
