@@ -537,6 +537,13 @@ class InvoiceManager extends TransactionManager
         $clonedCharge->save();
       }
 
+      $payment = new TransactionPayment;
+      $payment->transaction_id = $cloned->id;
+      $payment->tipo_medio_pago = '04';  // transaferencia
+      $payment->medio_pago_otros = '';
+      $payment->total_medio_pago = $cloned->totalComprobante;
+      $payment->save();
+
       // Clonar comisiones y documentos si es necesario
       // ... (agregar lógica similar según requerimientos)
 
