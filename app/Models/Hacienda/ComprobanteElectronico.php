@@ -417,7 +417,9 @@ class ComprobanteElectronico extends ComprobanteElectronico\ComprobanteElectroni
         // Agregar Cantidad
         $nodoLineaDetalle->appendChild($this->createElement($dom, 'Cantidad', $line->getCantidad()));
         $nodoLineaDetalle->appendChild($this->createElement($dom, 'UnidadMedida', $line->getUnidadMedida()));
-        $nodoLineaDetalle->appendChild($this->createElement($dom, 'TipoTransaccion', $line->getTipoTransaccion()));
+        if ($this->transaction->document_type != 'TE') {
+          $nodoLineaDetalle->appendChild($this->createElement($dom, 'TipoTransaccion', $line->getTipoTransaccion()));
+        }
 
         // Convertir caracteres especiales a entidades numéricas (seguro para XML)
         $convmap = array(0x80, 0xff, 0, 0xff);
