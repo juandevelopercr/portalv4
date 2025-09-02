@@ -51,22 +51,18 @@ class Token
    */
   public function getToken($username, $password)
   {
-    //Log::debug("getToken", [$username, $password, $this->authUrl]);
     // Verificamos si el access_token es válido
     if ($this->tokenStorage->isAccessTokenValid($username)) {
-      dd("Uno");
       $tokenData = $this->tokenStorage->getTokens($username);
       return $tokenData['access_token'];
     }
 
     // Si el refresh_token es válido, lo usamos para renovar el access_token
     if ($this->tokenStorage->isRefreshTokenValid($username)) {
-      dd("dDos");
       $tokenData = $this->tokenStorage->getTokens($username);
       return $this->refreshToken($username, $tokenData['refresh_token']);
     }
 
-    dd("Tres");
     // Si no, solicitamos un nuevo token
     return $this->requestNewToken($username, $password);
   }
@@ -96,13 +92,16 @@ class Token
         'grant_type'    => 'password',
         'client_secret' => '',
       ]);
+
     //'scopes'        => '',
 
     // Verificar si la respuesta es exitosa
     if ($response->failed()) {
+      dd($response);
       throw new Exception('Error obteniendo el token: ' . $response->body());
     }
 
+    dd($response);
     $data = $response->json();
 
     if (isset($data['access_token'])) {
