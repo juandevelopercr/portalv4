@@ -776,7 +776,7 @@ class ComprobanteElectronico extends ComprobanteElectronico\ComprobanteElectroni
 
     $nodoResumenFactura->appendChild($this->createElement($dom, 'TotalImpuesto', $resumen->getTotalImpuesto()));
 
-    if ($this->transaction->document_type != 'FEC' && $this->transaction->document_type != 'PRC') {
+    if ($this->transaction->document_type != 'TE' && $this->transaction->document_type != 'FEC' && $this->transaction->document_type != 'PRC') {
       $nodoResumenFactura->appendChild($this->createElement($dom, 'TotalImpAsumEmisorFabrica', $resumen->getTotalImpAsumEmisorFabrica()));
       $nodoResumenFactura->appendChild($this->createElement($dom, 'TotalIVADevuelto', $resumen->getTotalIVADevuelto()));
     }
