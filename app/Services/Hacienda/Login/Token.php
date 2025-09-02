@@ -97,11 +97,9 @@ class Token
 
     // Verificar si la respuesta es exitosa
     if ($response->failed()) {
-      dd($response);
       throw new Exception('Error obteniendo el token: ' . $response->body());
     }
 
-    dd($response);
     $data = $response->json();
 
     if (isset($data['access_token'])) {
