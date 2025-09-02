@@ -207,7 +207,7 @@ class ResumenComprobanteAType
     }
 
     $this->setTotalImpuesto($transaction->totalImpuesto);
-    if ($transaction->document_type != 'FEC' && $transaction->document_type != 'PRC') {
+    if ($transaction->document_type != 'TE' && $transaction->document_type != 'FEC' && $transaction->document_type != 'PRC') {
       $this->setTotalImpAsumEmisorFabrica($transaction->totalImpAsumEmisorFabrica);
       $this->setTotalIVADevuelto($transaction->totalIVADevuelto);
     }

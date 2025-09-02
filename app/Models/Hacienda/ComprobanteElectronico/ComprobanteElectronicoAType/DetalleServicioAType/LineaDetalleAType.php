@@ -233,7 +233,8 @@ class LineaDetalleAType
     //campo de “Código del impuesto” el código 07. Validación: En caso de utilizarse el código 01, en el campo
     //de IVA cobrado a nivel de fábrica, se verificará que este campo se encuentre en el comprobante, y deberá
     //incluirse un valor mayor a “cero”. Caso contrario se rechazará
-    $this->setBaseImponible($line->baseImponible);
+    if ($line->transaction->document_type != 'TE')
+      $this->setBaseImponible($line->baseImponible);
 
     // Adicionar los impuestos
     if (!empty($line->taxes)) {
@@ -243,9 +244,11 @@ class LineaDetalleAType
       }
     }
 
-    $this->setImpuestoAsumidoEmisorFabrica($line->impuestoAsumidoEmisorFabrica);
+    if ($line->transaction->document_type != 'TE'){
+      $this->setImpuestoAsumidoEmisorFabrica($line->impuestoAsumidoEmisorFabrica);
 
-    $this->setImpuestoNeto($line->impuestoNeto);
+      $this->setImpuestoNeto($line->impuestoNeto);
+    }
 
     $this->setMontoTotalLinea($line->total);
   }
