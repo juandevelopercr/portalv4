@@ -51,7 +51,7 @@ class Token
    */
   public function getToken($username, $password)
   {
-    Log::debug("getToken", [$username, $password]);
+    Log::debug("getToken", [$username, $password, $this->authUrl]);
     // Verificamos si el access_token es válido
     if ($this->tokenStorage->isAccessTokenValid($username)) {
       $tokenData = $this->tokenStorage->getTokens($username);
