@@ -456,7 +456,8 @@ class ComprobanteElectronico extends ComprobanteElectronico\ComprobanteElectroni
         // Agregar BaseImponible
         $taxes = $line->getImpuesto();
         $baseimponible = $line->getBaseImponible();
-        $nodoLineaDetalle->appendChild($this->createElement($dom, 'BaseImponible', $baseimponible));
+        if ($this->transaction->document_type != 'TE')
+          $nodoLineaDetalle->appendChild($this->createElement($dom, 'BaseImponible', $baseimponible));
 
         // Agregar Impuestos
         $this->generarImpuestos($dom, $nodoLineaDetalle, $taxes);
