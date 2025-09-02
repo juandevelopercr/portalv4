@@ -466,7 +466,8 @@ class ComprobanteElectronico extends ComprobanteElectronico\ComprobanteElectroni
         }
 
         // Agregar ImpuestoNeto
-        $nodoLineaDetalle->appendChild($this->createElement($dom, 'ImpuestoNeto', $line->getImpuestoNeto()));
+        if ($this->transaction->document_type != 'TE')
+          $nodoLineaDetalle->appendChild($this->createElement($dom, 'ImpuestoNeto', $line->getImpuestoNeto()));
 
         // Agregar MontoTotalLinea
         $nodoLineaDetalle->appendChild($this->createElement($dom, 'MontoTotalLinea', $line->getMontoTotalLinea()));
