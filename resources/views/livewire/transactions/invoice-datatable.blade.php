@@ -34,14 +34,9 @@
                     @include('livewire.includes.button-opciones')
                   @endcan
 
-                  @can("create-electronicinvoices")
-                    @include('livewire.includes.button-opciones')
-                  @endcan
-
                   @can("delete-electronicinvoices")
                     @include('livewire.includes.button-delete', ['textButton' => __('Eliminar')])
                   @endcan
-
 
 
                   <div x-data="{ action: @entangle('action') }">
