@@ -53,7 +53,7 @@ class ComprobanteElectronico extends ComprobanteElectronico\ComprobanteElectroni
     } else
       $this->setCodigoActividadEmisor($transaction->locationEconomicActivity->code);
 
-    if ($transaction->document_type != 'FEC' && !is_null($transaction->contactEconomicActivity)) {
+    if ($transaction->document_type != 'TE' && $transaction->document_type != 'FEC' && !is_null($transaction->contactEconomicActivity)) {
       $this->setCodigoActividadReceptor($transaction->contactEconomicActivity->code);
     }
 
