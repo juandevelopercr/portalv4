@@ -864,6 +864,10 @@ class InvoiceManager extends TransactionManager
       ->setTime(now()->hour, now()->minute, now()->second)
       ->format('Y-m-d H:i:s');
 
+    if ($this->invoice_type == 'TIQUETE') {
+      $this->document_type = Transaction::TIQUETEELECTRONICO;
+    }
+
     // Validar
     $validatedData = $this->validate();
 
