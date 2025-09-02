@@ -30,11 +30,11 @@
                     @include('livewire.includes.button-edit')
                   @endcan
 
-                  @can("anular-electronicinvoices")
+                  @can("create-electronicinvoices")
                     @include('livewire.includes.button-opciones')
                   @endcan
 
-                  @can("anular-electronicinvoices")
+                  @can("create-electronicinvoices")
                     @include('livewire.includes.button-opciones')
                   @endcan
 
