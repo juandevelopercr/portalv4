@@ -69,10 +69,12 @@ class ComprobanteElectronico extends ComprobanteElectronico\ComprobanteElectroni
     $this->setEmisor($emisor);
 
     // ✅ Configuración del Receptor
-    $receptor = new ReceptorType($this->transaction);
+    if ($transaction->document_type != 'TE'){
+      $receptor = new ReceptorType($this->transaction);
 
-    // ✅ Asignar Receptor
-    $this->setReceptor($receptor);
+      // ✅ Asignar Receptor
+      $this->setReceptor($receptor);
+    }
 
     // ✅ Asignar La condición de venta
     $this->setCondicionVenta($this->transaction->condition_sale);
