@@ -243,11 +243,10 @@ class LineaDetalleAType
       }
     }
 
-    if ($line->transaction->document_type != 'TE'){
-      $this->setImpuestoAsumidoEmisorFabrica($line->impuestoAsumidoEmisorFabrica);
+    $this->setImpuestoAsumidoEmisorFabrica($line->impuestoAsumidoEmisorFabrica);
 
-      $this->setImpuestoNeto($line->impuestoNeto);
-    }
+    $this->setImpuestoNeto($line->impuestoNeto);
+
 
     $this->setMontoTotalLinea($line->total);
   }
