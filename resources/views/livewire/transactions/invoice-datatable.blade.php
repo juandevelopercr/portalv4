@@ -34,6 +34,10 @@
                     @include('livewire.includes.button-opciones')
                   @endcan
 
+                  @can("anular-electronicinvoices")
+                    @include('livewire.includes.button-opciones')
+                  @endcan
+
                   @can("delete-electronicinvoices")
                     @include('livewire.includes.button-delete', ['textButton' => __('Eliminar')])
                   @endcan
