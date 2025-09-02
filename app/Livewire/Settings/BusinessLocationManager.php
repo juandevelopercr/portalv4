@@ -97,6 +97,7 @@ class BusinessLocationManager extends BaseComponent
 
   public $documentTypes = [
     'FE'  => 'Factura electrónica',
+    'TE'  => 'Tiquete electrónico',
     'FEC' => 'Factura electrónica de compra',
     'NCE' => 'Nota de crédito electrónica',
     'NDE' => 'Nota de débito electrónica'
