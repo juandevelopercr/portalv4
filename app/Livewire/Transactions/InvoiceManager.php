@@ -295,8 +295,13 @@ class InvoiceManager extends TransactionManager
 
   protected function getFilteredQuery()
   {
+    $document_type = $this->document_type;
+    if (!is_array($this->document_type)) {
+      $document_type = [$this->document_type];
+    }
+
     $query = Transaction::search($this->search, $this->filters)
-      ->where('document_type', $this->document_type);
+      ->whereIn('document_type', $document_type);
 
     $query->where(function ($q) {
       $q->whereIn('status', [Transaction::PENDIENTE, Transaction::RECIBIDA, Transaction::ACEPTADA, Transaction::RECHAZADA, Transaction::ANULADA]);
