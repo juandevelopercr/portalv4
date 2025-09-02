@@ -67,7 +67,6 @@ class Token
     }
 
     dd("Tres");
-    Log::info("getToken Solicitando nuevo token");
     // Si no, solicitamos un nuevo token
     return $this->requestNewToken($username, $password);
   }
