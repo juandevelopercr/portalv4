@@ -40,5 +40,5 @@ $configData = Helper::appClasses();
 @endsection
 
 @section('content')
-@livewire('transactions.invoice-manager', ['document_type'=>'FE'])
+@livewire('transactions.invoice-manager', ['document_type'=>['FE','TE']])
 @endsection
