@@ -31,7 +31,6 @@ class Token
     // Configuración según el entorno
     if (env('HACIENDA_ENVIRONMENT') == 'prod') {
       $this->authUrl = 'https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect/token';
-      dd($this->authUrl);
       $this->clientId = 'api-prod';
     } else {
       $this->authUrl = 'https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect/token';
