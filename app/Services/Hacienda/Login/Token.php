@@ -51,19 +51,23 @@ class Token
    */
   public function getToken($username, $password)
   {
-    Log::debug("getToken", [$username, $password, $this->authUrl]);
+    //Log::debug("getToken", [$username, $password, $this->authUrl]);
     // Verificamos si el access_token es válido
     if ($this->tokenStorage->isAccessTokenValid($username)) {
+      Log::debug("getToken", ['Entrol linea 57']);
       $tokenData = $this->tokenStorage->getTokens($username);
+      Log::debug("getToken", [$tokenData]);
       return $tokenData['access_token'];
     }
 
     // Si el refresh_token es válido, lo usamos para renovar el access_token
     if ($this->tokenStorage->isRefreshTokenValid($username)) {
+      Log::debug("getToken", ['Entrol linea 65']);
       $tokenData = $this->tokenStorage->getTokens($username);
       return $this->refreshToken($username, $tokenData['refresh_token']);
     }
 
+    Log::debug("getToken", ['Solicitando nuevo token']);
     // Si no, solicitamos un nuevo token
     return $this->requestNewToken($username, $password);
   }
