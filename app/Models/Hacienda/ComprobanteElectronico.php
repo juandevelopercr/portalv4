@@ -459,7 +459,7 @@ class ComprobanteElectronico extends ComprobanteElectronico\ComprobanteElectroni
         // Agregar Impuestos
         $this->generarImpuestos($dom, $nodoLineaDetalle, $taxes);
 
-        if ($this->transaction->document_type != 'FEC' && $this->transaction->document_type != 'PRC') {
+        if ($this->transaction->document_type != 'TE' && $this->transaction->document_type != 'FEC' && $this->transaction->document_type != 'PRC') {
           $nodoLineaDetalle->appendChild($this->createElement($dom, 'ImpuestoAsumidoEmisorFabrica', $line->getImpuestoAsumidoEmisorFabrica()));
         }
 
