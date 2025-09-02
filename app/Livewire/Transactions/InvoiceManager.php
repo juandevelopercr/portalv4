@@ -1098,6 +1098,10 @@ class InvoiceManager extends TransactionManager
       return $pago;
     })->toArray();
 
+    if ($this->invoice_type == 'TIQUETE') {
+      $this->document_type = Transaction::TIQUETEELECTRONICO;
+    }
+
     // Validar
     $validatedData = $this->validate();
 
