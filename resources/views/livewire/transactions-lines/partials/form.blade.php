@@ -59,7 +59,7 @@
         >
           <div class="input-group input-group-merge has-validation">
             {{--  <span class="input-group-text"><i class="bx bx-dollar"></i></span> --}}
-            <input type="text" id="price" x-ref="cleaveInput" wire:ignore class="form-control js-input-price" />
+            <input type="text" id="price" x-ref="cleaveInput" wire:model="price" class="form-control js-input-price" />
           </div>
         </div>
         @error('price')
