@@ -222,7 +222,7 @@ class TransactionLine extends TenantModel
 
     $this->total = $this->getMontoTotalLinea() ?? 0;
 
-    dd($this);
+    //dd($this);
     $this->save();
   }
 
@@ -469,7 +469,8 @@ class TransactionLine extends TenantModel
     if ($this->product->type == 'service') {
       $taxes = $this->taxes;
       foreach ($taxes as $tax) {
-        if (in_array($tax->taxRate->code, ['01', '10', '11'])) {
+        //if (in_array($tax->taxRate->code, ['01', '10', '11'])) {
+        if (!in_array($tax->taxRate->code, ['01', '11']) && $tax->taxRate->tax == 0) {
           return number_format($this->getMontoTotal(), 5, '.', '');
         }
       }
@@ -484,7 +485,8 @@ class TransactionLine extends TenantModel
     if ($this->product->type != 'service') {
       $taxes = $this->taxes;
       foreach ($taxes as $tax) {
-        if (in_array($tax->taxRate->code, ['01', '10', '11'])) {
+        //if (in_array($tax->taxRate->code, ['01', '10', '11'])) {
+        if (!in_array($tax->taxRate->code, ['01', '11']) && $tax->taxRate->tax == 0) {
           return number_format($this->getMontoTotal(), 5, '.', '');
         }
       }
