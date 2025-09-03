@@ -38,33 +38,59 @@
 
       <!-- price -->
       <div class="col-md-3 fv-plugins-icon-container">
-        <label class="form-label" for="price">{{ __('Price') }}</label>
-        <div
-          x-data="cleaveLivewire({
-            initialValue: '{{ $price ?? '' }}',
-            wireModelName: 'price',
-            postUpdate: false,
-            decimalScale: 2,
-            allowNegative: true,
-            rawValueCallback: (val) => {
-              //console.log('Callback personalizado:', val);
-              // lógica extra aquí si deseas
-              const component = Livewire.find($refs.cleaveInput.closest('[wire\\:id]').getAttribute('wire:id'));
-              if (component) {
-                component.set('price', val); // <- Esto envía el valor sin comas
-              }
-            }
-          })"
-          x-init="init($refs.cleaveInput)"
-        >
-          <div class="input-group input-group-merge has-validation">
-            {{--  <span class="input-group-text"><i class="bx bx-dollar"></i></span> --}}
-            <input type="text" id="price" x-ref="cleaveInput" wire:model="price" class="form-control js-input-price" />
+          <label class="form-label" for="price">{{ __('Price') }}</label>
+          <div class="input-group input-group-merge has-validation" x-data="{
+                      rawValue: @js($this->price),
+                      maxLength: 15,
+                      hasError: {{ json_encode($errors->has('price')) }}
+                  }" x-init="
+                      let cleaveInstance = new Cleave($refs.cleaveInput, {
+                          numeral: true,
+                          numeralThousandsGroupStyle: 'thousand',
+                          numeralDecimalMark: '.',
+                          delimiter: ',',
+                          numeralDecimalScale: 2,
+                      });
+
+                      // Inicializa el valor formateado
+                      if (rawValue) {
+                          cleaveInstance.setRawValue(rawValue);
+                      }
+
+                      // Observa cambios en rawValue desde Livewire
+                      $watch('rawValue', (newValue) => {
+                          if (newValue !== undefined) {
+                              cleaveInstance.setRawValue(newValue);
+                          }
+                      });
+
+                      // Sincroniza cambios del input con Livewire
+                      $refs.cleaveInput.addEventListener('input', () => {
+                          let cleanValue = cleaveInstance.getRawValue();
+                          if (cleanValue.length <= maxLength) {
+                              rawValue = cleanValue;
+                          } else {
+                              // Limita al máximo de caracteres
+                              rawValue = cleanValue.slice(0, maxLength);
+                              cleaveInstance.setRawValue(rawValue);
+                          }
+                      });
+                  ">
+              <!-- Ícono alineado con el input -->
+              <span class="input-group-text">
+                  <i class="bx bx-dollar"></i>
+              </span>
+
+              <!-- Input con máscara -->
+              <input wire:model="price"
+                  class="form-control numeral-mask" :class="{ 'is-invalid': hasError }" type="text"
+                  placeholder="{{ __('Price') }}" x-ref="cleaveInput" />
           </div>
-        </div>
-        @error('price')
+
+          <!-- Mensaje de error -->
+          @error('price')
           <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
+          @enderror
       </div>
 
       <!-- quantity -->
