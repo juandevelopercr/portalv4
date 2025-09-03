@@ -222,7 +222,6 @@ class TransactionLine extends TenantModel
 
     $this->total = $this->getMontoTotalLinea() ?? 0;
 
-    //dd($this);
     $this->save();
   }
 

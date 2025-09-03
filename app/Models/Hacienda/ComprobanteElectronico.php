@@ -69,7 +69,19 @@ class ComprobanteElectronico extends ComprobanteElectronico\ComprobanteElectroni
     $this->setEmisor($emisor);
 
     // ✅ Configuración del Receptor
-    if ($transaction->document_type != 'TE'){
+    $showReceptor = true;
+
+    if ($transaction->document_type === 'TE') {
+      $showReceptor = false;
+    } elseif ($transaction->document_type === 'NCE') {
+      $referencia = Transaction::where('key', trim($transaction->RefNumero))->first();
+
+      if ($referencia && $referencia->document_type === 'TE') {
+        $showReceptor = false;
+      }
+    }
+
+    if ($showReceptor) {
       $receptor = new ReceptorType($this->transaction);
 
       // ✅ Asignar Receptor
