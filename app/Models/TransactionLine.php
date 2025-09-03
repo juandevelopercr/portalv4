@@ -739,13 +739,11 @@ class TransactionLine extends TenantModel
       return number_format(0, 5, '.', '');
 
     $taxes = $this->taxes;
-    /*
     foreach ($taxes as $tax) {
       if (in_array($tax->taxRate->code, ['01', '11'])) {
         return number_format($this->getMontoTotal(), 5, '.', '');
       }
     }
-      */
     return number_format(0, 5, '.', '');
   }
 
@@ -755,13 +753,11 @@ class TransactionLine extends TenantModel
       return number_format(0, 5, '.', '');
 
     $taxes = $this->taxes;
-    /*
     foreach ($taxes as $tax) {
       if (in_array($tax->taxRate->code, ['01', '11'])) {
         return number_format($this->getMontoTotal(), 5, '.', '');
       }
     }
-    */
     return number_format(0, 5, '.', '');
   }
 }
