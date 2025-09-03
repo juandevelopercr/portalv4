@@ -835,14 +835,11 @@ class TransactionLineManager extends BaseComponent
 
       if (!is_null($product)) {
         $this->detail = $product->name;
+        $this->codigo = $product->code;
+        $this->codigocabys = $product->caby_code;
       }
-
-      $this->codigo = NULL;
-      $this->codigocabys = NULL;
-
       // Limpiar el array de taxes actual
       $this->taxes = [];
-
 
       $transaction = Transaction::find($this->transaction_id);
       $aplicarImpuesto = $transaction ? $transaction->contact->aplicarImpuesto : true;
