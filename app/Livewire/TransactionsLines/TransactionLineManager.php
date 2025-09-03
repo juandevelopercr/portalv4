@@ -834,7 +834,7 @@ class TransactionLineManager extends BaseComponent
         $discounts = TransactionLineDiscount::where('transaction_line_id', $this->recordId)->get();
 
       if (!is_null($product)) {
-        $this->price = $product->price;
+        $this->price = number_format($product->price, 2, '.', '');
         $this->detail = $product->name;
         $this->codigo = $product->code;
         $this->codigocabys = $product->caby_code;
