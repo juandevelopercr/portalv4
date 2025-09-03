@@ -222,6 +222,7 @@ class TransactionLine extends TenantModel
 
     $this->total = $this->getMontoTotalLinea() ?? 0;
 
+    dd($this);
     $this->save();
   }
 
@@ -480,7 +481,7 @@ class TransactionLine extends TenantModel
   {
     $exento = 0;
     // Obtiene el monto exento si es un servicio
-    if ($this->product->type == 'service') {
+    if ($this->product->type != 'service') {
       $taxes = $this->taxes;
       foreach ($taxes as $tax) {
         if (in_array($tax->taxRate->code, ['01', '10', '11'])) {
