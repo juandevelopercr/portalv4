@@ -335,7 +335,8 @@ class TransactionLine extends TenantModel
         //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
         $gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
       } else if (!empty($taxes)) {
-        $gravado = $this->getMontoTotal();
+        if ($this->tax > 0)
+          $gravado = $this->getMontoTotal();
       }
     }
     return number_format($gravado, 5, '.', '');
@@ -354,7 +355,8 @@ class TransactionLine extends TenantModel
         //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
         $gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
       } else if (!empty($taxes)) {
-        $gravado = $this->getMontoTotal();
+        if ($this->tax > 0)
+          $gravado = $this->getMontoTotal();
       }
     }
     return number_format($gravado, 5, '.', '');
@@ -466,7 +468,7 @@ class TransactionLine extends TenantModel
     if ($this->product->type == 'service') {
       $taxes = $this->taxes;
       foreach ($taxes as $tax) {
-        if (in_array($tax->taxRate->code, ['01', '11'])) {
+        if (in_array($tax->taxRate->code, ['01', '10', '11'])) {
           return number_format($this->getMontoTotal(), 5, '.', '');
         }
       }
@@ -481,7 +483,7 @@ class TransactionLine extends TenantModel
     if ($this->product->type == 'service') {
       $taxes = $this->taxes;
       foreach ($taxes as $tax) {
-        if (in_array($tax->taxRate->code, ['01', '11'])) {
+        if (in_array($tax->taxRate->code, ['01', '10', '11'])) {
           return number_format($this->getMontoTotal(), 5, '.', '');
         }
       }
