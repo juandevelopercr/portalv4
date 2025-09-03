@@ -737,7 +737,7 @@ class TransactionLine extends TenantModel
 
   private function getServNoSujeto()
   {
-    if ($this->product->type != 'service')
+    if ($this->product->type == 'service')
       return number_format(0, 5, '.', '');
 
     $taxes = $this->taxes;
@@ -751,7 +751,7 @@ class TransactionLine extends TenantModel
 
   private function getMercNoSujeta()
   {
-    if ($this->product->type == 'service')
+    if ($this->product->type != 'service')
       return number_format(0, 5, '.', '');
 
     $taxes = $this->taxes;
