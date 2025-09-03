@@ -334,6 +334,32 @@ class ApiHacienda
       $transaction->status = Transaction::ACEPTADA;
       $key = $transaction->key;
     }
+    // Nota de crédito o nota de debito
+    if (in_array($transaction->document_type, ['NCE'])) {
+
+      Log::error("Es una nota de crédito electrónica");
+      $referencia = Transaction::where('key', trim($transaction->RefNumero))->first();
+
+      if ($referencia) {
+        $referencia->status = Transaction::ANULADA;
+        $referencia->proforma_status = Transaction::ANULADA;
+
+        if ($referencia->save()) {
+          Log::error("Se guardó el estado en transacción ID: {$referencia->id}");
+        } else {
+          Log::error("Error al guardar estado en transacción ID: {$referencia->id}", [
+            'datos' => $referencia->toArray(), // Registra todos los datos
+            'errores' => $referencia->getErrors() // Si usas validación
+          ]);
+        }
+      } else {
+        Log::warning("No se encontró transacción de referencia", [
+          'key_buscada' => trim($transaction->RefNumero),
+          'nota_id' => $transaction->id
+        ]);
+      }
+    }
+
     $type = 'success';
     $titulo = "Información <hr class=\"kv-alert-separator\">";
     $mensaje = "$documento con clave: [{$key}] fue aceptada por Hacienda.";
