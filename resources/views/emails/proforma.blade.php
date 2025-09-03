@@ -45,7 +45,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <img class="logo" src="{{ url('assets/img/invoice/logo.png') }}" alt="Logo de la empresa">
+      <img class="logo" src="{{ $logo }}" alt="Logo" style="height: 150px; width: auto;">
     </div>
     <div class="content">
       {{ $data['message'] }}
