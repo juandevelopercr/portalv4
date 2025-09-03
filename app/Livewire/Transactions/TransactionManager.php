@@ -337,7 +337,8 @@ abstract class TransactionManager extends BaseComponent
       $transaction->totalExonerado = $transaction->totalServExonerado + $transaction->totalMercExonerada;
       $transaction->totalNoSujeto = $transaction->totalServNoSujeto + $transaction->totalMercNoSujeta;
 
-      $transaction->totalVenta = $transaction->totalGravado + $transaction->totalExento + $transaction->totalExonerado + $transaction->totalNoSujeto + $transaction->totalTimbres;
+      //$transaction->totalVenta = $transaction->totalGravado + $transaction->totalExento + $transaction->totalExonerado + $transaction->totalNoSujeto + $transaction->totalTimbres;
+      $transaction->totalVenta = $transaction->totalGravado + $transaction->totalExento + $transaction->totalExonerado + $transaction->totalTimbres;
       $transaction->totalDiscount = $totals ? ($totals->totalDiscount ?? 0) : 0;
       $transaction->totalVentaNeta = $transaction->totalVenta - $transaction->totalDiscount;
 
