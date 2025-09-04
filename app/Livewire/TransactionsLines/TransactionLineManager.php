@@ -488,7 +488,7 @@ class TransactionLineManager extends BaseComponent
     $this->codigocabys = $record->codigocabys;
     $this->detail = $record->detail;
     $this->quantity = $record->quantity;
-    $this->price = $record->price;
+    $this->price = number_format($record->price, 2, '.', '');
     $this->discount = $record->discount;
     $this->subtotal = $record->subtotal;
     $this->baseImponible = $record->baseImponible;
