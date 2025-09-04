@@ -489,7 +489,7 @@ class TransactionLineManager extends BaseComponent
     $this->codigocabys = $record->codigocabys;
     $this->detail = $record->detail;
     $this->quantity = $record->quantity;
-    $this->price = number_format($record->price, 2, '.', '');
+    $this->price = number_format((float)$record->price, 2, '.', '');
     $this->discount = $record->discount;
     $this->subtotal = $record->subtotal;
     $this->baseImponible = $record->baseImponible;
@@ -902,7 +902,7 @@ class TransactionLineManager extends BaseComponent
         $this->record->quantity = $this->quantity;
       }
 
-      $this->price = number_format($this->price, 2, '.', '');
+      $this->price = number_format((float)$this->price, 2, '.', '');
     }
 
     // Detectar si el cambio corresponde a un tax_type_id
