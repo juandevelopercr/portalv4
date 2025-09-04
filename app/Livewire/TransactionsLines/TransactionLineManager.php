@@ -405,10 +405,11 @@ class TransactionLineManager extends BaseComponent
   {
     $transaction = Transaction::find($this->transaction_id);
     $product = Product::where('id', $this->product_id)->first();
+    $this->price = str_replace(',', '', $this->price);
+
     if ($product) {
       $this->codigo = $product->code;
       $this->codigocabys = $product->caby_code;
-      $currency_id = $transaction->currency_id;
       $this->detail = $product->name;
     }
 
@@ -563,6 +564,8 @@ class TransactionLineManager extends BaseComponent
       $this->codigo = $product->code;
       $this->codigocabys = $product->caby_code;
     }
+
+    $this->price = str_replace(',', '', $this->price);
 
     // Validar
     $validatedData = $this->validate();

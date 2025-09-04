@@ -77,10 +77,6 @@
                       });
                   ">
               <!-- Ícono alineado con el input -->
-              <span class="input-group-text">
-                  <i class="bx bx-dollar"></i>
-              </span>
-
               <!-- Input con máscara -->
               <input wire:model="price"
                   class="form-control numeral-mask" :class="{ 'is-invalid': hasError }" type="text"
