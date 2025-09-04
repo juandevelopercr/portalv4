@@ -405,10 +405,12 @@ class TransactionLineManager extends BaseComponent
   {
     $transaction = Transaction::find($this->transaction_id);
     $product = Product::where('id', $this->product_id)->first();
+    dd($this->price);
+    $this->price = str_replace(',', '', $this->price);
+
     if ($product) {
       $this->codigo = $product->code;
       $this->codigocabys = $product->caby_code;
-      $currency_id = $transaction->currency_id;
       $this->detail = $product->name;
     }
 
@@ -488,7 +490,7 @@ class TransactionLineManager extends BaseComponent
     $this->codigocabys = $record->codigocabys;
     $this->detail = $record->detail;
     $this->quantity = $record->quantity;
-    $this->price = $record->price;
+    $this->price = $this->price;
     $this->discount = $record->discount;
     $this->subtotal = $record->subtotal;
     $this->baseImponible = $record->baseImponible;
@@ -505,7 +507,6 @@ class TransactionLineManager extends BaseComponent
     $this->mercExoneradas = $record->mercExoneradas;
     $this->mercNoSujeta = $record->mercNoSujeta;
     $this->exoneration = $record->exoneration;
-
     // Cargar taxes
     $this->taxes = $record->taxes->map(function ($tax) {
       return [
@@ -563,6 +564,8 @@ class TransactionLineManager extends BaseComponent
       $this->codigo = $product->code;
       $this->codigocabys = $product->caby_code;
     }
+
+    $this->price = str_replace(',', '', $this->price);
 
     // Validar
     $validatedData = $this->validate();
@@ -834,16 +837,13 @@ class TransactionLineManager extends BaseComponent
         $discounts = TransactionLineDiscount::where('transaction_line_id', $this->recordId)->get();
 
       if (!is_null($product)) {
-        $this->detail = $product->name;
         $this->price = $product->price;
+        $this->detail = $product->name;
+        $this->codigo = $product->code;
+        $this->codigocabys = $product->caby_code;
       }
-
-      $this->codigo = NULL;
-      $this->codigocabys = NULL;
-
       // Limpiar el array de taxes actual
       $this->taxes = [];
-
 
       $transaction = Transaction::find($this->transaction_id);
       $aplicarImpuesto = $transaction ? $transaction->contact->aplicarImpuesto : true;
@@ -892,7 +892,6 @@ class TransactionLineManager extends BaseComponent
       }
     }
 
-    /*
     if ($property === 'price' || $property === 'quantity') {
       if (empty($this->price))
         $this->price = 0;
@@ -903,7 +902,6 @@ class TransactionLineManager extends BaseComponent
         $this->record->quantity = $this->quantity;
       }
     }
-    */
 
     // Detectar si el cambio corresponde a un tax_type_id
     if (preg_match('/^taxes\.(\d+)\.tax_type_id$/', $property, $matches)) {
