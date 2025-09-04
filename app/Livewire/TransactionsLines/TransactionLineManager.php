@@ -898,6 +898,8 @@ class TransactionLineManager extends BaseComponent
         $this->record->price = $this->price;
         $this->record->quantity = $this->quantity;
       }
+
+      $this->price = number_format($this->price, 2, '.', '');
     }
 
     // Detectar si el cambio corresponde a un tax_type_id
