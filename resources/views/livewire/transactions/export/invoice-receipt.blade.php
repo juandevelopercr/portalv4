@@ -104,7 +104,7 @@
               <p>
                 <b class="tm_primary_color">{{ strtoupper($transaction->location->name) }}</b><br>
                 <b class="tm_primary_color">{{ $transaction->location->identification }}</b>
-                <br>Portal Genral de Facturación Electrónica<br>
+                <br>Portal General de Facturación Electrónica<br>
                 <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
                   data-cfemail="3054555d5f70575d51595c1e535f5d">{{ $transaction->location->email }}</a>
               </p>
