@@ -198,21 +198,21 @@ class TransactionLine extends TenantModel
     $this->impuestoAsumidoEmisorFabrica = $this->transaction->document_type == 'FEC' ? 0 : $this->getImpuestoAsumidoEmisorFabrica();
 
     // Servicios
+    $this->servExonerados = $this->getServExonerado() ?? 0;
+
     $this->servGravados = $this->getServGravado() ?? 0;
 
     $this->servExentos = $this->getServExento() ?? 0;
 
-    $this->servExonerados = $this->getServExonerado() ?? 0;
-    //$this->getImpuestoServExonerado() ?? 0;  // para borrarlo
-
     $this->servNoSujeto = $this->getServNoSujeto() ?? 0;
 
+
     // Mercancias
+    $this->mercExoneradas = $this->getMercExonerada() ?? 0;
+
     $this->mercGravadas = $this->getMercanciaGravada() ?? 0;
 
     $this->mercExentas = $this->getMercanciaExenta() ?? 0;
-
-    $this->mercExoneradas = $this->getMercExonerada() ?? 0;
 
     $this->mercNoSujeta = $this->getMercNoSujeta() ?? 0;
 
@@ -333,7 +333,8 @@ class TransactionLine extends TenantModel
         //(1-porcentaje de exoneración) por el monto de la venta
         //▪Porcentaje de exoneración: (Tarifa Exonerada /Tarifa IVA)
         //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
-        $gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
+        //$gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
+        $gravado = 1 - $this->servExonerados / $this->tax;
       } else if (!empty($taxes)) {
         if ($this->tax > 0)
           $gravado = $this->getMontoTotal();
@@ -353,7 +354,8 @@ class TransactionLine extends TenantModel
         //(1-porcentaje de exoneración) por el monto de la venta
         //▪Porcentaje de exoneración: (Tarifa Exonerada /Tarifa IVA)
         //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
-        $gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
+        //$gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
+        $gravado = 1 - $this->servExonerados / $this->tax;
       } else if (!empty($taxes)) {
         if ($this->tax > 0)
           $gravado = $this->getMontoTotal();
