@@ -297,8 +297,8 @@ class TransactionLineManager extends BaseComponent
       }
 
       if (in_array($tax['exoneration_type_id'], [2, 3, 6, 7, 8])) {
-        $rules["taxes.$index.exoneration_article"] = 'required|min:5|max:100';
-        $rules["taxes.$index.exoneration_inciso"]  = 'required|min:5|max:100';
+        $rules["taxes.$index.exoneration_article"] = 'required|max:1000';
+        $rules["taxes.$index.exoneration_inciso"]  = 'required|max:1000';
       }
 
       if ($tax['exoneration_type_id'] == '99') {
