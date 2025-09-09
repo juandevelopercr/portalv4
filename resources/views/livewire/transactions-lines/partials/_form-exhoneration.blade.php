@@ -66,7 +66,7 @@
 </div>
 
 <!-- exoneration_article -->
-@if(in_array($tax['exoneration_type_id'], ['02', '03', '06', '07', '08']))
+@if(in_array($tax['exoneration_type_id'], ['2', '3', '6', '7', '8']))
 <div class="col-md-3 fv-plugins-icon-container">
     <label class="form-label" for="exoneration_article_{{ $index }}">{{ __('Article') }}</label>
     <div class="input-group input-group-merge has-validation">
@@ -82,7 +82,7 @@
 @endif
 
 <!-- exoneration_inciso -->
-@if(in_array($tax['exoneration_type_id'], ['02', '03', '06', '07', '08']))
+@if(in_array($tax['exoneration_type_id'], ['2', '3', '6', '7', '8']))
 <div class="col-md-3 fv-plugins-icon-container">
     <label class="form-label" for="exoneration_inciso_{{ $index }}">{{ __('Inciso') }}</label>
     <div class="input-group input-group-merge has-validation">
