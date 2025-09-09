@@ -143,7 +143,7 @@ class TransactionLineManager extends BaseComponent
   #[Computed]
   public function exhonerations()
   {
-    return ExonerationType::where('active', 1)->where('id', '<>', 8)->orderBy('code', 'ASC')->get();
+    return ExonerationType::where('active', 1)->orderBy('code', 'ASC')->get();
   }
 
   #[Computed]
