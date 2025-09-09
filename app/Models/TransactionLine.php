@@ -355,7 +355,7 @@ class TransactionLine extends TenantModel
         //▪Porcentaje de exoneración: (Tarifa Exonerada /Tarifa IVA)
         //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
         //$gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
-        $gravado = 1 - $this->servExonerados / $this->tax;
+        $gravado = 1 - $this->mercExoneradas / $this->tax;
       } else if (!empty($taxes)) {
         if ($this->tax > 0)
           $gravado = $this->getMontoTotal();
