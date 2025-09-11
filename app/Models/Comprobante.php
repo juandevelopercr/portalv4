@@ -167,7 +167,8 @@ class Comprobante extends Model
   {
     // Columnas a seleccionar (todas las de la tabla comprobantes)
     $columns = [
-      'comprobantes.*'
+      'comprobantes.*',
+      DB::raw('SUBSTRING(comprobantes.key, 21, 20) as consecutivo_factura')
     ];
 
     $query->select($columns)
@@ -189,6 +190,12 @@ class Comprobante extends Model
 
     if (!empty($filters['filter_consecutivo'])) {
       $query->where('comprobantes.consecutivo', 'like', '%' . $filters['filter_consecutivo'] . '%');
+    }
+
+    if (!empty($filters['filter_consecutivo_factura'])) {
+      $consecutivo = $filters['filter_consecutivo_factura'];
+      // Filtra usando la expresión SUBSTRING también
+      $query->whereRaw('SUBSTRING(comprobantes.key, 21, 20) like ?', ["%{$consecutivo}%"]);
     }
 
     if (!empty($filters['filter_emisor'])) {
