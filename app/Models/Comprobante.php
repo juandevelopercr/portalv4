@@ -168,7 +168,7 @@ class Comprobante extends Model
     // Columnas a seleccionar (todas las de la tabla comprobantes)
     $columns = [
       'comprobantes.*',
-      DB::raw('SUBSTRING(comprobantes.key, 21, 20) as consecutivo_factura')
+      DB::raw('SUBSTRING(comprobantes.key, 22, 20) as consecutivo_factura')
     ];
 
     $query->select($columns)
