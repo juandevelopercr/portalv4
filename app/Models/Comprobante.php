@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Helpers\Helpers;
 use App\Models\BusinessLocation;
-use App\Models\TenantModel;
 use App\Services\Hacienda\ApiHacienda;
 use Carbon\Carbon;
 use DOMDocument;
@@ -14,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class Comprobante extends TenantModel
+class Comprobante extends Model
 {
   const PENDIENTE = 'PENDIENTE';
   const RECIBIDA  = 'RECIBIDA';

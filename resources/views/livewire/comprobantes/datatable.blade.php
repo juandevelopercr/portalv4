@@ -16,19 +16,19 @@
                 class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0">
                 <div class="dt-buttons btn-group flex-wrap">
                   <!-- Dropdown with icon -->
-                  @can("create-classifiers")
+                  @can("create-comprobantes")
                     @include('livewire.includes.button-create')
                   @endcan
 
-                  @can("edit-classifiers")
+                  @can("edit-comprobantes")
                     @include('livewire.includes.button-edit')
                   @endcan
 
-                  @can("delete-classifiers")
+                  @can("delete-comprobantes")
                     @include('livewire.includes.button-delete', ['textButton'=>null])
                   @endcan
 
-                  @can('export-classifiers')
+                  @can('export-comprobantes')
                     <livewire:comprobantes.comprobante-datatable-export />
                   @endcan
 
