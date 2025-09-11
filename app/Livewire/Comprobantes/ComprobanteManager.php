@@ -1295,6 +1295,7 @@ class ComprobanteManager extends Component
     //Loguearme en hacienda para obtener el token
     $username = $comprobante->location->api_user_hacienda;
     $password = $comprobante->location->api_password;
+    $token = null;
     try {
       $authService = new AuthService();
       $token = $authService->getToken($username, $password);

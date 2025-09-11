@@ -112,6 +112,11 @@ class Token
       }
       //'scopes'        => '',
 
+      // 🚨 Si la respuesta es 401 => credenciales inválidas
+      if ($response->status() === 401) {
+        throw new \Exception("Error de autenticación: credenciales inválidas al intentar obtener el token.");
+      }
+
       // Verificar si la respuesta es exitosa
       if ($response->failed()) {
         throw new Exception('Error obteniendo el token: ' . $response->body());
