@@ -119,6 +119,8 @@ class Token
 
     $data = $response->json();
 
+    dd($data);
+
     if (isset($data['access_token'])) {
       // Guardamos los tokens en el almacenamiento
       $this->tokenStorage->saveTokens(
