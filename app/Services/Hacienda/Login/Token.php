@@ -106,8 +106,8 @@ class Token
             'username'      => $username,
             'password'      => $password,
             'grant_type'    => 'password',
-            'client_secret' => '',
-            'scopes'         => '',
+            //'client_secret' => '',
+            //'scopes'         => '',
           ]);
       }
       //'scopes'        => '',
@@ -189,8 +189,8 @@ class Token
           'client_id'     => $this->clientId,
           'grant_type'    => 'refresh_token',
           'refresh_token' => $refreshToken,
-          'client_secret' => '',
-          'scopes'        => ''
+          //'client_secret' => '',
+          //'scopes'        => ''
         ]);
     }
 
