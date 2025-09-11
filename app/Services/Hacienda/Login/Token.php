@@ -77,6 +77,7 @@ class Token
    */
   protected function requestNewToken($username, $password)
   {
+    dd("OK");
     if (env('HACIENDA_ENVIRONMENT') == 'prod') {
       $response = Http::withOptions([
         'verify' => false,  // Deshabilitar la verificación SSL si es necesario
@@ -109,7 +110,6 @@ class Token
           'scopes'        => '',
         ]);
     }
-
     //'scopes'        => '',
 
     // Verificar si la respuesta es exitosa
