@@ -78,20 +78,38 @@ class Token
    */
   protected function requestNewToken($username, $password)
   {
-    $response = Http::withOptions([
-      'verify' => false,  // Deshabilitar la verificación SSL si es necesario
-    ])
-      ->withHeaders([
-        'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',  // Aquí defines el tipo de contenido
+    if (env('HACIENDA_ENVIRONMENT') == 'prod') {
+      $response = Http::withOptions([
+        'verify' => false,  // Deshabilitar la verificación SSL si es necesario
       ])
-      ->asForm()
-      ->post($this->authUrl, [
-        'client_id'     => $this->clientId,
-        'username'      => $username,
-        'password'      => $password,
-        'grant_type'    => 'password',
-        'client_secret' => '',
-      ]);
+        ->withHeaders([
+          'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',  // Aquí defines el tipo de contenido
+        ])
+        ->asForm()
+        ->post($this->authUrl, [
+          'client_id'     => $this->clientId,
+          'username'      => $username,
+          'password'      => $password,
+          'grant_type'    => 'password',
+          'client_secret' => '',
+        ]);
+    } else {
+      $response = Http::withOptions([
+        'verify' => false,  // Deshabilitar la verificación SSL si es necesario
+      ])
+        ->withHeaders([
+          'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',  // Aquí defines el tipo de contenido
+        ])
+        ->asForm()
+        ->post($this->authUrl, [
+          'client_id'     => $this->clientId,
+          'username'      => $username,
+          'password'      => $password,
+          'grant_type'    => 'password',
+          'client_secret' => '',
+          'scopes'        => '',
+        ]);
+    }
 
     //'scopes'        => '',
 
