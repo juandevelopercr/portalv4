@@ -77,63 +77,71 @@ class Token
    */
   protected function requestNewToken($username, $password)
   {
-    if (env('HACIENDA_ENVIRONMENT') == 'prod') {
-      $response = Http::withOptions([
-        'verify' => false,  // Deshabilitar la verificación SSL si es necesario
-      ])
-        ->withHeaders([
-          'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',  // Aquí defines el tipo de contenido
+    try {
+      if (env('HACIENDA_ENVIRONMENT') == 'prod') {
+        $response = Http::withOptions([
+          'verify' => false,  // Deshabilitar la verificación SSL si es necesario
         ])
-        ->asForm()
-        ->post($this->authUrl, [
-          'client_id'     => $this->clientId,
-          'username'      => $username,
-          'password'      => $password,
-          'grant_type'    => 'password',
-          'client_secret' => '',
-        ]);
-    } else {
-      $response = Http::withOptions([
-        'verify' => false,  // Deshabilitar la verificación SSL si es necesario
-      ])
-        ->withHeaders([
-          'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',  // Aquí defines el tipo de contenido
+          ->withHeaders([
+            'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',  // Aquí defines el tipo de contenido
+          ])
+          ->asForm()
+          ->post($this->authUrl, [
+            'client_id'     => $this->clientId,
+            'username'      => $username,
+            'password'      => $password,
+            'grant_type'    => 'password',
+            'client_secret' => '',
+          ]);
+      } else {
+        $response = Http::withOptions([
+          'verify' => false,  // Deshabilitar la verificación SSL si es necesario
         ])
-        ->asForm()
-        ->post($this->authUrl, [
-          'client_id'     => $this->clientId,
-          'username'      => $username,
-          'password'      => $password,
-          'grant_type'    => 'password',
-          'client_secret' => '',
-          //'scopes'        => '',
-        ]);
-    }
-    //'scopes'        => '',
+          ->withHeaders([
+            'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',  // Aquí defines el tipo de contenido
+          ])
+          ->asForm()
+          ->post($this->authUrl, [
+            'client_id'     => $this->clientId,
+            'username'      => $username,
+            'password'      => $password,
+            'grant_type'    => 'password',
+            'client_secret' => '',
+            //'scopes'        => '',
+          ]);
+      }
+      //'scopes'        => '',
 
-    dd($response);
-    // Verificar si la respuesta es exitosa
-    if ($response->failed()) {
+      //dd($response);
+      // Verificar si la respuesta es exitosa
+      if ($response->failed()) {
+        throw new Exception('Error obteniendo el token: ' . $response->body());
+      }
+
+      $data = $response->json();
+
+      //dd($data);
+
+      if (isset($data['access_token'])) {
+        // Guardamos los tokens en el almacenamiento
+        $this->tokenStorage->saveTokens(
+          $username,
+          $data['access_token'],
+          $data['expires_in'],
+          $data['refresh_token'],
+          $data['refresh_expires_in']
+        );
+        return $data['access_token'];
+      }
+
       throw new Exception('Error obteniendo el token: ' . $response->body());
+    } catch (\Throwable $e) {
+      Log::error('Excepción en requestNewToken: ' . $e->getMessage(), [
+        'trace' => $e->getTraceAsString(),
+      ]);
+
+      throw new Exception('Error obteniendo el token: ' . $e->getTraceAsString());
     }
-
-    $data = $response->json();
-
-    dd($data);
-
-    if (isset($data['access_token'])) {
-      // Guardamos los tokens en el almacenamiento
-      $this->tokenStorage->saveTokens(
-        $username,
-        $data['access_token'],
-        $data['expires_in'],
-        $data['refresh_token'],
-        $data['refresh_expires_in']
-      );
-      return $data['access_token'];
-    }
-
-    throw new Exception('Error obteniendo el token: ' . $response->body());
   }
 
   /**
