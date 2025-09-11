@@ -112,7 +112,7 @@ class Token
       }
       //'scopes'        => '',
 
-      dd($response);
+      dd($response->status());
 
       // 🚨 Si la respuesta es 401 => credenciales inválidas
       if ($response->status() === 401) {
