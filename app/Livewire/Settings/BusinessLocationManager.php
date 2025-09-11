@@ -100,7 +100,8 @@ class BusinessLocationManager extends BaseComponent
     'TE'  => 'Tiquete electrónico',
     'FEC' => 'Factura electrónica de compra',
     'NCE' => 'Nota de crédito electrónica',
-    'NDE' => 'Nota de débito electrónica'
+    'NDE' => 'Nota de débito electrónica',
+    'MR'  => 'Mensaje de receptor'
   ];
 
   public $sequences = [];
