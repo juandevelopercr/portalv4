@@ -107,16 +107,18 @@ class Token
             'password'      => $password,
             'grant_type'    => 'password',
             'client_secret' => '',
-            'scope'         => '',
+            'scopes'         => '',
           ]);
       }
       //'scopes'        => '',
 
-      dd($response);
       // Verificar si la respuesta es exitosa
       if ($response->failed()) {
         throw new Exception('Error obteniendo el token: ' . $response->body());
       }
+
+      if (!$response->json())
+        throw new Exception('Error obteniendo el token, no se ha autorizado con las credenciales suministradas');
 
       $data = $response->json();
 
@@ -183,7 +185,7 @@ class Token
           'grant_type'    => 'refresh_token',
           'refresh_token' => $refreshToken,
           'client_secret' => '',
-          //'scopes'        => ''
+          'scopes'        => ''
         ]);
     }
 
