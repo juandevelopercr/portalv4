@@ -255,7 +255,7 @@ class ComprobanteManager extends Component
       'respuesta_hacienda' => 'nullable|string',
 
       'mensajeConfirmacion' => 'required|in:ACEPTADO,ACEPTADOPARCIAL,RECHAZADO',
-      'detalle' => 'required|string|max:80',
+      'detalle' => 'required_if:mensajeConfirmacion,RECHAZADO|string|max:150',
 
       // Mantener estos campos como requeridos
       'key' => 'required|string|max:50|unique:comprobantes,key',

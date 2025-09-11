@@ -154,7 +154,7 @@
                 @enderror
               </div>
 
-              <div class="col-md-3 fv-plugins-icon-container">
+              <div class="col-md-9 fv-plugins-icon-container">
                 <label class="form-label" for="detalle">{{ __('Detalle') }}</label>
                 <div class="input-group input-group-merge has-validation">
                   <span class="input-group-text"><i class="bx bx-receipt"></i></span>
