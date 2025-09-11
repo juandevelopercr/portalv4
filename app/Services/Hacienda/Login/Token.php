@@ -107,7 +107,7 @@ class Token
             'password'      => $password,
             'grant_type'    => 'password',
             'client_secret' => '',
-            //'scopes'        => '',
+            'scope'         => '',
           ]);
       }
       //'scopes'        => '',
