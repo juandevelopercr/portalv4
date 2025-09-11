@@ -53,16 +53,18 @@ class Token
   {
     // Verificamos si el access_token es válido
     if ($this->tokenStorage->isAccessTokenValid($username)) {
+      dd("1");
       $tokenData = $this->tokenStorage->getTokens($username);
       return $tokenData['access_token'];
     }
 
     // Si el refresh_token es válido, lo usamos para renovar el access_token
     if ($this->tokenStorage->isRefreshTokenValid($username)) {
+      dd("2");
       $tokenData = $this->tokenStorage->getTokens($username);
       return $this->refreshToken($username, $tokenData['refresh_token']);
     }
-
+    dd("3");
     // Si no, solicitamos un nuevo token
     return $this->requestNewToken($username, $password);
   }
