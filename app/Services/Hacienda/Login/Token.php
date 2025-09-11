@@ -112,7 +112,7 @@ class Token
       }
       //'scopes'        => '',
 
-      //dd($response);
+      dd($response);
       // Verificar si la respuesta es exitosa
       if ($response->failed()) {
         throw new Exception('Error obteniendo el token: ' . $response->body());
