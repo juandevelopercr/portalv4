@@ -117,6 +117,8 @@ class Token
         throw new \Exception("Error de autenticación: credenciales inválidas al intentar obtener el token.");
       }
 
+      dd($response->status());
+
       // Verificar si la respuesta es exitosa
       if ($response->failed()) {
         throw new Exception('Error obteniendo el token: ' . $response->body());
