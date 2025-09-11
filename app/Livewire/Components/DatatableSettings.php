@@ -32,7 +32,7 @@ class DatatableSettings extends Component
 
   public function defaultColumns()
   {
-    return collect()
+    return collect($this->availableColumns)
       ->map(fn($column) => ['key' => $column['key'], 'label' => $column['label'], 'visible' => true])
       ->toArray();
   }

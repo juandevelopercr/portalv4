@@ -54,9 +54,11 @@ class ComprobanteManager extends Component
   public $emisor_nombre;
   public $emisor_tipo_identificacion;
   public $emisor_numero_identificacion;
+
   public $receptor_nombre;
   public $receptor_tipo_identificacion;
   public $receptor_numero_identificacion;
+
   public $tipo_cambio;
   public $total_impuestos;
   public $total_exento;
@@ -319,7 +321,7 @@ class ComprobanteManager extends Component
       // Extraer datos básicos del comprobante
       $this->key = (string)($findElement('Clave') ?? '');
       $this->fecha_emision = date('Y-m-d\TH:i', strtotime((string)($findElement('FechaEmision') ?? now())));
-      $this->codigo_actividad = (string)($findElement('CodigoActividad') ?? '');
+      $this->codigo_actividad = (string)($findElement('CodigoActividadEmisor') ?? '');
       $this->situacion_comprobante = (string)($findElement('SituacionComprobante') ?? '1');
 
       // Extraer datos del emisor
@@ -442,6 +444,7 @@ class ComprobanteManager extends Component
 
   public function store()
   {
+    //dd($this);
     $this->validate();
     try {
       // Obtener el emisor del comprobante
