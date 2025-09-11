@@ -53,18 +53,15 @@ class Token
   {
     // Verificamos si el access_token es válido
     if ($this->tokenStorage->isAccessTokenValid($username)) {
-      dd("1");
       $tokenData = $this->tokenStorage->getTokens($username);
       return $tokenData['access_token'];
     }
 
     // Si el refresh_token es válido, lo usamos para renovar el access_token
     if ($this->tokenStorage->isRefreshTokenValid($username)) {
-      dd("2");
       $tokenData = $this->tokenStorage->getTokens($username);
       return $this->refreshToken($username, $tokenData['refresh_token']);
     }
-    dd("3");
     // Si no, solicitamos un nuevo token
     return $this->requestNewToken($username, $password);
   }
@@ -148,20 +145,37 @@ class Token
    */
   protected function refreshToken($issuerId, $refreshToken)
   {
-    $response = Http::withOptions([
-      'verify' => false,  // Deshabilitar la verificación SSL si es necesario
-    ])
-      ->withHeaders([
-        'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',  // Aquí defines el tipo de contenido
+    if (env('HACIENDA_ENVIRONMENT') == 'prod') {
+      $response = Http::withOptions([
+        'verify' => false,  // Deshabilitar la verificación SSL si es necesario
       ])
-      ->asForm()
-      ->post($this->authUrl, [
-        'client_id'     => $this->clientId,
-        'grant_type'    => 'refresh_token',
-        'refresh_token' => $refreshToken,
-        'client_secret' => '',
-      ]);
-    //'scopes'        => ''
+        ->withHeaders([
+          'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',  // Aquí defines el tipo de contenido
+        ])
+        ->asForm()
+        ->post($this->authUrl, [
+          'client_id'     => $this->clientId,
+          'grant_type'    => 'refresh_token',
+          'refresh_token' => $refreshToken,
+          'client_secret' => '',
+        ]);
+      //'scopes'        => ''
+    } else {
+      $response = Http::withOptions([
+        'verify' => false,  // Deshabilitar la verificación SSL si es necesario
+      ])
+        ->withHeaders([
+          'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',  // Aquí defines el tipo de contenido
+        ])
+        ->asForm()
+        ->post($this->authUrl, [
+          'client_id'     => $this->clientId,
+          'grant_type'    => 'refresh_token',
+          'refresh_token' => $refreshToken,
+          'client_secret' => '',
+          'scopes'        => ''
+        ]);
+    }
 
     // Verificar si la respuesta es exitosa
     if ($response->failed()) {
