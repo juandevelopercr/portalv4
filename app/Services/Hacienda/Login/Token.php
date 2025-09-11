@@ -106,7 +106,7 @@ class Token
           'password'      => $password,
           'grant_type'    => 'password',
           'client_secret' => '',
-          'scopes'        => '',
+          //'scopes'        => '',
         ]);
     }
     //'scopes'        => '',
@@ -175,7 +175,7 @@ class Token
           'grant_type'    => 'refresh_token',
           'refresh_token' => $refreshToken,
           'client_secret' => '',
-          'scopes'        => ''
+          //'scopes'        => ''
         ]);
     }
 
