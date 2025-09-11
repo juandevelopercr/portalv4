@@ -1305,7 +1305,7 @@ class ComprobanteManager extends Component
         'message' => "Ha ocurrido un error al intentar identificarse en la api de hacienda",
       ]);
     }
-
+    dd($token);
     $tipoDocumento = $comprobante->getComprobanteCode();
 
     $api = new ApiHacienda();
