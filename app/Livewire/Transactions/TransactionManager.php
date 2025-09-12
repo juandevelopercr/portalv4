@@ -322,7 +322,7 @@ abstract class TransactionManager extends BaseComponent
         ])
         ->first();
 
-      dd($totals);
+      // dd($totals);
 
 
       $totalCharge = $transaction->otherCharges()
