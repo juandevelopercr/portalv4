@@ -300,7 +300,7 @@ abstract class TransactionManager extends BaseComponent
           DB::raw('SUM(
               CASE
                   WHEN transactions_lines.codigocabys LIKE "93%"
-                      AND tp.tipo_medio_pago = "02" AND 
+                      AND tp.tipo_medio_pago IN ("02", "04", "06") AND
                       p.type = "service"
                   THEN tax
                   ELSE 0
