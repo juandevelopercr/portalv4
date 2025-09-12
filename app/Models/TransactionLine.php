@@ -41,6 +41,7 @@ class TransactionLine extends TenantModel
     'servExentos',
     'servExonerados',
     'servNoSujeto',
+    'servIVADevuelto',
 
     'mercGravadas',
     'mercExentas',

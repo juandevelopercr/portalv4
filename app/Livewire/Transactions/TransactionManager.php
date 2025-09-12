@@ -294,6 +294,16 @@ abstract class TransactionManager extends BaseComponent
           DB::raw('SUM(mercExoneradas) as totalMercExoneradas'),
           DB::raw('SUM(mercNoSujeta) as totalMercNoSujeta'),
 
+          // 🔹 NUEVO: Impuestos por servicios de salud pagados con tarjeta
+          DB::raw('SUM(
+              CASE
+                  WHEN lines.codigocabys LIKE "93%"
+                      AND tp.tipo_medio_pago = "02"
+                  THEN tax
+                  ELSE 0
+              END
+          ) as TotalIVADevuelto'),
+
           DB::raw('SUM(
               CASE
                   WHEN (exoneration IS NULL OR exoneration = 0)
@@ -342,7 +352,9 @@ abstract class TransactionManager extends BaseComponent
       $transaction->totalVentaNeta = $transaction->totalVenta - $transaction->totalDiscount;
 
       $transaction->totalImpAsumEmisorFabrica = $totals ? ($totals->totalImpuestoAsumidoEmisorFabrica ?? 0) : 0;
-      $transaction->totalIVADevuelto = 0; // Por ahora se pone en cero, si se factura algún medicamento debe colocarse
+
+      // Por ahora se pone en cero, si se factura algún medicamento debe colocarse
+      $transaction->totalIVADevuelto = $totals ? ($totals->TotalIVADevuelto ?? 0) : 0;
       $transaction->totalOtrosCargos = $totalCharge ? ($totalCharge->total ?? 0) : 0;
       $transaction->totalComprobante = $transaction->totalVentaNeta + $transaction->totalImpuesto + $transaction->totalOtrosCargos;
       $transaction->save();
