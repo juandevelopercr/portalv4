@@ -31,6 +31,11 @@
                     Helper::formatDecimal($this->totalImpAsumEmisorFabrica) }}</th>
             </tr>
             <tr>
+                <th style="padding: 4px 8px; font-weight: bold;">{{ __('TOTAL IVA DEVUELTO') }}</th>
+                <th style="padding: 4px 8px; font-weight: bold;">{{ $this->currencyCode }} {{
+                    Helper::formatDecimal($this->totalIVADevuelto) }}</th>
+            </tr>
+            <tr>
                 <th style="padding: 4px 8px; font-weight: bold;">{{ __('TOTAL OTROS CARGOS') }}</th>
                 <th style="padding: 4px 8px; font-weight: bold;">{{ $this->currencyCode }} {{
                     Helper::formatDecimal($this->totalOtrosCargos) }}
