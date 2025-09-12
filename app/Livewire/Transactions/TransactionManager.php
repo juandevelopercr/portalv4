@@ -322,6 +322,8 @@ abstract class TransactionManager extends BaseComponent
         ])
         ->first();
 
+      dd($totals);
+
 
       $totalCharge = $transaction->otherCharges()
         ->select([
