@@ -281,8 +281,8 @@ abstract class TransactionManager extends BaseComponent
       //Poner aqui el calculo de los totales
       // Realizar una única consulta para calcular todos los totales
       $totals = $transaction->lines()
-        ->join('transactions_payments as tp', 'tp.transaction_id', '=', 'lines.transaction_id')
-        ->join('products as p', 'lines.product_id', '=', 'p.id')
+        ->join('transactions_payments as tp', 'tp.transaction_id', '=', 'transactions_lines.transaction_id')
+        ->join('products as p', 'transactions_lines.product_id', '=', 'p.id')
         ->select([
           DB::raw('SUM(discount) as totalDiscount'),
           //DB::raw('SUM(tax) as totalTax'),
@@ -299,7 +299,7 @@ abstract class TransactionManager extends BaseComponent
           // 🔹 NUEVO: Impuestos por servicios de salud pagados con tarjeta
           DB::raw('SUM(
               CASE
-                  WHEN lines.codigocabys LIKE "93%"
+                  WHEN transactions_lines.codigocabys LIKE "93%"
                       AND tp.tipo_medio_pago = "02" AND 
                       p.type = "service"
                   THEN tax
