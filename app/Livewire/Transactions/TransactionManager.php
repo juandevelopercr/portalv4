@@ -288,12 +288,31 @@ abstract class TransactionManager extends BaseComponent
           //DB::raw('SUM(tax) as totalTax'),
           DB::raw('SUM(servGravados) as totalServGravados'),
           DB::raw('SUM(servExentos) as totalServExentos'),
-          DB::raw('SUM(servExonerados) as totalServExonerados'),
+
+          DB::raw('SUM(COALESCE(servExonerados,0) + COALESCE(mercExoneradas,0)) as totalMio'),
+
+          //DB::raw('SUM(servExonerados) as totalServExonerados'),
+          DB::raw('SUM(
+              CASE
+                  WHEN servExonerados > 0
+                  THEN subtotal
+                  ELSE 0
+              END
+          ) as totalServExonerados'),
+
           DB::raw('SUM(servNoSujeto) as totalServNoSujeto'),
 
           DB::raw('SUM(mercGravadas) as totalmercGravadas'),
           DB::raw('SUM(mercExentas) as totalmercExentas'),
-          DB::raw('SUM(mercExoneradas) as totalMercExoneradas'),
+
+          //DB::raw('SUM(mercExoneradas) as totalMercExoneradas'),
+          DB::raw('SUM(
+              CASE
+                  WHEN mercExoneradas > 0
+                  THEN subtotal
+                  ELSE 0
+              END
+          ) as totalMercExoneradas'),
           DB::raw('SUM(mercNoSujeta) as totalMercNoSujeta'),
 
           // 🔹 NUEVO: Impuestos por servicios de salud pagados con tarjeta
@@ -347,6 +366,8 @@ abstract class TransactionManager extends BaseComponent
       $transaction->totalImpuesto = $totals ? ($totals->totalImpuesto ?? 0) : 0;
       $transaction->totalTax = $totals ? ($totals->totalImpuesto ?? 0) : 0;
 
+      $totalMio = $totals ? ($totals->totalMio ?? 0) : 0;
+
       $transaction->totalGravado = $transaction->totalServGravados + $transaction->totalMercGravadas;
       $transaction->totalExento = $transaction->totalServExentos + $transaction->totalMercExentas;
       $transaction->totalExonerado = $transaction->totalServExonerado + $transaction->totalMercExonerada;
@@ -357,8 +378,6 @@ abstract class TransactionManager extends BaseComponent
       $transaction->totalVentaNeta = $transaction->totalVenta - $transaction->totalDiscount;
 
       $transaction->totalImpAsumEmisorFabrica = $totals ? ($totals->totalImpuestoAsumidoEmisorFabrica ?? 0) : 0;
-
-      // Por ahora se pone en cero, si se factura algún medicamento debe colocarse
       $transaction->totalIVADevuelto = $totals ? ($totals->TotalIVADevuelto ?? 0) : 0;
       $transaction->totalOtrosCargos = $totalCharge ? ($totalCharge->total ?? 0) : 0;
       $transaction->totalComprobante = $transaction->totalVentaNeta + $transaction->totalImpuesto + $transaction->totalOtrosCargos;

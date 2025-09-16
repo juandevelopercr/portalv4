@@ -151,6 +151,8 @@
 </div>
 @endif
 
+@php
+/*
 <div class="col-md-3 fv-plugins-icon-container">
     <label class="form-label" for="exoneration_date_{{ $index }}">{{ __('Date') }}</label>
     <div class="input-group input-group-merge has-validation">
@@ -162,6 +164,24 @@
     @error('taxes.{{ $index }}.exoneration_date')
     <div class="text-danger mt-1">{{ $message }}</div>
     @enderror
+</div>
+*/
+@endphp
+<div class="col-md-3 fv-plugins-icon-container">
+  <label class="form-label" for="exoneration_date_{{ $index }}">{{ __('Date') }}</label>
+  <div class="input-group input-group-merge has-validation">
+    <span class="input-group-text"><i class="bx bx-calendar"></i></span>
+    <input type="text" id="exoneration_date_{{ $index }}" @if (!$recordId) readonly @endif
+      wire:model="taxes.{{ $index }}.exoneration_date"
+      x-data="datePickerLivewire({ wireEventName: 'dateSelected' })"
+      x-init="init($el)"
+      wire:ignore
+      class="form-control date-picke @error('taxes.{{ $index }}.exoneration_date') is-invalid @enderror"
+      placeholder="dd-mm-aaaa">
+  </div>
+  @error('taxes.{{ $index }}.exoneration_date')
+  <div class="text-danger mt-1">{{ $message }}</div>
+  @enderror
 </div>
 
 <div class="col-md-3 fv-plugins-icon-container">

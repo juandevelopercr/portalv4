@@ -323,6 +323,7 @@ class TransactionLine extends TenantModel
     return $total_tax;
   }
 
+  /*
   // Devuelve el monto de precio * cantidad si el servicio está gravado
   public function getServGravado()
   {
@@ -393,16 +394,10 @@ class TransactionLine extends TenantModel
     //$subtotal = $this->getSubTotal();
 
     foreach ($taxes as $tax) {
-      /*
-      // Aplica cada impuesto sobre el monto restante
-      $tax_aplicado = $subtotal * ($tax->tax / 100);
-
-      // Resta el descuento del monto
-      $subtotal -= $tax_aplicado;
-      */
 
       if (!is_null($tax->exoneration_type_id) && !is_null($tax->exoneration_institution_id) && $tax->exoneration_percent > 0) {
-        $monto_exonerado += $tax->tax_amount * $tax->exoneration_percent / 100;
+        //$monto_exonerado += $tax->tax_amount * $tax->exoneration_percent / 100;
+        $monto_exonerado += $this->subtotal * $tax->exoneration_percent / 100;
       }
     }
 
@@ -489,6 +484,185 @@ class TransactionLine extends TenantModel
       foreach ($taxes as $tax) {
         //if (in_array($tax->taxRate->code, ['01', '10', '11'])) {
         if (!in_array($tax->taxRate->code, ['01', '11']) && $tax->tax == 0) {
+          return number_format($this->getMontoTotal(), 5, '.', '');
+        }
+      }
+    }
+    return number_format($exento, 5, '.', '');
+  }
+
+  public function getMontoTotalLinea()
+  {
+    //Es la sumatoria de los campos “Subtotal” e “Impuesto Neto”
+    $montoTotalLinea = $this->subtotal + $this->impuestoNeto;
+
+    return number_format($montoTotalLinea, 5, '.', '');
+  }
+  */
+
+// Devuelve el monto de precio * cantidad si el servicio está gravado
+  public function getServGravado()
+  {
+    // Obtiene el impuesto si es un servicio
+    $gravado = 0;
+    $taxes = !is_null($this->taxes) ? $this->taxes : collect([]);
+    if ($this->product->type == 'service') {
+      if ($this->calculaMontoImpuestoExonerado() > 0) {
+        //(1-porcentaje de exoneración) por el monto de la venta
+        //▪Porcentaje de exoneración: (Tarifa Exonerada /Tarifa IVA)
+        //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
+        //$gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
+        $gravado = 1 - $this->servExonerados / $this->tax;
+      } else if (!empty($taxes)) {
+        $gravado = $this->getMontoTotal();
+      }
+    }
+    return number_format($gravado, 5, '.', '');
+  }
+
+  // Devuelve el monto de precio * cantidad si la mercancia está gravado
+  public function getMercanciaGravada()
+  {
+    // Obtiene el impuesto si es un producto
+    $gravado = 0;
+    $taxes = !is_null($this->taxes) ? $this->taxes : collect([]);
+    if ($this->product->type != 'service') {
+      if ($this->calculaMontoImpuestoExonerado() > 0) {
+        //(1-porcentaje de exoneración) por el monto de la venta
+        //▪Porcentaje de exoneración: (Tarifa Exonerada /Tarifa IVA)
+        //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
+        //$gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
+        $gravado = 1 - $this->mercExoneradas / $this->tax;
+      } else if (!empty($taxes)) {
+        $gravado = $this->getMontoTotal();
+      }
+    }
+    return number_format($gravado, 5, '.', '');
+  }
+
+  public function getServExonerado()
+  {
+    // Obtiene el impuesto si es un servicio
+    if ($this->product->type == 'service')
+      $impuesto = $this->calculaMontoImpuestoExonerado();
+    else
+      $impuesto = 0;
+    return number_format($impuesto, 5, '.', '');
+  }
+
+  public function getMercExonerada()
+  {
+    // Obtiene el impuesto si es un servicio
+    if ($this->product->type != 'service')
+      $impuesto = $this->calculaMontoImpuestoExonerado();
+    else
+      $impuesto = 0;
+    return number_format($impuesto, 5, '.', '');
+  }
+
+  protected function calculaMontoImpuestoExonerado()
+  {
+    $monto_exonerado = 0;
+
+    $taxes = !is_null($this->taxes) ? $this->taxes : collect([]);
+    //$subtotal = $this->getSubTotal();
+
+    foreach ($taxes as $tax) {
+      /*
+      // Aplica cada impuesto sobre el monto restante
+      $tax_aplicado = $subtotal * ($tax->tax / 100);
+
+      // Resta el descuento del monto
+      $subtotal -= $tax_aplicado;
+      */
+
+      if (!is_null($tax->exoneration_type_id) && !is_null($tax->exoneration_institution_id) && $tax->exoneration_percent > 0) {
+        //$monto_exonerado += $tax->tax_amount * $tax->exoneration_percent / 100;
+        $monto_exonerado += $this->subtotal * $tax->exoneration_percent / 100;
+      }
+    }
+
+    //$monto_exonerado = round($monto_exonerado, 2);
+    return $monto_exonerado;
+  }
+
+  public function getImpuestoServGravado()
+  {
+    // Obtiene el impuesto si es un servicio
+    if ($this->product->type == 'service')
+      $impuesto = $this->getImpuesto();
+    else
+      $impuesto = 0;
+    return number_format($impuesto, 5, '.', '');
+  }
+
+  public function getImpuestoMercanciaGravada()
+  {
+    // Obtiene el impuesto si es un producto
+    if ($this->product->type != 'service')
+      $impuesto = $this->getImpuesto();
+    else
+      $impuesto = 0;
+    return number_format($impuesto, 5, '.', '');
+  }
+
+  public function getImpuestoServExonerado()
+  {
+    // Obtiene el impuesto si es un servicio
+    if ($this->product->type == 'service')
+      $impuesto = $this->calculaMontoImpuestoExonerado();
+    else
+      $impuesto = 0;
+    return number_format($impuesto, 5, '.', '');
+  }
+
+  public function getImpuestoMercanciaExonerado()
+  {
+    // Obtiene el impuesto si es un product
+    if ($this->product->type != 'service')
+      $impuesto = $this->calculaMontoImpuestoExonerado();
+    else
+      $impuesto = 0;
+    return number_format($impuesto, 5, '.', '');
+  }
+
+  public function getMontoImpuestoNeto()
+  {
+    //Este monto se obtiene al restar el campo “Monto del Impuesto” menos “Monto del Impuesto Exonerado” o el
+    //campo “Impuestos Asumidos por el Emisor o cobrado a Nivel de Fábrica” cuando corresponda. ▪En caso de no contar con datos en los campos “Monto del
+    //Impuesto Exonerado” o “Impuestos Asumidos por el Emisor o cobrado a Nivel de Fábrica” el monto será el mismo al del impuesto calculado
+    $impuestoNeto = $this->tax - ($this->exoneration ? $this->exoneration : 0);
+
+    if ($this->impuestoAsumidoEmisorFabrica > 0) {
+      $impuestoNeto = $this->tax - $this->impuestoAsumidoEmisorFabrica;
+    }
+
+    return number_format($impuestoNeto, 5, '.', '');
+  }
+
+  public function getServExento()
+  {
+    $exento = 0;
+    // Obtiene el monto exento si es un servicio
+    if ($this->product->type == 'service') {
+      $taxes = $this->taxes;
+      foreach ($taxes as $tax) {
+        if (in_array($tax->taxRate->code, ['01', '11'])) {
+          return number_format($this->getMontoTotal(), 5, '.', '');
+        }
+      }
+    }
+    return number_format($exento, 5, '.', '');
+  }
+
+  public function getMercanciaExenta()
+  {
+    $exento = 0;
+    // Obtiene el monto exento si es un servicio
+    if ($this->product->type != 'service') {
+      $taxes = $this->taxes;
+      foreach ($taxes as $tax) {
+        if (in_array($tax->taxRate->code, ['01', '11'])) {
           return number_format($this->getMontoTotal(), 5, '.', '');
         }
       }

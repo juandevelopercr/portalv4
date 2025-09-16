@@ -16,7 +16,12 @@ class SetTenantDatabase
 
     if ($user && $user->tenant) {
       $tenant = $user->tenant;
-
+      /*
+      dd([
+        'user'=> $user,
+        'tenant' => $tenant
+      ]);
+      */
       // Cerrar conexión previa si ya estaba abierta
       DB::purge('tenant');
 
