@@ -123,7 +123,7 @@ class ExoneracionType
 
     $this->setTarifaExonerada($tax->exoneration_percent);
 
-    $montoExoneracion = $tax->tax_amount * $this->getTarifaExonerada() / 100;
+    $montoExoneracion = number_format($subtotal * $this->getTarifaExonerada() / 100, 5, '.', '');
     $this->setMontoExoneracion($montoExoneracion);
   }
 
