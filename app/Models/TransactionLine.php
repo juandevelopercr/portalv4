@@ -199,23 +199,24 @@ class TransactionLine extends TenantModel
     $this->impuestoAsumidoEmisorFabrica = $this->transaction->document_type == 'FEC' ? 0 : $this->getImpuestoAsumidoEmisorFabrica();
 
     // Servicios
+    $this->servNoSujeto = $this->getServNoSujeto() ?? 0;
+
     $this->servExonerados = $this->getServExonerado() ?? 0;
 
     $this->servGravados = $this->getServGravado() ?? 0;
 
     $this->servExentos = $this->getServExento() ?? 0;
 
-    $this->servNoSujeto = $this->getServNoSujeto() ?? 0;
 
 
     // Mercancias
+    $this->mercNoSujeta = $this->getMercNoSujeta() ?? 0;
+
     $this->mercExoneradas = $this->getMercExonerada() ?? 0;
 
     $this->mercGravadas = $this->getMercanciaGravada() ?? 0;
 
     $this->mercExentas = $this->getMercanciaExenta() ?? 0;
-
-    $this->mercNoSujeta = $this->getMercNoSujeta() ?? 0;
 
     $this->exoneration = $this->servExonerados + $this->mercExoneradas;
 
@@ -507,14 +508,19 @@ class TransactionLine extends TenantModel
     $gravado = 0;
     $taxes = !is_null($this->taxes) ? $this->taxes : collect([]);
     if ($this->product->type == 'service') {
-      if ($this->calculaMontoImpuestoExonerado() > 0) {
-        //(1-porcentaje de exoneración) por el monto de la venta
-        //▪Porcentaje de exoneración: (Tarifa Exonerada /Tarifa IVA)
-        //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
-        //$gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
-        $gravado = 1 - $this->servExonerados / $this->tax;
-      } else if (!empty($taxes)) {
-        $gravado = $this->getMontoTotal();
+      if ($this->servNoSujeto > 0)
+        $gravado = 0;
+      else
+        {
+          if ($this->calculaMontoImpuestoExonerado() > 0) {
+            //(1-porcentaje de exoneración) por el monto de la venta
+            //▪Porcentaje de exoneración: (Tarifa Exonerada /Tarifa IVA)
+            //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
+            //$gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
+            $gravado = 1 - $this->servExonerados / $this->tax;
+          } else if (!empty($taxes)) {
+            $gravado = $this->getMontoTotal();
+          }
       }
     }
     return number_format($gravado, 5, '.', '');
@@ -527,14 +533,19 @@ class TransactionLine extends TenantModel
     $gravado = 0;
     $taxes = !is_null($this->taxes) ? $this->taxes : collect([]);
     if ($this->product->type != 'service') {
-      if ($this->calculaMontoImpuestoExonerado() > 0) {
-        //(1-porcentaje de exoneración) por el monto de la venta
-        //▪Porcentaje de exoneración: (Tarifa Exonerada /Tarifa IVA)
-        //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
-        //$gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
-        $gravado = 1 - $this->mercExoneradas / $this->tax;
-      } else if (!empty($taxes)) {
-        $gravado = $this->getMontoTotal();
+      if ($this->servNoSujeto > 0)
+        $gravado = 0;
+      else
+      {
+        if ($this->calculaMontoImpuestoExonerado() > 0) {
+          //(1-porcentaje de exoneración) por el monto de la venta
+          //▪Porcentaje de exoneración: (Tarifa Exonerada /Tarifa IVA)
+          //$gravado = (1 - $this->exoneration_percent / 100) * $this->getSubtotal();
+          //$gravado = $this->getMontoTotal() - $this->calculaMontoImpuestoExonerado();
+          $gravado = 1 - $this->mercExoneradas / $this->tax;
+        } else if (!empty($taxes)) {
+          $gravado = $this->getMontoTotal();
+        }
       }
     }
     return number_format($gravado, 5, '.', '');
@@ -543,8 +554,12 @@ class TransactionLine extends TenantModel
   public function getServExonerado()
   {
     // Obtiene el impuesto si es un servicio
-    if ($this->product->type == 'service')
-      $impuesto = $this->calculaMontoImpuestoExonerado();
+    if ($this->product->type == 'service'){
+      if ($this->servNoSujeto > 0)
+        $impuesto = 0;
+      else
+        $impuesto = $this->calculaMontoImpuestoExonerado();
+    }
     else
       $impuesto = 0;
     return number_format($impuesto, 5, '.', '');
@@ -553,8 +568,12 @@ class TransactionLine extends TenantModel
   public function getMercExonerada()
   {
     // Obtiene el impuesto si es un servicio
-    if ($this->product->type != 'service')
-      $impuesto = $this->calculaMontoImpuestoExonerado();
+    if ($this->product->type != 'service'){
+      if ($this->servNoSujeto > 0)
+        $impuesto = 0;
+      else
+        $impuesto = $this->calculaMontoImpuestoExonerado();
+    }
     else
       $impuesto = 0;
     return number_format($impuesto, 5, '.', '');
@@ -645,10 +664,15 @@ class TransactionLine extends TenantModel
     $exento = 0;
     // Obtiene el monto exento si es un servicio
     if ($this->product->type == 'service') {
-      $taxes = $this->taxes;
-      foreach ($taxes as $tax) {
-        if (in_array($tax->taxRate->code, ['01', '11'])) {
-          return number_format($this->getMontoTotal(), 5, '.', '');
+      if ($this->servNoSujeto > 0)
+        $gravado = 0;
+      else
+      {
+        $taxes = $this->taxes;
+        foreach ($taxes as $tax) {
+          if (in_array($tax->taxRate->code, ['01', '11'])) {
+            return number_format($this->getMontoTotal(), 5, '.', '');
+          }
         }
       }
     }
@@ -660,10 +684,15 @@ class TransactionLine extends TenantModel
     $exento = 0;
     // Obtiene el monto exento si es un servicio
     if ($this->product->type != 'service') {
-      $taxes = $this->taxes;
-      foreach ($taxes as $tax) {
-        if (in_array($tax->taxRate->code, ['01', '11'])) {
-          return number_format($this->getMontoTotal(), 5, '.', '');
+      if ($this->servNoSujeto > 0)
+        $gravado = 0;
+      else
+      {
+        $taxes = $this->taxes;
+        foreach ($taxes as $tax) {
+          if (in_array($tax->taxRate->code, ['01', '11'])) {
+            return number_format($this->getMontoTotal(), 5, '.', '');
+          }
         }
       }
     }
