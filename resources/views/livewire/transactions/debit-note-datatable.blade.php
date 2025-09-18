@@ -160,7 +160,7 @@
   <livewire:modals.caby-modal />
 
   @livewire('transactions.send-email-modal', [
-            'documentType' => 'PROFORMA',
+            'documentType' => 'NOTADEBITOELECTRONICA',
             'canview'   => auth()->user()->can('view-documento-proformas'),
             'cancreate' => auth()->user()->can('create-documento-proformas'),
             'canedit'   => auth()->user()->can('edit-documento-proformas'),

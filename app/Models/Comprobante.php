@@ -397,6 +397,19 @@ class Comprobante extends Model
     HTML;
     }
 
+    // Eliminar
+    if ($user->can('delete-comprobantes')) {
+      $html .= <<<HTML
+        <a href="#" class="text-danger" title="Eliminar"
+           wire:click.prevent="confirmarAccion({$this->id}, 'delete',
+             '¿Está seguro que desea eliminar este registro?',
+             'Después de confirmar, el registro será eliminado',
+             'Sí, proceder')">
+            <i class="bx bx-trash {$iconSize}"></i>
+        </a>
+        HTML;
+    }
+
     $html .= '</div>';
     return $html;
   }

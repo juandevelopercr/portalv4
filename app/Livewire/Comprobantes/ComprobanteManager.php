@@ -89,6 +89,7 @@ class ComprobanteManager extends Component
 
   public $clave_referencia;
   public $codigo_actividad;
+  public $codigo_actividad_receptor;
   public $situacion_comprobante = '1';
 
   public $closeForm = false;
@@ -272,6 +273,80 @@ class ComprobanteManager extends Component
       'status' => 'required|in:PENDIENTE,RECIBIDA,ACEPTADA,RECHAZADA',
       'codigo_actividad' => 'required|string|max:6',
       'situacion_comprobante' => 'required|string|in:1,2,3',
+    ];
+  }
+
+  protected function messages()
+  {
+    return [
+        'location_id.required' => 'Debe seleccionar una ubicación.',
+        'location_id.exists'   => 'La ubicación seleccionada no es válida.',
+
+        'xmlFile.required' => 'Debe adjuntar el archivo XML.',
+        'xmlFile.mimes'    => 'El archivo XML debe tener extensión .xml.',
+        'xmlFile.max'      => 'El archivo XML no debe exceder los 10 MB.',
+
+        'xml_respuestaFile.mimes' => 'La respuesta debe ser un archivo XML válido.',
+        'xml_respuestaFile.max'   => 'El archivo de respuesta no debe exceder los 10 MB.',
+
+        'xml_confirmacionFile.mimes' => 'La confirmación debe ser un archivo XML válido.',
+        'xml_confirmacionFile.max'   => 'El archivo de confirmación no debe exceder los 10 MB.',
+
+        'pdfFile.mimes' => 'El archivo PDF debe tener extensión .pdf.',
+        'pdfFile.max'   => 'El archivo PDF no debe exceder los 20 MB.',
+
+        'receptor_nombre.max' => 'El nombre del receptor no puede exceder los 200 caracteres.',
+        'receptor_tipo_identificacion.in' => 'El tipo de identificación del receptor no es válido.',
+        'receptor_numero_identificacion.max' => 'El número de identificación no puede exceder 20 caracteres.',
+
+        'clave_referencia.max' => 'La clave de referencia no puede exceder 50 caracteres.',
+        'medio_pago.in'        => 'El medio de pago seleccionado no es válido.',
+        'plazo_credito.integer' => 'El plazo de crédito debe ser un número entero.',
+        'total_otros_cargos.numeric' => 'El total de otros cargos debe ser numérico.',
+
+        'mensajeConfirmacion.required' => 'Debe indicar un mensaje de confirmación.',
+        'mensajeConfirmacion.in'       => 'El mensaje de confirmación debe ser ACEPTADO, ACEPTADOPARCIAL o RECHAZADO.',
+        'detalle.required_if'          => 'El detalle es obligatorio cuando el mensaje es RECHAZADO.',
+        'detalle.max'                  => 'El detalle no puede superar los 150 caracteres.',
+
+        'key.required' => 'La clave del comprobante es obligatoria.',
+        'key.unique'   => 'La clave del comprobante ya existe en el sistema.',
+
+        'fecha_emision.required' => 'La fecha de emisión es obligatoria.',
+        'fecha_emision.date'     => 'La fecha de emisión no tiene un formato válido.',
+
+        'emisor_nombre.required' => 'El nombre del emisor es obligatorio.',
+        'emisor_nombre.max'      => 'El nombre del emisor no puede exceder los 200 caracteres.',
+
+        'emisor_tipo_identificacion.required' => 'Debe indicar el tipo de identificación del emisor.',
+        'emisor_tipo_identificacion.in'       => 'El tipo de identificación del emisor no es válido.',
+
+        'emisor_numero_identificacion.required' => 'El número de identificación del emisor es obligatorio.',
+        'emisor_numero_identificacion.max'      => 'El número de identificación del emisor no puede exceder 12 caracteres.',
+
+        'total_comprobante.required' => 'El total del comprobante es obligatorio.',
+        'total_comprobante.numeric'  => 'El total del comprobante debe ser numérico.',
+
+        'tipo_cambio.required' => 'El tipo de cambio es obligatorio.',
+        'tipo_cambio.numeric'  => 'El tipo de cambio debe ser numérico.',
+
+        'moneda.required' => 'La moneda es obligatoria.',
+        'moneda.size'     => 'La moneda debe tener exactamente 3 caracteres.',
+
+        'tipo_documento.required' => 'El tipo de documento es obligatorio.',
+        'tipo_documento.in'       => 'El tipo de documento seleccionado no es válido.',
+
+        'condicion_venta.required' => 'Debe indicar la condición de venta.',
+        'condicion_venta.in'       => 'La condición de venta seleccionada no es válida.',
+
+        'status.required' => 'El estado del comprobante es obligatorio.',
+        'status.in'       => 'El estado del comprobante no es válido.',
+
+        'codigo_actividad.required' => 'El código de actividad es obligatorio.',
+        'codigo_actividad.max'      => 'El código de actividad no puede superar 6 caracteres.',
+
+        'situacion_comprobante.required' => 'La situación del comprobante es obligatoria.',
+        'situacion_comprobante.in'       => 'La situación del comprobante debe ser 1, 2 o 3.',
     ];
   }
 
