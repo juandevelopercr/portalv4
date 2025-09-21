@@ -1,7 +1,8 @@
 <div class="table-wrapper" style="display: flex; justify-content: flex-end; align-items: flex-start;">
 @php
 //if (!is_null($this->transaction_id))
-  //dd($this);
+    //dd($this);
+
 @endphp
     <table class="table" style="width: auto; border-collapse: collapse; text-align: left;">
         <thead>
@@ -24,6 +25,11 @@
                 <th style="padding: 4px 8px; font-weight: bold;">{{ __('TOTAL IVA') }}</th>
                 <th style="padding: 4px 8px; font-weight: bold;">{{ $this->currencyCode }} {{
                     Helper::formatDecimal($this->totalImpuesto) }}</th>
+            </tr>
+            <tr>
+                <th style="padding: 4px 8px; font-weight: bold;">{{ __('TOTAL NO SUJETO') }}</th>
+                <th style="padding: 4px 8px; font-weight: bold;">{{ $this->currencyCode }} {{
+                    Helper::formatDecimal($this->totalNoSujeto) }}</th>
             </tr>
             <tr>
                 <th style="padding: 4px 8px; font-weight: bold;">{{ __('TOTAL IVA ASUMIDO EMISOR') }}</th>

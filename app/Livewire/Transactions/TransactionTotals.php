@@ -67,7 +67,7 @@ class TransactionTotals extends Component
       $this->totalGravado = Helpers::formatDecimal($transaction->totalGravado ?? 0);
       $this->totalExento = Helpers::formatDecimal($transaction->totalExento ?? 0);
       $this->totalExonerado = Helpers::formatDecimal($transaction->totalExonerado ?? 0);
-      $this->totalNoSujeto = Helpers::formatDecimal($transaction->totalExonerado ?? 0);
+      $this->totalNoSujeto = Helpers::formatDecimal($transaction->totalNoSujeto ?? 0);
 
       $this->totalVenta = Helpers::formatDecimal($transaction->totalVenta ?? 0);
       $this->totalDiscount = Helpers::formatDecimal($transaction->totalDiscount ?? 0);
@@ -104,7 +104,7 @@ class TransactionTotals extends Component
       $this->totalGravado = Helpers::formatDecimal($transaction->totalGravado ?? 0);
       $this->totalExento = Helpers::formatDecimal($transaction->totalExento ?? 0);
       $this->totalExonerado = Helpers::formatDecimal($transaction->totalExonerado ?? 0);
-      $this->totalNoSujeto = Helpers::formatDecimal($transaction->totalExonerado ?? 0);
+      $this->totalNoSujeto = Helpers::formatDecimal($transaction->totalNoSujeto ?? 0);
 
       $this->totalVenta = Helpers::formatDecimal($transaction->totalVenta ?? 0);
       $this->totalDiscount = Helpers::formatDecimal($transaction->totalDiscount ?? 0);

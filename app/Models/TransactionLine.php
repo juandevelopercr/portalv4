@@ -208,7 +208,6 @@ class TransactionLine extends TenantModel
     $this->servExentos = $this->getServExento() ?? 0;
 
 
-
     // Mercancias
     $this->mercNoSujeta = $this->getMercNoSujeta() ?? 0;
 
