@@ -1048,7 +1048,8 @@ class TransactionLineManager extends BaseComponent
       return;
     }
 
-    $monto = $this->price * $this->quantity;
+    $precio = str_replace(',', '', $this->price);
+    $monto = $precio * $this->quantity;
 
     switch ($value) {
       case 1:
