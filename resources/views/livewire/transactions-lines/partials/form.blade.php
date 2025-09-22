@@ -37,6 +37,7 @@
       </div>
 
       <!-- price -->
+      <!-- price -->
       <div class="col-md-3 fv-plugins-icon-container">
         <label class="form-label" for="price">{{ __('Price') }}</label>
         <div
@@ -59,14 +60,13 @@
         >
           <div class="input-group input-group-merge has-validation">
             {{--  <span class="input-group-text"><i class="bx bx-dollar"></i></span> --}}
-            <input type="text" id="price" x-ref="cleaveInput" wire:ignore class="form-control js-input-price" />
+            <input type="text" id="price" x-ref="cleaveInput" wire:model="price" class="form-control js-input-price" />
           </div>
         </div>
         @error('price')
           <div class="text-danger mt-1">{{ $message }}</div>
         @enderror
       </div>
-
 
       <!-- quantity -->
       <div class="col-md-2 fv-plugins-icon-container">

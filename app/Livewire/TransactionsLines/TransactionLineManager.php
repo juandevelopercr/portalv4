@@ -409,8 +409,10 @@ class TransactionLineManager extends BaseComponent
       $this->codigo = $product->code;
       $this->codigocabys = $product->caby_code;
       $currency_id = $transaction->currency_id;
-      $this->detail = $product->name;
+      //$this->detail = $product->name;
     }
+
+    $this->price = str_replace(',', '', $this->price);
 
     // Validar
     $validatedData = $this->validate();
@@ -506,6 +508,8 @@ class TransactionLineManager extends BaseComponent
     $this->mercNoSujeta = $record->mercNoSujeta;
     $this->exoneration = $record->exoneration;
 
+    $this->price = number_format($record->price, 2, '.', ',');
+
     // Cargar taxes
     $this->taxes = $record->taxes->map(function ($tax) {
       return [
@@ -563,6 +567,8 @@ class TransactionLineManager extends BaseComponent
       $this->codigo = $product->code;
       $this->codigocabys = $product->caby_code;
     }
+
+    $this->price = str_replace(',', '', $this->price);
 
     // Validar
     $validatedData = $this->validate();
@@ -833,17 +839,17 @@ class TransactionLineManager extends BaseComponent
       if ($this->recordId)
         $discounts = TransactionLineDiscount::where('transaction_line_id', $this->recordId)->get();
 
+
       if (!is_null($product)) {
         $this->detail = $product->name;
-        $this->price = $product->price;
+        //$this->price = $product->price;
+        $this->price = number_format($product->price, 2, '.', ',');
+        $this->codigo = $product->code;
+        $this->codigocabys = $product->caby_code;
       }
-
-      $this->codigo = NULL;
-      $this->codigocabys = NULL;
 
       // Limpiar el array de taxes actual
       $this->taxes = [];
-
 
       $transaction = Transaction::find($this->transaction_id);
       $aplicarImpuesto = $transaction ? $transaction->contact->aplicarImpuesto : true;
