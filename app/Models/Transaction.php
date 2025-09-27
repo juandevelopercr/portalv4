@@ -442,15 +442,17 @@ class Transaction extends TenantModel implements HasMedia
                 $start = Carbon::createFromFormat('d-m-Y', trim($range[0]))->startOfDay();
                 $end   = Carbon::createFromFormat('d-m-Y', trim($range[1]))->endOfDay();
 
-                $query->whereBetween('transaction_date', [$start, $end]);
+                $query->whereBetween('transactions.transaction_date', [$start, $end]);
             } catch (\Exception $e) {
                 // Manejo de error
             }
         } else {
             try {
-                $singleDate = Carbon::createFromFormat('d-m-Y', $filters['filter_transaction_date']);
+                // Validar y convertir la fecha única
+                $singleDate = Carbon::createFromFormat('d-m-Y', $filters['filter_transaction_date'])->format('Y-m-d');
 
-                $query->whereBetween('transaction_date', [$singleDate->startOfDay(), $singleDate->endOfDay()]);
+                // Aplicar filtro si la fecha es válida
+                $query->whereDate('transactions.transaction_date', $singleDate);
             } catch (\Exception $e) {
                 // Manejo de error
             }
@@ -467,7 +469,7 @@ class Transaction extends TenantModel implements HasMedia
           $end = Carbon::createFromFormat('d-m-Y', $range[1])->format('Y-m-d');
 
           // Aplicar filtro si ambas fechas son válidas
-          $query->whereBetween('filter_fecha_envio_email', [$start, $end]);
+          $query->whereBetween('transactions.fecha_envio_email', [$start, $end]);
         } catch (\Exception $e) {
           // Manejar el caso de fechas inválidas (opcional: log o ignorar)
         }
@@ -477,7 +479,7 @@ class Transaction extends TenantModel implements HasMedia
           $singleDate = Carbon::createFromFormat('d-m-Y', $filters['filter_fecha_envio_email'])->format('Y-m-d');
 
           // Aplicar filtro si la fecha es válida
-          $query->whereDate('filter_fecha_envio_email', $singleDate);
+          $query->whereDate('transactions.fecha_envio_email', $singleDate);
         } catch (\Exception $e) {
           // Manejar el caso de fecha inválida (opcional: log o ignorar)
         }
