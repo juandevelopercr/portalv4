@@ -146,19 +146,21 @@
                   @endforeach
                 </tbody>
                 <tfoot>
-                  <tr>
-                    <td></td>
-                    @foreach ($this->columns as $index => $column)
-                      @if ($column['visible'])
-                        @php
-                        $value = !empty($column['sumary']) ? (${$column['sumary']} ?? '') : '';
-                        @endphp
-                      <td>
-                        <strong>{{ Helper::formatDecimal($value) }}</strong>
-                      </td>
-                      @endif
-                    @endforeach
-                  </tr>
+                    <tr>
+                        <td></td>
+                        @foreach ($this->columns as $index => $column)
+                            @if ($column['visible'])
+                                @php
+                                    $value = !empty($column['sumary']) ? (${$column['sumary']} ?? '') : '';
+                                @endphp
+                                <td class="text-end">
+                                    <strong>
+                                        {{ $column['sumary'] == 'tpax' ? (int)$value : Helper::formatDecimal($value) }}
+                                    </strong>
+                                </td>
+                            @endif
+                        @endforeach
+                    </tr>
                 </tfoot>
               </table>
               <div class="row overflow-y-scroll" wire:scroll>
