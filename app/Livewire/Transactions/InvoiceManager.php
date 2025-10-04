@@ -887,7 +887,7 @@ class InvoiceManager extends TransactionManager
 
     // Generar consecutivo
     $consecutive = DocumentSequenceService::generateConsecutive(
-      $validatedData['document_type'],
+      'PR',
       $validatedData['location_id'] ?? null
     );
 
