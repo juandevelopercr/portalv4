@@ -492,5 +492,8 @@
   "Movement Notifications": "Movement Notifications",
   "View-buscador": "View proforma finder",
   "View-admin": "Ver gráficos en pantalla de inicio",
-  "Providerandseller": "Providerandseller"
+  "Providerandseller": "Providerandseller",
+  "View-facturacion": "Ver reporte de facturación",
+  "View-gastos": "Ver reporte de gastos",
+  "View-cliente": "Ver reporte de clientes"
 }
