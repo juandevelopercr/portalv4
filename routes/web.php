@@ -1,47 +1,55 @@
 <?php
 
-use \App\Models\Contact;
-use App\Http\Controllers\authentications\LoginBasic;
-use App\Http\Controllers\authentications\RegisterBasic;
-use App\Http\Controllers\billing\CalculoRegistroController;
-use App\Http\Controllers\billing\InvoiceController;
-use App\Http\Controllers\billing\ProformaController;
-use App\Http\Controllers\billing\TripController;
-use App\Http\Controllers\casos\CasoController;
-use App\Http\Controllers\classifiers\ClasificadorController;
-use App\Http\Controllers\classifiers\DepartmentController;
-use App\Http\Controllers\customers\CustomerController;
-use App\Http\Controllers\dashboard\GraficoController;
-use App\Http\Controllers\hacienda\ApiHaciendaController;
-use App\Http\Controllers\Home;
-use App\Http\Controllers\language\LanguageController;
-use App\Http\Controllers\pages\HomePage;
-use App\Http\Controllers\pages\MiscError;
-use App\Http\Controllers\pages\Page2;
-use App\Http\Controllers\products\ProductController;
-use App\Http\Controllers\providerAndSellers\ProviderAndSellerController;
-use App\Http\Controllers\reports\ReportInvoiceController;
-use App\Http\Controllers\reports\ReportProformaController;
-use App\Http\Controllers\reports\ReportTransactionController;
-use App\Http\Controllers\rolesPersmissions\AccessPermission;
-use App\Http\Controllers\rolesPersmissions\AccessRoles;
-use App\Http\Controllers\services\ServiceController;
-use App\Http\Controllers\Settings\SettingController;
-use App\Http\Controllers\UserController;
-use App\Http\Middleware\SetTenantDatabase;
-use App\Livewire\Movimientos\Export\MovimientoExportFromView;
-use App\Mail\TestMail;
 use App\Models\User;
+use App\Mail\TestMail;
+use Livewire\Livewire;
+use \App\Models\Contact;
+use App\Models\Comprobante;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Home;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
-use Livewire\Livewire;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\pages\Page2;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\pages\HomePage;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\pages\MiscError;
+use App\Http\Middleware\SetTenantDatabase;
+use App\Http\Controllers\casos\CasoController;
+use App\Http\Controllers\billing\TripController;
+use App\Http\Controllers\billing\InvoiceController;
+use App\Http\Controllers\authentications\LoginBasic;
+use App\Http\Controllers\billing\ProformaController;
+use App\Http\Controllers\products\ProductController;
+use App\Http\Controllers\services\ServiceController;
+use App\Http\Controllers\Settings\SettingController;
+use App\Http\Controllers\dashboard\GraficoController;
+use App\Http\Controllers\language\LanguageController;
+use App\Http\Controllers\customers\CustomerController;
+use App\Http\Controllers\authentications\RegisterBasic;
+use App\Http\Controllers\reports\ReportGastoController;
+use App\Http\Controllers\reports\ReportTripsController;
+use App\Http\Controllers\rolesPersmissions\AccessRoles;
+use App\Http\Controllers\hacienda\ApiHaciendaController;
+use App\Http\Controllers\reports\ReportInvoiceController;
+use App\Http\Controllers\classifiers\DepartmentController;
+use App\Http\Controllers\reports\ReportProformaController;
+use App\Http\Controllers\reports\ReportRegistroController;
+use App\Http\Controllers\billing\CalculoRegistroController;
+use App\Http\Controllers\reports\CustomersReportController;
+use App\Http\Controllers\reports\ReportGeneralesController;
+use App\Http\Controllers\classifiers\ClasificadorController;
+use App\Http\Controllers\reports\ReportComisionesController;
+use App\Http\Controllers\rolesPersmissions\AccessPermission;
+use App\Http\Controllers\reports\ReportFacturacionController;
+use App\Http\Controllers\reports\ReportTransactionController;
+use App\Livewire\Movimientos\Export\MovimientoExportFromView;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\providerAndSellers\ProviderAndSellerController;
 
 // locale
 Route::get('/lang/{locale}', [LanguageController::class, 'swap']);
@@ -132,7 +140,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', SetTenantDatabase::cl
   Route::get('dashboard/tipos-garantias', [GraficoController::class, 'tiposGarantias'])->name('dashboard-tipos-garantias.index');
   Route::get('dashboard/facturacion-centro-costo', [GraficoController::class, 'facturacionCentroCosto'])->name('dashboard-facturacion-centro-costo.index');
 
-  //Reportes  
+  //Reportes
   Route::get('/preparar-exportacion-proforma/{key}', [ReportProformaController::class, 'prepararExportacionProforma'])
     ->name('exportacion.proforma.preparar');
 
@@ -171,6 +179,37 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', SetTenantDatabase::cl
 
   Route::get('/descargar-exportacion-invoice/{filename}', [ReportInvoiceController::class, 'descargarExportacionInvoice'])
     ->name('exportacion.invoice.descargar');
+
+  // Reportes generales
+  Route::prefix('reports')->name('reports.')->group(function () {
+    // Reporte de facturación
+    Route::get('/facturacion', [ReportFacturacionController::class, 'index'])
+      ->name('facturacion.index');
+
+    // Reporte de facturación detallada
+    Route::get('/trips', [ReportTripsController::class, 'index'])
+      ->name('trips.index');
+
+    // Reporte de clientes
+    Route::get('/customers', [CustomersReportController::class, 'index'])
+      ->name('customers.index');
+
+    // Reporte de comisiones
+    Route::get('/comisiones', [ReportComisionesController::class, 'index'])
+      ->name('comisiones.index');
+
+    // Reporte Generales
+    Route::get('/generales', [ReportGeneralesController::class, 'index'])
+      ->name('generales.index');
+
+    // Reporte de Registro
+    Route::get('/registro', [ReportRegistroController::class, 'index'])
+      ->name('registro.index');
+
+    // Reporte de Gasto
+    Route::get('/gastos', [ReportGastoController::class, 'index'])
+      ->name('gastos.index');
+  });
 });
 
 //Route::get('/usuarios', [UserCrud::class, 'index'])->name('usuarios.index');
@@ -232,6 +271,20 @@ Route::get('/debug-mail', function () {
     'from_address' => config('mail.from.address'),
     'encryption' => config('mail.mailers.smtp.encryption'),
   ];
+});
+
+Route::get('/api/emisor/search', function (\Illuminate\Http\Request $request) {
+    $term = $request->get('q');
+    return Comprobante::query()
+        ->where('emisor_nombre', 'like', "%{$term}%")
+        ->select('emisor_nombre') // solo esta columna
+        ->distinct()
+        ->limit(20)
+        ->pluck('emisor_nombre') // obtenemos solo los valores únicos
+        ->map(fn($nombre) => [
+            'id' => $nombre,
+            'text' => $nombre
+        ]);
 });
 
 Route::get('/check-session', function () {

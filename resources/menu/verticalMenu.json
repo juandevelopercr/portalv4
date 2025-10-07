@@ -153,6 +153,40 @@
       ]
     },
     {
+      "name": "Reports",
+      "icon": "menu-icon tf-icons bx bx-bar-chart-alt-2",
+      "slug": "reports",
+      "permissions": [
+        "view-classifiers"
+      ],
+      "submenu": [
+        {
+          "url": "reports/facturacion",
+          "name": "Facturación",
+          "slug": "reports.facturacion.index",
+          "permissions": [
+            "view-facturacion-reports"
+          ]
+        },
+        {
+          "url": "reports/gastos",
+          "name": "Gastos",
+          "slug": "reports.gastos.index",
+          "permissions": [
+            "view-gastos-reports"
+          ]
+        },
+        {
+          "url": "reports/customers",
+          "name": "Clientes",
+          "slug": "reports.customers.index",
+          "permissions": [
+            "view-cliente-reports"
+          ]
+        }
+      ]
+    },
+    {
       "name": "Classifiers",
       "icon": "menu-icon tf-icons bx bx-table",
       "slug": "classifiers",
