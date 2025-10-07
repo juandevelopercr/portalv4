@@ -2045,4 +2045,25 @@ class Transaction extends TenantModel implements HasMedia
     $htmlData = "<span class=\"badge bg-primary\">$name</span>";
     return $htmlData;
   }
+
+  public static function getStatusOptionsforReports($is_invoice = false)
+  {
+      $status = [
+        ['id' => 'ACEPTADA', 'name' => __('ACEPTADA')],
+        ['id' => 'RECHAZADA', 'name' => __('RECHAZADA')],
+        ['id' => 'ANULADA', 'name' => __('ANULADA')],
+      ];
+
+      return collect($status);
+  }
+
+  public static function getStatusOptionsforReportGasto()
+  {
+      $status = [
+        ['id' => 'ACEPTADA', 'name' => __('ACEPTADO')],
+        ['id' => 'RECHAZADA', 'name' => __('RECHAZADO')],
+      ];
+
+      return collect($status);
+  }
 }
