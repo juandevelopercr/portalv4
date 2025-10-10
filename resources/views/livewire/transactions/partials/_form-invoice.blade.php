@@ -27,6 +27,8 @@
         {{ __('The system generates it') }}
       </div>
     </div>
+    @php
+    /*
     <div class="col-md-6 fv-plugins-icon-container">
       <label class="form-label" for="customer_name">{{ __('Customer Name') }}</label>
       <div class="input-group input-group-merge has-validation">
@@ -43,6 +45,18 @@
       @error('customer_name')
       <div class="text-danger mt-1">{{ $message }}</div>
       @enderror
+    </div>
+    */
+    @endphp
+    <div class="col-md-3 select2-primary fv-plugins-icon-container">
+      <label class="form-label" for="contact_id">{{ __('Customer Name') }}</label>
+      <div wire:ignore>
+        <select id="contact_id" class="form-select select2-ajax" data-placeholder="Buscar Cliente">
+          @if($customer_text)
+              <option value="{{ $contact_id }}" selected>{{ $customer_text }}</option>
+          @endif
+        </select>
+      </div>
     </div>
 
     <div class="col-md-3 select2-primary fv-plugins-icon-container">
@@ -112,7 +126,7 @@
           initialValue: '{{ $pay_term_number ?? '' }}',
           wireModelName: 'pay_term_number',
           postUpdate: true,
-          decimalScale: 0,          
+          decimalScale: 0,
         })"
         x-init="init($refs.cleaveInput)"
         x-effect="
@@ -343,78 +357,71 @@
 @script()
 <script>
   $(document).ready(function() {
-    // Para la busqueda del caso
-    // Configuración AJAX para caso_id
-    window.select2Config = {
-      currency_id: {fireEvent: false},
-      contact_economic_activity_id: {fireEvent: false},
-      location_economic_activity_id: {fireEvent: false},
-      condition_sale: {fireEvent: true},
-      location_id: {fireEvent: true},
-      status: {fireEvent: false}
-    };
+    $('#caso_id').select2({
+      placeholder: $('#caso_id').data('placeholder'),
+      minimumInputLength: 2,
+      ajax: {
+        url: '/api/casos/search',
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            q: params.term,
+            bank_id: $("#bank_id").val()
+          };
+        },
+        processResults: function (data) {
+          return {
+            results: data.map(item => ({
+              id: item.id,
+              text: item.text
+            }))
+          };
+        },
+        cache: true
+      }
+    });
 
-    //**************************************************************
-    //*****Para todos los demás select2****************
-    //**************************************************************
-    Object.entries(select2Config).forEach(([id, config]) => {
-      const $select = $('#' + id);
-      if (!$select.length) return;
+    // Manejar selección y enviar a Livewire
+    $('#caso_id').on('change', function () {
+      const val = $(this).val();
+      if (typeof $wire !== 'undefined') {
+        $wire.set('caso_id', val);
+      }
+    });
 
-      $select.select2();
+    $('#contact_id').select2({
+      placeholder: $('#contact_id').data('placeholder'),
+      minimumInputLength: 2,
+      ajax: {
+        url: '/api/customers/search',
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            q: params.term,
+          };
+        },
+        processResults: function (data) {
+          return {
+            results: data.map(item => ({
+              id: item.id,
+              text: item.text
+            }))
+          };
+        },
+        cache: true
+      }
+    });
 
-      // Default values
-      const fireEvent = config.fireEvent ?? false;
-      //const allowClear = config.allowClear ?? false;
-      //const placeholder = config.placeholder ?? 'Seleccione una opción';
-
-      $select.on('change', function() {
-        let data = $(this).val();
-        $wire.set(id, data, fireEvent);
-        $wire.id = data;
-        //@this.department_id = data;
-        console.log(data);
-      });
+    // Manejar selección y enviar a Livewire
+    $('#contact_id').on('change', function () {
+      const val = $(this).val();
+      if (typeof $wire !== 'undefined') {
+        $wire.set('contact_id', val);
+      }
     });
   })
-
-  const initializeSelect2 = () => {
-      const selects = [
-        'invoice_type'
-      ];
-
-      selects.forEach((id) => {
-        const element = document.getElementById(id);
-        if (element) {
-          //console.log(`Inicializando Select2 para: ${id}`);
-
-          $(`#${id}`).select2();
-
-          $(`#${id}`).on('change', function() {
-            const newValue = $(this).val();
-            const livewireValue = @this.get(id);
-
-            if (newValue !== livewireValue) {
-              // Actualiza Livewire solo si es el select2 de `condition_sale`
-              // Hay que poner wire:ignore en el select2 para que todo vaya bien
-              const specificIds = ['invoice_type']; // Lista de IDs específicos
-
-              if (specificIds.includes(id)) {
-                @this.set(id, newValue);
-              } else {
-                // Para los demás select2, actualiza localmente sin llamar al `updated`
-                @this.set(id, newValue, false);
-              }
-            }
-          });
-        }
-
-        // Sincroniza el valor actual desde Livewire al Select2
-        const currentValue = @this.get(id);
-        $(`#${id}`).val(currentValue).trigger('change');
-      });
-
-    };
 
   Livewire.on('setSelect2Value', ({ id, value, text }) => {
     const option = new Option(text, value, true, true);
@@ -438,37 +445,71 @@
     console.log("Se dispara el change");
   });
 
-  // Re-ejecuta las inicializaciones después de actualizaciones de Livewire
-  Livewire.on('reinitSelect2Controls', () => {
-    console.log('Reinicializando controles después de Livewire update reinitFormControls');
-    setTimeout(() => {
-      initSelect2Other();
-      initializeSelect2();
-    }, 300); // Retraso para permitir que el DOM se estabilice
-  });
+  const initializeSelect2 = () => {
+      const selects = [
+        'condition_sale',
+        'invoice_type',
+        'codigo_contable_id',
+        'location_id',
+        'bank_id',
+        'department_id',
+        'cuenta_id',
+        'showInstruccionesPago',
+        'currency_id',
+        'contact_economic_activity_id',
+        'location_economic_activity_id',
+        'created_by',
+        'proforma_type',
+        'proforma_status',
+        'area_id'
+      ];
 
-  function initSelect2Other(){
-      Object.entries(select2Config).forEach(([id, config]) => {
-      const $select = $('#' + id);
-      if (!$select.length) return;
+      selects.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) {
+          //console.log(`Inicializando Select2 para: ${id}`);
 
-      $select.select2();
+          $(`#${id}`).select2();
+          /*
+          let el = $('#' + id);
+          el.select2({
+              dropdownParent: el.parent() // asegura que el dropdown se quede dentro del contenedor
+          });
+          */
 
-      // Default values
-      const fireEvent = config.fireEvent ?? false;
-      //const allowClear = config.allowClear ?? false;
-      //const placeholder = config.placeholder ?? 'Seleccione una opción';
+          $(`#${id}`).on('change', function() {
+            const newValue = $(this).val();
+            const livewireValue = @this.get(id);
 
-      $select.on('change', function() {
-        let data = $(this).val();
-        $wire.set(id, data, fireEvent);
-        $wire.id = data;
-        //@this.department_id = data;
-        console.log(data);
+            if (newValue !== livewireValue) {
+              // Actualiza Livewire solo si es el select2 de `condition_sale`
+              // Hay que poner wire:ignore en el select2 para que todo vaya bien
+              const specificIds = ['bank_id', 'condition_sale', 'location_id']; // Lista de IDs específicos
+
+              if (specificIds.includes(id)) {
+                @this.set(id, newValue);
+              } else {
+                // Para los demás select2, actualiza localmente sin llamar al `updated`
+                @this.set(id, newValue, false);
+              }
+            }
+          });
+        }
+
+        // Sincroniza el valor actual desde Livewire al Select2
+        const currentValue = @this.get(id);
+        $(`#${id}`).val(currentValue).trigger('change');
       });
-    });
-  }
 
+    };
+
+    // Re-ejecuta las inicializaciones después de actualizaciones de Livewire
+    Livewire.on('reinitSelect2Controls', () => {
+      console.log('Reinicializando controles después de Livewire update reinitFormControls');
+      setTimeout(() => {
+        initializeSelect2();
+      }, 300); // Retraso para permitir que el DOM se estabilice
+    });
 </script>
 @endscript
 @endif

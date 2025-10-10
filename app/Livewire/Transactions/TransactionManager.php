@@ -196,7 +196,8 @@ abstract class TransactionManager extends BaseComponent
       ->where('contacts_economic_activities.contact_id', $this->contact_id)
       ->orderBy('economic_activities.name', 'asc')
       ->get();
-
+    if (count($activities) == 1)
+      $this->contact_economic_activity_id = $activities[0]->id;
     $this->contactEconomicActivities = $activities;
   }
 

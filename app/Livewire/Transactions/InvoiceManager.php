@@ -24,6 +24,7 @@ use App\Models\BusinessLocation;
 
 class InvoiceManager extends TransactionManager
 {
+  public $customer_text; // para mostrar el texto inicial
 
   public $sortBy = 'transactions.id';
 
@@ -346,9 +347,33 @@ class InvoiceManager extends TransactionManager
     }
 
     if ($propertyName == 'contact_id') {
+      $contact = Contact::find($this->contact_id);
+      if ($contact){
+        $this->customer_name = $contact->name;
+        if (is_null($this->customer_comercial_name) || empty($this->customer_comercial_name))
+          $this->customer_comercial_name = $contact->commercial_name;
+
+        $this->invoice_type = $contact->invoice_type;
+        $this->condition_sale = $contact->conditionSale ? $contact->conditionSale->code : NULL;
+        $this->pay_term_number = $contact->pay_term_number;
+        $this->email_cc = $contact->email_cc;
+      }
+
       if ($this->contact_id == '' | is_null($this->contact_id))
         $this->contact_economic_activity_id = null;
+      else{
+        $this->setcontactEconomicActivities();
+        if ($this->contact_economic_activity_id) {
+          $activity = EconomicActivity::find($this->contact_economic_activity_id);
+          if ($activity) {
+            $this->dispatch('setSelect2Value', id: 'contact_economic_activity_id', value: $activity->id, text: $activity->name);
+          }
+        }
+      }
+      $this->dispatch('reinitSelect2Controls');
     }
+
+    $this->dispatch('reinitSelect2Controls');
 
     $this->dispatch('updateExportFilters', [
       'search' => $this->search,
@@ -696,6 +721,7 @@ class InvoiceManager extends TransactionManager
 
   public function create()
   {
+    $this->customer_text = '';
     $this->resetControls();
     $this->resetErrorBag(); // Limpia los errores de validación previos
     $this->resetValidation(); // También puedes reiniciar los valores previos de val
@@ -728,6 +754,9 @@ class InvoiceManager extends TransactionManager
     ]];
 
     $this->recalcularVuelto();
+
+    $text = '';
+    $this->dispatch('setSelect2Value', id: 'contact_id', value: '', text: $text);
 
     $this->action = 'create';
     $this->dispatch('scroll-to-top');
@@ -1038,9 +1067,16 @@ class InvoiceManager extends TransactionManager
 
     $this->clientEmail = $record->contact->email;
 
+
     $contact = Contact::find($record->contact_id);
-    $this->tipoIdentificacion = $contact->identificationType->name;
+    $this->tipoIdentificacion = !is_null($contact->identificationType) ? $contact->identificationType->name : '';
     $this->identificacion = $contact->identification;
+
+    if ($contact) {
+      $this->customer_text = $contact->name;
+      $text = $contact->name;
+      $this->dispatch('setSelect2Value', id: 'contact_id', value: $this->contact_id, text: $text);
+    }
 
     // Se emite este evento para los componentes hijos
     $this->dispatch('updateTransactionContext', [
@@ -1181,7 +1217,7 @@ class InvoiceManager extends TransactionManager
     $this->reset(
       //'business_id',
       //'location_id',
-      //      'location_economic_activity_id',
+      // 'location_economic_activity_id',
       'contact_id',
       'contact_economic_activity_id',
       'currency_id',
@@ -1220,7 +1256,8 @@ class InvoiceManager extends TransactionManager
       'vuelto',
       'invoice_type',
       'tipoIdentificacion',
-      'identificacion'
+      'identificacion',
+      'customer_text'
     );
 
     $this->currency_id = null;
