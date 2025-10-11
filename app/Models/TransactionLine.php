@@ -838,6 +838,7 @@ class TransactionLine extends TenantModel
     if ($tax->taxType->code == '01' && $hasRegaliaOrBonificacion) {
       //$iva = number_format((float)($this->getMontoTotal() * $tax->tax) / 100, 5, '.', '');
       $iva = number_format((float)($this->getSubTotal() * $tax->tax) / 100, 5, '.', '');
+      dd($this->getSubTotal());
     }
 
     if ($tax->taxType->code == '08') { // IVA Régimen de Bienes Usados (Factor)
