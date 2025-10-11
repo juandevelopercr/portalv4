@@ -530,7 +530,7 @@ class InvoiceManager extends TransactionManager
       // Clonar líneas con montos negativos
       foreach ($original->lines as $line) {
         $clonedLine = $line->replicate();
-        $clonedLine->updateTransactionTotals();
+        $clonedLine->updateTransactionTotals($original->currency_id);
         $clonedLine->forceFill([
           'transaction_id' => $cloned->id,
           //'quantity' => -abs($line->quantity), // Negativo
@@ -1344,7 +1344,7 @@ class InvoiceManager extends TransactionManager
       // Clonar lines
       foreach ($original->lines as $item) {
         $copy = $item->replicate();
-        $copy->updateTransactionTotals();
+        $copy->updateTransactionTotals($original->currency_id);
         $copy->transaction_id = $cloned->id;
         $copy->save();
 
