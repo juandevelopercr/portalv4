@@ -2066,4 +2066,115 @@ class Transaction extends TenantModel implements HasMedia
 
       return collect($status);
   }
+
+  // Seutilizara cuando se clone o cuando se haga nota de credito para si se hizo algun calculo mal que recalcule
+  public function recalculeteTotals()
+  {
+    if ($this) {
+      //Poner aqui el calculo de los totales
+      // Realizar una única consulta para calcular todos los totales
+      $totals = $this->lines()
+        ->join('transactions_payments as tp', 'tp.transaction_id', '=', 'transactions_lines.transaction_id')
+        ->join('products as p', 'transactions_lines.product_id', '=', 'p.id')
+        ->select([
+          DB::raw('SUM(discount) as totalDiscount'),
+          //DB::raw('SUM(tax) as totalTax'),
+          DB::raw('SUM(servGravados) as totalServGravados'),
+          DB::raw('SUM(servExentos) as totalServExentos'),
+
+          DB::raw('SUM(COALESCE(servExonerados,0) + COALESCE(mercExoneradas,0)) as totalMio'),
+
+          //DB::raw('SUM(servExonerados) as totalServExonerados'),
+          DB::raw('SUM(
+              CASE
+                  WHEN servExonerados > 0
+                  THEN subtotal
+                  ELSE 0
+              END
+          ) as totalServExonerados'),
+
+          DB::raw('SUM(servNoSujeto) as totalServNoSujeto'),
+
+          DB::raw('SUM(mercGravadas) as totalmercGravadas'),
+          DB::raw('SUM(mercExentas) as totalmercExentas'),
+
+          //DB::raw('SUM(mercExoneradas) as totalMercExoneradas'),
+          DB::raw('SUM(
+              CASE
+                  WHEN mercExoneradas > 0
+                  THEN subtotal
+                  ELSE 0
+              END
+          ) as totalMercExoneradas'),
+          DB::raw('SUM(mercNoSujeta) as totalMercNoSujeta'),
+
+          // 🔹 NUEVO: Impuestos por servicios de salud pagados con tarjeta
+          DB::raw('SUM(
+              CASE
+                  WHEN transactions_lines.codigocabys LIKE "93%"
+                      AND tp.tipo_medio_pago IN ("02", "04", "06") AND
+                      p.type = "service"
+                  THEN tax
+                  ELSE 0
+              END
+          ) as TotalIVADevuelto'),
+
+          DB::raw('SUM(
+              CASE
+                  WHEN (exoneration IS NULL OR exoneration = 0)
+                      AND (impuestoAsumidoEmisorFabrica IS NULL OR impuestoAsumidoEmisorFabrica = 0)
+                  THEN tax
+                  WHEN exoneration > 0 OR (impuestoAsumidoEmisorFabrica IS NOT NULL AND impuestoAsumidoEmisorFabrica >= 0)
+                  THEN impuestoNeto
+                  ELSE 0
+              END
+          ) AS totalImpuesto'),
+          DB::raw('SUM(impuestoAsumidoEmisorFabrica) as totalImpuestoAsumidoEmisorFabrica')
+          //DB::raw('SUM(honorarios + timbres - discount) as totalVenta'),
+        ])
+        ->first();
+
+       //dd($totals);
+
+
+      $totalCharge = $this->otherCharges()
+        ->select([
+          DB::raw('SUM(amount * quantity) as total'),
+        ])
+        ->first();
+
+      // Asignar los resultados a los atributos de la transacción
+      $this->totalAditionalCharge = $totals ? ($totals->totalAditionalCharge ?? 0) : 0;
+
+      $this->totalServGravados = $totals ? ($totals->totalServGravados ?? 0) : 0;
+      $this->totalServExentos = $totals ? ($totals->totalServExentos ?? 0) : 0;
+      $this->totalServExonerado = $totals ? ($totals->totalServExonerados ?? 0) : 0;
+      $this->totalServNoSujeto = $totals->totalServNoSujeto ?? 0;
+
+      $this->totalMercGravadas = $totals ? ($totals->totalmercGravadas ?? 0) : 0;
+      $this->totalMercExentas = $totals ? ($totals->totalmercExentas ?? 0) : 0;
+      $this->totalMercExonerada = $totals ? ($totals->totalMercExoneradas ?? 0) : 0;
+      $this->totalMercNoSujeta = $totals->totalMercNoSujeta ?? 0;
+
+      $this->totalImpuesto = $totals ? ($totals->totalImpuesto ?? 0) : 0;
+      $this->totalTax = $totals ? ($totals->totalImpuesto ?? 0) : 0;
+
+      $totalMio = $totals ? ($totals->totalMio ?? 0) : 0;
+
+      $this->totalGravado = $this->totalServGravados + $this->totalMercGravadas;
+      $this->totalExento = $this->totalServExentos + $this->totalMercExentas;
+      $this->totalExonerado = $this->totalServExonerado + $this->totalMercExonerada;
+      $this->totalNoSujeto = $this->totalServNoSujeto + $this->totalMercNoSujeta;
+
+      $this->totalVenta = $this->totalGravado + $this->totalExento + $this->totalExonerado + $this->totalNoSujeto;
+      $this->totalDiscount = $totals ? ($totals->totalDiscount ?? 0) : 0;
+      $this->totalVentaNeta = $this->totalVenta - $this->totalDiscount;
+
+      $this->totalImpAsumEmisorFabrica = $totals ? ($totals->totalImpuestoAsumidoEmisorFabrica ?? 0) : 0;
+      $this->totalIVADevuelto = $totals ? ($totals->TotalIVADevuelto ?? 0) : 0;
+      $this->totalOtrosCargos = $totalCharge ? ($totalCharge->total ?? 0) : 0;
+      $this->totalComprobante = $this->totalVentaNeta + $this->totalImpuesto + $this->totalOtrosCargos;
+      $this->save();
+    }
+  }
 }

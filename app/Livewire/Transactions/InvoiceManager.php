@@ -530,7 +530,6 @@ class InvoiceManager extends TransactionManager
       // Clonar líneas con montos negativos
       foreach ($original->lines as $line) {
         $clonedLine = $line->replicate();
-        $clonedLine->updateTransactionTotals($original->currency_id);
         $clonedLine->forceFill([
           'transaction_id' => $cloned->id,
           //'quantity' => -abs($line->quantity), // Negativo
@@ -553,6 +552,7 @@ class InvoiceManager extends TransactionManager
           //$clonedDiscount->amount = -abs($discount->amount);
           $clonedDiscount->save();
         }
+        $clonedLine->updateTransactionTotals($original->currency_id);
       }
 
       // Clonar otros cargos (negativos)
@@ -608,6 +608,9 @@ class InvoiceManager extends TransactionManager
       ]);
 
       DB::commit();
+
+      // Para que recalule los totales de la factura
+      $cloned->recalculeteTotals();
 
       // Livewire: Notificación y limpieza
       $this->reset(['selectedIds', 'recordId']);
@@ -1068,7 +1071,6 @@ class InvoiceManager extends TransactionManager
 
     $this->clientEmail = $record->contact->email;
 
-
     $contact = Contact::find($record->contact_id);
     $this->tipoIdentificacion = !is_null($contact->identificationType) ? $contact->identificationType->name : '';
     $this->identificacion = $contact->identification;
@@ -1344,7 +1346,6 @@ class InvoiceManager extends TransactionManager
       // Clonar lines
       foreach ($original->lines as $item) {
         $copy = $item->replicate();
-        $copy->updateTransactionTotals($original->currency_id);
         $copy->transaction_id = $cloned->id;
         $copy->save();
 
@@ -1361,6 +1362,8 @@ class InvoiceManager extends TransactionManager
           $copyDiscount->transaction_line_id = $copy->id;
           $copyDiscount->save();
         }
+
+        $copy->updateTransactionTotals($original->currency_id);
       }
 
       // Clonar otros cargos
@@ -1390,6 +1393,9 @@ class InvoiceManager extends TransactionManager
       */
 
       DB::commit();
+
+      // Para que recalule los totales de la factura
+      $cloned->recalculeteTotals();
 
       $this->selectedIds = [];
       $this->dispatch('updateSelectedIds', $this->selectedIds);

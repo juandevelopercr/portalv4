@@ -855,7 +855,7 @@ class ComprobanteElectronico extends ComprobanteElectronico\ComprobanteElectroni
       $nodoDesgloseImpuesto = $dom->createElement('TotalDesgloseImpuesto');
       $nodoDesgloseImpuesto->appendChild($this->createElement($dom, 'Codigo', $impuesto['codigo']));
       $nodoDesgloseImpuesto->appendChild($this->createElement($dom, 'CodigoTarifaIVA', $impuesto['tarifa']));
-      $nodoDesgloseImpuesto->appendChild($this->createElement($dom, 'TotalMontoImpuesto', $impuesto['total']));
+      $nodoDesgloseImpuesto->appendChild($this->createElement($dom, 'TotalMontoImpuesto', number_format($impuesto['total'], 5, '.', '')));
       $nodoResumenFactura->appendChild($nodoDesgloseImpuesto);
     }
   }
