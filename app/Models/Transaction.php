@@ -1100,7 +1100,7 @@ class Transaction extends TenantModel implements HasMedia
     }
 
     // Enviar Email
-    if ($user->can('send-email-proformas')) {
+    if ($user->can('download-electronicinvoices')) {
       $html .= <<<HTML
             <button type="button"
                 class="btn p-0 me-2 text-success"
