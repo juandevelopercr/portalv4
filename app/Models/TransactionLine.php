@@ -836,7 +836,8 @@ class TransactionLine extends TenantModel
       $iva = 0.00000;
 
     if ($tax->taxType->code == '01' && $hasRegaliaOrBonificacion) {
-      $iva = number_format((float)($this->getMontoTotal() * $tax->tax) / 100, 5, '.', '');
+      //$iva = number_format((float)($this->getMontoTotal() * $tax->tax) / 100, 5, '.', '');
+      $iva = number_format((float)($this->getSubTotal() * $tax->tax) / 100, 5, '.', '');
     }
 
     if ($tax->taxType->code == '08') { // IVA Régimen de Bienes Usados (Factor)
@@ -844,7 +845,8 @@ class TransactionLine extends TenantModel
     }
 
     if ($tax->taxType->code == '07') { // IVA (cálculo especial)
-      $iva = number_format((float)($this->getMontoTotal() * $tax->tax) / 100, 5, '.', '');
+      //$iva = number_format((float)($this->getMontoTotal() * $tax->tax) / 100, 5, '.', '');
+      $iva = number_format((float)($this->getSubTotal() * $tax->tax) / 100, 5, '.', '');
       // Nota: En el caso de utilizar el nodo “Detalle de productos del surtido, paquetes o combos”, este
       // campo se calcula como la sumatoria de los montos de IVA individuales de las líneas de detalle del surtido que se deben
       // incluir en estos casos, en caso de contar con más de una unidad de surtido dicho monto se debe de multiplicar por la
