@@ -22,10 +22,9 @@
             <ul class="nav nav-tabs nav-fill" role="tablist">
               <li class="nav-item">
                 <button type="button" class="nav-link @if ($this->activeTab == 'invoice') show active @endif" role="tab"
-                  data-bs-toggle="tab" data-bs-target="#navs-justified-home" aria-controls="navs-justified-home"
-                  aria-selected="true">
-                  <span class="d-none d-sm-block"><i
-                      class="tf-icons bx bx-info-circle bx-lg me-1_5 align-text-center"></i>
+                  wire:click="changeTab('invoice')">
+                  <span class="d-none d-sm-block">
+                    <i class="tf-icons bx bx-info-circle bx-lg me-1_5 align-text-center"></i>
                     {{ __('General Information') }}
                   </span>
                   <i class="bx bx-info-circle bx-lg d-sm-none"></i>
@@ -33,8 +32,7 @@
               </li>
               <li class="nav-item">
                 <button type="button" class="nav-link @if ($this->activeTab == 'product') show active @endif" role="tab"
-                  data-bs-toggle="tab" data-bs-target="#navs-justified-services" aria-controls="navs-justified-services"
-                  aria-selected="false">
+                  wire:click="changeTab('product')">
                   <span class="d-none d-sm-block">
                     <i class="tf-icons bx bx-cog bx-lg me-1_5 align-text-center"></i>
                     {{ __('Services') }}
@@ -49,8 +47,7 @@
               </li>
               <li class="nav-item">
                 <button type="button" class="nav-link @if ($this->activeTab == 'charges') show active @endif" role="tab"
-                  data-bs-toggle="tab" data-bs-target="#navs-justified-charge" aria-controls="navs-justified-charge"
-                  aria-selected="true">
+                  wire:click="changeTab('charges')">
                   <span class="d-none d-sm-block"><i class="tf-icons bx bx-dollar bx-lg me-1_5 align-text-center"></i>
                     {{ __('Other Charge') }}
                   </span>
@@ -58,9 +55,8 @@
                 </button>
               </li>
               <li class="nav-item">
-                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                  data-bs-target="#navs-justified-document" aria-controls="navs-justified-document"
-                  aria-selected="true">
+                <button type="button" class="nav-link @if ($this->activeTab == 'documentos') show active @endif" role="tab"
+                  wire:click="changeTab('documentos')">
                   <span class="d-none d-sm-block"><i class="tf-icons bx bx-file bx-lg me-1_5 align-text-center"></i>
                     {{ __('Attached Documents') }}
                   </span>
@@ -69,8 +65,8 @@
               </li>
             </ul>
             <div class="tab-content">
-              <div class="tab-pane fade show @if ($this->activeTab == 'invoice') show active @endif"
-                id="navs-justified-home" role="tabpanel">
+              <div class="tab-pane fade @if ($this->activeTab == 'invoice') show active @endif"
+                  id="navs-justified-home" role="tabpanel">
                 @include('livewire.transactions.partials._form-invoice')
               </div>
               <div class="tab-pane fade @if ($this->activeTab == 'product') show active @endif"
@@ -115,7 +111,7 @@
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="navs-justified-document" role="tabpanel">
+              <div class="tab-pane fade @if ($this->activeTab == 'documentos') show active @endif" id="navs-justified-document" role="tabpanel">
                 @if($this->recordId)
                 @livewire('transactions.documents-manager', [
                     'transaction_id' => $this->recordId,

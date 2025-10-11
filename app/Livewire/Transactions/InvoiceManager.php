@@ -468,6 +468,179 @@ class InvoiceManager extends TransactionManager
     DB::beginTransaction();
 
     try {
+        // 🔹 Bloquear el registro original
+        $original = Transaction::with([
+            'lines.taxes',
+            'lines.discounts',
+            'otherCharges',
+        ])->lockForUpdate()->findOrFail($recordId);
+
+        // 🔹 Validar elegibilidad
+        if (!$this->isCreditNoteEligible($original->status)) {
+            throw new \Exception(__('El comprobante no es elegible para nota de crédito. Seleccione un comprobante con estado ACEPTADO'));
+        }
+
+        // 🔹 Clonar la transacción
+        $cloned = $original->replicate();
+        $now = Carbon::now('America/Costa_Rica');
+
+        $cloned->forceFill([
+            'document_type' => Transaction::NOTACREDITOELECTRONICA,
+            'transaction_date' => $now->format('Y-m-d H:i:s'),
+            'status' => Transaction::PENDIENTE,
+            'payment_status' => 'due',
+            'created_by' => auth()->id(),
+            'RefTipoDoc' => '01',
+            'RefNumero' => $original->key,
+            'RefFechaEmision' => $original->transaction_date,
+            'RefCodigo' => '01',
+            'RefRazon' => trim($motivo),
+            'proforma_status' => null,
+            'access_token' => NULL,
+            'response_xml' => NULL,
+            'filexml' => NULL,
+            'filepdf' => NULL,
+            'num_request_hacienda_set' => 0,
+            'num_request_hacienda_get' => 0,
+            'invoice_date' => $now->format('Y-m-d H:i:s'),
+            'fecha_envio_email' => NULL,
+            'totalPagado' => 0,
+            'pendientePorPagar' => $original->totalComprobante,
+            'vuelto' => 0,
+        ]);
+
+        // 🔹 Generar consecutivo y clave
+        $secuencia = DocumentSequenceService::generateConsecutive(
+            $cloned->document_type,
+            $cloned->location_id
+        );
+        $cloned->consecutivo = $cloned->getConsecutivo($secuencia);
+        $cloned->key = $cloned->generateKey();
+        $cloned->save();
+
+        // 🔹 Clonar líneas, impuestos y descuentos
+        foreach ($original->lines as $line) {
+            $clonedLine = $line->replicate();
+            $clonedLine->transaction_id = $cloned->id;
+            $clonedLine->save();
+
+            foreach ($line->taxes as $tax) {
+                $clonedTax = $tax->replicate();
+                $clonedTax->transaction_line_id = $clonedLine->id;
+                $clonedTax->save();
+            }
+
+            foreach ($line->discounts as $discount) {
+                $clonedDiscount = $discount->replicate();
+                $clonedDiscount->transaction_line_id = $clonedLine->id;
+                $clonedDiscount->save();
+            }
+
+            $clonedLine->updateTransactionTotals($original->currency_id);
+        }
+
+        // 🔹 Clonar otros cargos
+        foreach ($original->otherCharges as $charge) {
+            $clonedCharge = $charge->replicate();
+            $clonedCharge->transaction_id = $cloned->id;
+            $clonedCharge->save();
+        }
+
+        // 🔹 Crear pago provisional
+        $payment = new TransactionPayment;
+        $payment->transaction_id = $cloned->id;
+        $payment->tipo_medio_pago = '04';
+        $payment->medio_pago_otros = '';
+        $payment->total_medio_pago = $cloned->totalComprobante;
+        $payment->save();
+
+        // 🔹 Commit para confirmar los datos
+        DB::commit();
+
+        // 🔹 Recalcular totales con datos confirmados
+        $cloned->recalculeteTotals($cloned->id);
+
+        // 🔹 Generar XML con totales recalculados
+        $xml = Helpers::generateComprobanteElectronicoXML($cloned, true, 'content');
+
+        // 🔹 Notificación de creación exitosa
+        $this->dispatch('show-notification', [
+            'type' => 'success',
+            'message' => __('Se ha creado la nota de crédito satisfactoriamente')
+        ]);
+
+        // 🔹 Intentar autenticación y envío a Hacienda
+        try {
+            $authService = new AuthService();
+            $token = $authService->getToken(
+                $cloned->location->api_user_hacienda,
+                $cloned->location->api_password
+            );
+
+            $api = new ApiHacienda();
+            $result = $api->send(
+                $xml,
+                $token,
+                $cloned,
+                $cloned->location,
+                Transaction::NCE
+            );
+
+            if ($result['error'] == 0) {
+                $cloned->update([
+                    'status' => Transaction::RECIBIDA,
+                    'invoice_date' => $now
+                ]);
+            } else {
+                $cloned->update([
+                    'status' => Transaction::PENDIENTE,
+                    'response_xml' => $result['mensaje']
+                ]);
+
+                // 🔹 Notificación de error de envío
+                $this->dispatch('show-notification', [
+                    'type' => 'error',
+                    'message' => __('Se ha creado la nota de créedito pero no se ha podido enviar hacienda. Un error ha ocurrido al enviar la nota de crédito a Hacienda: ') . $result['mensaje']
+                ]);
+            }
+        } catch (\Exception $e) {
+            $cloned->update([
+                'status' => Transaction::PENDIENTE,
+                'response_xml' => $e->getMessage()
+            ]);
+
+            // 🔹 Notificación de error de autenticación
+            $this->dispatch('show-notification', [
+                'type' => 'warning',
+                'message' => __('Se ha creado la nota de créedito pero no se ha podido enviar hacienda. Ha ocurrido un error de autenticación con Hacienda')
+            ]);
+        }
+
+        // 🔹 Livewire: limpieza
+        $this->reset(['selectedIds', 'recordId']);
+
+        return response()->json([
+            'success' => true,
+            'id' => $cloned->id
+        ]);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Error creating credit note', ['error' => $e, 'recordId' => $recordId]);
+
+        $this->dispatch('show-notification', [
+            'type' => 'error',
+            'message' => __('Ha ocurrido un error al crear la nota de crédito: ')
+        ]);
+    }
+  }
+
+  /*
+  public function createCreditNote($recordId, $motivo)
+  {
+    DB::beginTransaction();
+
+    try {
       // Bloquear el registro original para evitar modificaciones concurrentes
       $original = Transaction::with([
         'lines.taxes',
@@ -627,6 +800,7 @@ class InvoiceManager extends TransactionManager
       $this->dispatch('show-notification', ['type' => 'error', 'message' => __('Ha ocurrido un error al crear a nota de crédito') . ' ' . $e->getMessage()]);
     }
   }
+  */
 
   private function isCreditNoteEligible($status): bool
   {
@@ -1379,18 +1553,6 @@ class InvoiceManager extends TransactionManager
       $payment->medio_pago_otros = '';
       $payment->total_medio_pago = 0;
       $payment->save();
-
-      // Clona los documentos asociados (colección 'documents')
-      /*
-      foreach ($original->getMedia('documents') as $media) {
-        // Verifica que el archivo físico existe en el disco configurado
-        if (Storage::disk($media->disk)->exists($media->getPathRelativeToRoot())) {
-          $media->copy($cloned, 'documents');
-        } else {
-          Log::warning("Archivo no encontrado al clonar media ID {$media->id}: " . $media->getPath());
-        }
-      }
-      */
 
       DB::commit();
 
