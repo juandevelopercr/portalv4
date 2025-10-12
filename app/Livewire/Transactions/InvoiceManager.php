@@ -563,6 +563,10 @@ class InvoiceManager extends TransactionManager
         // 🔹 Generar XML con totales recalculados
         $xml = Helpers::generateComprobanteElectronicoXML($cloned, true, 'content');
 
+        LOG::info([
+          'Nota de credito recalculada'=>$cloned
+        ]);
+
         // 🔹 Notificación de creación exitosa
         $this->dispatch('show-notification', [
             'type' => 'success',
