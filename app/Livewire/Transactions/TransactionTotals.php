@@ -12,31 +12,31 @@ use Livewire\Component;
 class TransactionTotals extends Component
 {
   public $transaction_id;
-  public $totalDiscount;
-  public $totalTax;
-  public $totalAditionalCharge;
+  public $totalDiscount = NULL;
+  public $totalTax = NULL;
+  public $totalAditionalCharge = NULL;
 
-  public $totalServGravados;
-  public $totalServExentos;
-  public $totalServExonerado;
-  public $totalServNoSujeto;
+  public $totalServGravados = NULL;
+  public $totalServExentos = NULL;
+  public $totalServExonerado = NULL;
+  public $totalServNoSujeto = NULL;
 
-  public $totalMercGravadas;
-  public $totalMercExentas;
-  public $totalMercExonerada;
-  public $totalMercNoSujeta;
+  public $totalMercGravadas = NULL;
+  public $totalMercExentas = NULL;
+  public $totalMercExonerada = NULL;
+  public $totalMercNoSujeta = NULL;
 
-  public $totalGravado;
-  public $totalExento;
-  public $totalVenta;
-  public $totalVentaNeta;
-  public $totalExonerado;
-  public $totalNoSujeto;
-  public $totalImpAsumEmisorFabrica;
-  public $totalImpuesto;
-  public $totalIVADevuelto;
-  public $totalOtrosCargos;
-  public $totalComprobante;
+  public $totalGravado = NULL;
+  public $totalExento = NULL;
+  public $totalVenta = NULL;
+  public $totalVentaNeta = NULL;
+  public $totalExonerado = NULL;
+  public $totalNoSujeto = NULL;
+  public $totalImpAsumEmisorFabrica = NULL;
+  public $totalImpuesto = NULL;
+  public $totalIVADevuelto = NULL;
+  public $totalOtrosCargos = NULL;
+  public $totalComprobante = NULL;
 
   public $currencyCode = '';
 

@@ -58,29 +58,29 @@ class TransactionLineManager extends BaseComponent
   // Variables públicas
   public $transaction_id;
   public $transaction;
-  public $product_id;
-  public $codigo;
-  public $codigocabys;
-  public $detail;
-  public $quantity;
-  public $price;
+  public $product_id= NULL;
+  public $codigo= NULL;
+  public $codigocabys= NULL;
+  public $detail= NULL;
+  public $quantity= NULL;
+  public $price= NULL;
 
-  public $discount;
-  public $subtotal;
-  public $baseImponible;
-  public $tax;
-  public $impuestoAsumidoEmisorFabrica;
-  public $impuestoNeto;
-  public $total;
-  public $servGravados;
-  public $servExentos;
-  public $servExonerados;
-  public $servNoSujeto;
-  public $mercGravadas;
-  public $mercExentas;
-  public $mercExoneradas;
-  public $mercNoSujeta;
-  public $exoneration;
+  public $discount= 0;
+  public $subtotal= 0;
+  public $baseImponible= 0;
+  public $tax= 0;
+  public $impuestoAsumidoEmisorFabrica= 0;
+  public $impuestoNeto= 0;
+  public $total= 0;
+  public $servGravados= 0;
+  public $servExentos= 0;
+  public $servExonerados= 0;
+  public $servNoSujeto= 0;
+  public $mercGravadas= 0;
+  public $mercExentas= 0;
+  public $mercExoneradas= 0;
+  public $mercNoSujeta= 0;
+  public $exoneration= 0;
 
   //Listados
   public $taxes = [];
@@ -88,19 +88,19 @@ class TransactionLineManager extends BaseComponent
 
   public $closeForm = false;
 
-  public $columns;
-  public $defaultColumns;
+  public $columns = [];
+  public $defaultColumns = [];
 
-  public $canview;
-  public $cancreate;
-  public $canedit;
-  public $candelete;
-  public $canexport;
-  public $record;
+  public $canview = false;
+  public $cancreate = false;
+  public $canedit = false;
+  public $candelete = false;
+  public $canexport = false;
+  public $record = NULL;
 
-  public $facturaCompra;
+  public $facturaCompra = NULL;
 
-  public $degloseHtml;
+  public $degloseHtml = '';
 
   protected $listeners = [
     'cabyCodeSelected' => 'handleCabyCodeSelected',
@@ -207,6 +207,7 @@ class TransactionLineManager extends BaseComponent
   public function create()
   {
     $this->resetErrorBag(); // Limpia los errores de validación previos
+    $this->resetControls();
     $this->resetValidation(); // También puedes reiniciar los valores previos de val
     $this->action = 'create';
     $this->quantity = 1;

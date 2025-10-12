@@ -28,6 +28,8 @@ class InvoiceManager extends TransactionManager
 
   public $sortBy = 'transactions.id';
 
+  public $old_contact_id = NULL;
+
   public $filters = [
     'filter_proforma_no',
     'filter_consecutivo' => NULL,
@@ -346,6 +348,7 @@ class InvoiceManager extends TransactionManager
         $this->location_economic_activity_id = null;
     }
 
+    /*
     if ($propertyName == 'contact_id') {
       $contact = Contact::find($this->contact_id);
       if ($contact){
@@ -357,6 +360,38 @@ class InvoiceManager extends TransactionManager
         $this->condition_sale = $contact->conditionSale ? $contact->conditionSale->code : NULL;
         $this->pay_term_number = $contact->pay_term_number;
         $this->email_cc = $contact->email_cc;
+      }
+
+      if ($this->contact_id == '' | is_null($this->contact_id))
+        $this->contact_economic_activity_id = null;
+      else{
+        $this->setcontactEconomicActivities();
+        if ($this->contact_economic_activity_id) {
+          $activity = EconomicActivity::find($this->contact_economic_activity_id);
+          if ($activity) {
+            $this->dispatch('setSelect2Value', id: 'contact_economic_activity_id', value: $activity->id, text: $activity->name);
+          }
+        }
+      }
+      $this->dispatch('reinitSelect2Controls');
+    }
+    */
+    if ($propertyName == 'contact_id' && $this->old_contact_id != $this->contact_id) {
+      $this->old_contact_id = $this->contact_id;
+
+      $contact = Contact::find($this->contact_id);
+      if ($contact){
+        $this->customer_name = $contact->name;
+        if (is_null($this->customer_comercial_name) || empty($this->customer_comercial_name))
+          $this->customer_comercial_name = $contact->commercial_name;
+        $this->invoice_type = $contact->invoice_type;
+        $this->condition_sale = $contact->conditionSale ? $contact->conditionSale->code: NULL;
+        $this->pay_term_number = $contact->pay_term_number;
+        $this->email_cc = $contact->email_cc;
+        $this->clientEmail = $contact->email;
+        $this->customer_email = $contact->email;
+        $this->tipoIdentificacion = $contact->identificationType ? $contact->identificationType->name: NULL;
+        $this->identificacion = $contact->identification;
       }
 
       if ($this->contact_id == '' | is_null($this->contact_id))
@@ -1249,6 +1284,8 @@ class InvoiceManager extends TransactionManager
 
     $this->clientEmail = $record->contact->email;
 
+    $this->old_contact_id = $record->contact_id;
+
     $contact = Contact::find($record->contact_id);
     $this->tipoIdentificacion = !is_null($contact->identificationType) ? $contact->identificationType->name : '';
     $this->identificacion = $contact->identification;
@@ -1438,7 +1475,32 @@ class InvoiceManager extends TransactionManager
       'invoice_type',
       'tipoIdentificacion',
       'identificacion',
-      'customer_text'
+      'customer_text',
+      'old_contact_id',
+      'totalHonorarios',
+      'totalTimbres',
+      'totalDiscount',
+      'totalTax',
+      'totalAditionalCharge',
+      'totalServGravados',
+      'totalServExentos',
+      'totalServExonerado',
+      'totalServNoSujeto',
+      'totalMercGravadas',
+      'totalMercExentas',
+      'totalMercExonerada',
+      'totalMercNoSujeta',
+      'totalGravado',
+      'totalExento',
+      'totalVenta',
+      'totalVentaNeta',
+      'totalExonerado',
+      'totalNoSujeto',
+      'totalImpAsumEmisorFabrica',
+      'totalImpuesto',
+      'totalIVADevuelto',
+      'totalOtrosCargos',
+      'totalComprobante',
     );
 
     $this->currency_id = null;
