@@ -2,38 +2,39 @@
 
 namespace App\Livewire\TransactionsLines;
 
-use App\Helpers\Helpers;
-use App\Livewire\BaseComponent;
-use App\Models\Currency;
-use App\Models\DataTableConfig;
-use App\Models\DiscountType;
-use App\Models\ExonerationType;
-use App\Models\Institution;
+use Exception;
+use Carbon\Carbon;
 use App\Models\Product;
-use App\Models\ProductTax;
 use App\Models\TaxRate;
 use App\Models\TaxType;
+use Livewire\Component;
+use App\Helpers\Helpers;
+use App\Models\Currency;
+use App\Models\ProductTax;
+use App\Models\Institution;
 use App\Models\Transaction;
-use App\Models\TransactionLine;
-use App\Models\TransactionLineDiscount;
-use App\Models\TransactionLineTax;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Exception;
+use Illuminate\Support\Str;
+use Livewire\Attributes\On;
+use App\Models\DiscountType;
 use Illuminate\Http\Request;
+use Livewire\Attributes\Url;
+use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use App\Livewire\BaseComponent;
+use App\Models\DataTableConfig;
+use App\Models\ExonerationType;
+use App\Models\TransactionLine;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Livewire\Attributes\Computed;
+use App\Models\TransactionLineTax;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\TransactionLineDiscount;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Url;
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use Livewire\WithPagination;
-use Maatwebsite\Excel\Facades\Excel;
-use Spatie\Permission\Models\Role;
 
 class TransactionLineManager extends BaseComponent
 {
@@ -438,6 +439,17 @@ class TransactionLineManager extends BaseComponent
       foreach ($this->taxes as $tax) {
         if (empty($tax['exoneration_percent']))
           $tax['exoneration_percent'] = 0;
+
+        // 👉 Convertir fecha de d-m-Y a Y-m-d si existe
+        if (!empty($tax['exoneration_date'])) {
+            try {
+                $tax['exoneration_date'] = \Carbon\Carbon::createFromFormat('d-m-Y', $tax['exoneration_date'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                // En caso de error de formato, puedes asignar null o manejarlo
+                $tax['exoneration_date'] = null;
+            }
+        }
+
         $record->taxes()->updateOrCreate(
           ['id' => $tax['id'] ?? null], // Si el id existe, actualiza; si no, crea
           $tax  // Pasamos el arreglo directamente
@@ -534,7 +546,7 @@ class TransactionLineManager extends BaseComponent
         'exoneration_institute_other' => $tax->exoneration_institute_other ?? null,
         'exoneration_article' => $tax->exoneration_article ?? null,
         'exoneration_inciso' => $tax->exoneration_inciso ?? null,
-        'exoneration_date' => $tax->exoneration_date ?? null,
+        'exoneration_date' => $tax->exoneration_date ? Carbon::parse($tax->exoneration_date)->format('d-m-Y') : NULL,
         'exoneration_percent' => $tax->exoneration_percent ?? null,
       ];
     })->toArray();
@@ -616,6 +628,17 @@ class TransactionLineManager extends BaseComponent
       foreach ($this->taxes as $tax) {
         if (empty($tax['exoneration_percent']))
           $tax['exoneration_percent'] = 0;
+
+        // 👉 Convertir fecha de d-m-Y a Y-m-d si existe
+        if (!empty($tax['exoneration_date'])) {
+            try {
+                $tax['exoneration_date'] = \Carbon\Carbon::createFromFormat('d-m-Y', $tax['exoneration_date'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                // En caso de error de formato, puedes asignar null o manejarlo
+                $tax['exoneration_date'] = null;
+            }
+        }
+
         $tax['tax_amount'] = str_replace(',', '', $tax['tax_amount']);
         $record->taxes()->updateOrCreate(
           ['id' => $tax['id'] ?? null],
