@@ -1623,7 +1623,7 @@ class InvoiceManager extends TransactionManager
       DB::commit();
 
       // Para que recalule los totales de la factura
-      $cloned->recalculeteTotals();
+      //$cloned->recalculeteTotals();
 
       $this->selectedIds = [];
       $this->dispatch('updateSelectedIds', $this->selectedIds);
