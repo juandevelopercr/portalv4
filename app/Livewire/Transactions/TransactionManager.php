@@ -1346,10 +1346,10 @@ abstract class TransactionManager extends BaseComponent
 
     if ($clonar == false) {
       $transaction = Transaction::find($recordId);
-      if ($transaction->proforma_status != Transaction::PROCESO) {
+      if ($transaction->proforma_status != Transaction::PENDIENTE) {
         $this->dispatch('show-notification', [
           'type' => 'warning',
-          'message' => 'No puede editar una proforma que se encuentra en estado distinto de PROCESO'
+          'message' => 'No puede editar una factura que se encuentra en estado distinto de PENDIENTE'
         ]);
         return;
       }
