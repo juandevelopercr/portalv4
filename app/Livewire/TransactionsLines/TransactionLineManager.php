@@ -1159,7 +1159,9 @@ class TransactionLineManager extends BaseComponent
 
     $this->discounts[$index]['discount_amount'] = 10;
     if (!empty($this->discounts[$index]['discount_percent']) && is_numeric($value) && $this->price > 0) {
-      $price = (float) ($this->price * $this->quantity);
+      // Limpiar comas del precio
+      $cleanPrice = floatval(str_replace(',', '', $this->price));
+      $price   = $cleanPrice * $this->quantity;
       $percent = (float) $value;
       $this->discounts[$index]['discount_amount'] = round(($price * $percent) / 100, 2);
     }

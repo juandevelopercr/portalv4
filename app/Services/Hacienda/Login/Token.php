@@ -107,7 +107,7 @@ class Token
             'password'      => $password,
             'grant_type'    => 'password',
             'client_secret' => '',
-            'scopes'         => ' ',
+            'scopes'        => '',
           ]);
       }
       //'scopes'        => '',
@@ -193,7 +193,6 @@ class Token
           'scopes'        => ' '
         ]);
     }
-
     // Verificar si la respuesta es exitosa
     if ($response->failed()) {
       throw new Exception('Error renovando el token: ' . $response->body());
