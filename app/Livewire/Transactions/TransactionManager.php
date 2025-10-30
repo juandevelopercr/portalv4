@@ -1346,10 +1346,10 @@ abstract class TransactionManager extends BaseComponent
 
     if ($clonar == false) {
       $transaction = Transaction::find($recordId);
-      if ($transaction->proforma_status != Transaction::PENDIENTE) {
+      if (in_array($transaction->status, [Transaction::RECIBIDA, Transaction::ACEPTADA, Transaction::ANULADA, Transaction::RECHAZADA])  ) {
         $this->dispatch('show-notification', [
           'type' => 'warning',
-          'message' => 'No puede editar una factura que se encuentra en estado distinto de PENDIENTE'
+          'message' => 'No puede editar una factura que se ha enviado hacienda'
         ]);
         return;
       }
