@@ -51,7 +51,5 @@ $configData = Helper::appClasses();
 @endpush
 
 @section('content')
-  @can('view-admin-dashboard')
-
-  @endcan
+    @livewire('dashboards.honorarios-mes')
 @endsection
