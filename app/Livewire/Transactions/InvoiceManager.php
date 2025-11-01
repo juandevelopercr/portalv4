@@ -486,6 +486,24 @@ class InvoiceManager extends TransactionManager
     ]);
   }
 
+  public function confirmarNotaWithFormAccion($recordId, $metodo, $titulo, $mensaje, $textoBoton)
+  {
+    $recordId = $this->getRecordAction($recordId, true);
+
+    if (!$recordId) {
+      return; // Ya se lanzó la notificación desde getRecordAction
+    }
+
+    $this->dispatch('show-creditnote-dialog', [
+      'recordId' => $recordId,
+      'componentName' => static::getName(), // o puedes pasarlo como string
+      'methodName' => $metodo,
+      'title' => $titulo,
+      'message' => $mensaje,
+      'confirmText' => $textoBoton,
+    ]);
+  }
+
   public function beforeCreditNote()
   {
     $this->confirmarWithFormAccion(

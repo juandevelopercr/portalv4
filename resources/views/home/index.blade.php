@@ -51,5 +51,8 @@ $configData = Helper::appClasses();
 @endpush
 
 @section('content')
+  @if (!auth()->user()->hasRole('SuperAdmin')){
     @livewire('dashboards.honorarios-mes')
+  }
+  @endif
 @endsection
