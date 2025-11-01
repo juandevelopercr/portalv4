@@ -506,7 +506,7 @@ class InvoiceManager extends TransactionManager
 
   public function beforeCreditNote()
   {
-    $this->confirmarWithFormAccion(
+    $this->confirmarNotaWithFormAccion(
       null,
       'createCreditNote',
       "¿Está seguro que desea anular la factura electrónica?",
@@ -869,7 +869,7 @@ class InvoiceManager extends TransactionManager
 
   public function beforeDebitNote()
   {
-    $this->confirmarWithFormAccion(
+    $this->confirmarNotaWithFormAccion(
       null,
       'createDebitNote',
       "¿Está seguro que desea realizar nota de débito a la factura electrónica?",
