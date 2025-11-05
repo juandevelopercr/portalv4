@@ -15,17 +15,21 @@ class CabyModal extends Component
   use WithFileUploads;
   use WithPagination;
 
+  protected string $pageName = 'cabysPage'; // nombre único para esta tabla
+
   public $search = '';
 
   public $active = '';
 
-  public $sortBy = 'description_service';
+  public $sortBy = 'code';
 
-  public $sortDir = 'DESC';
+  public $sortDir = 'ASC';
 
   public $perPage = 10;
 
   public $modalCabysOpen = false; // Controla el estado del modal
+
+  public $type = NULL;
 
   //public $cabys;
 
@@ -33,9 +37,15 @@ class CabyModal extends Component
     'openCabysModal' => 'openCabysModal',
   ];
 
-  public function openCabysModal()
+  public function openCabysModal(...$params)
   {
-    $this->modalCabysOpen = true;
+      // Livewire envía los parámetros como array, incluso si es solo uno
+      $this->resetPage();
+      $this->type = $params[0] ?? null;
+      $this->modalCabysOpen = true;
+
+      // Depuración
+      // dd($this->type);
   }
 
   public function closeCabysModal()
@@ -56,6 +66,14 @@ class CabyModal extends Component
     $cabys = Cabys::search($this->search)
       ->when($this->active !== '', function ($query) {
         $query->where('active', $this->active);
+      })
+      ->when($this->type == 'single', function ($query) {
+            // Filtra códigos cuyo primer dígito sea 0,1,2,3,4
+            $query->whereRaw('LEFT(code, 1) BETWEEN 0 AND 4');
+        })
+        ->when($this->type != 'single', function ($query) {
+            // Filtra códigos cuyo primer dígito sea mayor que 4
+            $query->whereRaw('LEFT(code, 1) > 4');
       })
       ->orderBy($this->sortBy, $this->sortDir)
       ->paginate($this->perPage);

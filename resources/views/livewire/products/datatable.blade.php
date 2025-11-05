@@ -2,7 +2,7 @@
   @if($action == 'list')
     <!-- DataTable with Buttons -->
     <div class="card">
-      <h5 class="card-header pb-0 text-md-start text-center">{{ __('Products') }}</h5>
+      <h5 class="card-header pb-0 text-md-start text-center">@if ($type == 'single') {{ __('Products') }} @else {{ __('Services') }} @endif</h5>
       <div class="card-datatable text-nowrap">
         <div class="dataTables_wrapper dt-bootstrap5 no-footer">
           <div class="row">

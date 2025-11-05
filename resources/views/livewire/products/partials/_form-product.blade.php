@@ -34,7 +34,7 @@
           <span class="input-group-text"><i class="bx bx-barcode"></i></span>
           <input type="text" wire:model="caby_code" id="caby_code"
             class="form-control @error('caby_code') is-invalid @enderror" placeholder="{{ __('Caby Code') }}" readonly>
-          <button type="button" class="btn btn-primary" wire:click="$dispatch('openCabysModal')">
+          <button type="button" class="btn btn-primary" wire:click="$dispatch('openCabysModal', @js([$type]))">
             {{ __('Select') }}
           </button>
         </div>
