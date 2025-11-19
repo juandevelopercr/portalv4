@@ -1136,6 +1136,8 @@ abstract class TransactionManager extends BaseComponent
 
     // Tipo de cambio del día
     $transaction->factura_change_type = Session::get('exchange_rate');
+    if (!$transaction->factura_change_type)
+       $transaction->factura_change_type = $transaction->proforma_change_type;
 
     // Obtener la secuencia que le corresponde según tipo de comprobante
     $secuencia = DocumentSequenceService::generateConsecutive(
