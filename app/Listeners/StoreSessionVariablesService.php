@@ -46,12 +46,10 @@ class StoreSessionVariablesService
       //Session::put('user.location', $location);
 
       // Llama al método para obtener el tipo de cambio
-      $response = $this->apiBCCR->obtenerIndicadorEconomico(
+      $response = $this->apiBCCR->obtenerTipoCambio(
         318, // Indicador del tipo de cambio
-        now()->format('d/m/Y'), // Fecha de inicio
-        now()->format('d/m/Y')  // Fecha de fin
+        now()->format('Y/m/d'), // Fecha
       );
-
       $exchange_rate = '';
 
       if ($response) {
