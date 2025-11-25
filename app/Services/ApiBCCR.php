@@ -38,8 +38,11 @@ class ApiBCCR
                 ->acceptJson()
                 ->withOptions([
                     'verify' => app()->environment('production')
-                        ? '/etc/ssl/certs/ca-bundle.crt'
-                        : false
+                        ? '/etc/ssl/certs/ca-certificates.crt'
+                        : false,
+                    //'verify' => false,
+                    'timeout' => 15,
+                    'connect_timeout' => 5,
                 ])
                 ->get($url, [
                     'fechaInicio' => $fecha,
