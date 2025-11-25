@@ -37,12 +37,14 @@ class ApiBCCR
             $response = Http::withToken($this->token)
                 ->acceptJson()
                 ->withOptions([
+                    /*
                     'verify' => app()->environment('production')
                         ? '/etc/ssl/certs/ca-certificates.crt'
                         : false,
-                    //'verify' => false,
-                    'timeout' => 15,
-                    'connect_timeout' => 5,
+                    */
+                    'verify' => false,
+                    'timeout' => 20,
+                    'connect_timeout' => 10,
                 ])
                 ->get($url, [
                     'fechaInicio' => $fecha,
