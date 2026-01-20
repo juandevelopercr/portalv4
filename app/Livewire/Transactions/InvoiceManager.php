@@ -559,6 +559,8 @@ class InvoiceManager extends TransactionManager
             'fecha_envio_email' => NULL,
             'totalPagado' => 0,
             'pendientePorPagar' => $original->totalComprobante,
+            'proforma_change_type' => $original->proforma_change_type,
+            'factura_change_type'  => $original->factura_change_type,
             'vuelto' => 0,
         ]);
 
