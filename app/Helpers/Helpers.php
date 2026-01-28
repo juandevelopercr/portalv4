@@ -386,7 +386,9 @@ class Helpers
 
       $title = Helpers::getTitle($transaction);
 
-      $consecutivo = $transaction->consecutivo;
+      $consecutivo = (empty($transaction->key) || empty($transaction->consecutivo))
+        ? $transaction->proforma_no
+        : $transaction->consecutivo;
 
       $identification = $transaction->contact->identification;
       $address = $transaction->contact->address ?? '';
@@ -1050,8 +1052,12 @@ class Helpers
     return $prefix;
   }
 
-  public static function getPdfTitle($documentType)
+  public static function getPdfTitle($documentType, $transaction = null)
   {
+    if ($transaction && (empty($transaction->key) || empty($transaction->consecutivo))) {
+      return 'PROFORMA';
+    }
+
     $title = '-';
     if ($documentType == Transaction::FACTURAELECTRONICA) {
       $title = 'FACTURA ELECTRONICA';
@@ -1892,8 +1898,12 @@ class Helpers
     return $writer->writeString($publicUrl);
   }
 
-  static private function getTitle($transaction)
+  static public function getTitle($transaction)
   {
+    if (empty($transaction->key) || empty($transaction->consecutivo)) {
+      return 'Proforma';
+    }
+
     switch ($transaction->document_type) {
       case "FE":
         $title = 'Factura electrónica';

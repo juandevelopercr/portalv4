@@ -69,15 +69,13 @@
                       wire:model="type"
                       class="form-select @error('type') is-invalid @enderror">
                 <option value="">{{ __('Seleccione...') }}</option>
-                @php
-                /*
-                @if ($this->documentType != 'FE' && $this->documentType != 'TE')
-                <option value="PRS">{{ __('Proforma Sencilla') }}</option>
-                <option value="PRD">{{ __('Proforma Detallada') }}</option>
+                @if ($this->is_proforma)
+                  <option value="FE">{{ __('Proforma') }}</option>
+                  <option value="PRS">{{ __('Proforma Sencilla') }}</option>
+                  <option value="PRD">{{ __('Proforma Detallada') }}</option>
+                @else
+                  <option value="FE">{{ __('Comprobante Electrónico') }}</option>
                 @endif
-                */
-                @endphp
-                <option value="FE">{{ __('Comprobante Electrónico') }}</option>
               </select>
               @error('type')
               <div class="text-danger mt-1">{{ $message }}</div>

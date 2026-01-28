@@ -28,6 +28,7 @@ class SendEmailModal extends Component
   public $message;
   public $type;
   public $filename;
+  public $is_proforma = false;
 
   public $canview;
   public $cancreate;
@@ -54,7 +55,7 @@ class SendEmailModal extends Component
     $this->resetErrorBag(); // Limpia los errores de validación previos
     $this->resetValidation(); // También puedes reiniciar los valores previos de val
     $this->transactionId = $transactionId['transactionId'];
-    $transaction = Transaction::where('id', $transactionId)->first();
+    $transaction = Transaction::where('id', $this->transactionId)->first();
 
     if ($transaction) {
       //$this->fromEmail = !is_null($transaction->location) ? trim($transaction->location->email) : '';
@@ -63,6 +64,13 @@ class SendEmailModal extends Component
       $this->ccEmails = $transaction->email_cc;
 
       $this->has_documents = $transaction->documents->isNotEmpty();
+
+      $this->is_proforma = (empty($transaction->key) || empty($transaction->consecutivo));
+      if ($this->is_proforma) {
+        $this->type = 'FE'; // We keep FE for the helper to call the right method, but we will change labels in blade
+      } else {
+        $this->type = 'FE';
+      }
 
       $prefijo_nombre = '';
       $prefijo_asunto = '';
@@ -85,12 +93,17 @@ class SendEmailModal extends Component
         // Documento electrónico
         $titulo = $transaction->customer_name;
 
-        $typeComprobante = Helpers::getPdfTitle($transaction->document_type);
+        $typeComprobante = Helpers::getPdfTitle($transaction->document_type, $transaction);
+        $consecutivo = (empty($transaction->key) || empty($transaction->consecutivo)) ? $transaction->proforma_no : $transaction->consecutivo;
 
-        $subject = $typeComprobante . 'No.' . $transaction->consecutivo . '-' . $titulo;
+        $subject = $typeComprobante . ' No.' . $consecutivo . '-' . $titulo;
 
         $this->subject = $subject;
-        $this->message = "Estimado/a " . $this->recipientName . ",\n\nAdjunto encontrará los documentos asociados.\n\nSaludos cordiales.";
+        if ($this->is_proforma) {
+          $this->message = "Estimado/a " . $this->recipientName . ",\n\nAdjunto encontrará la proforma con los detalles solicitados.\n\nSaludos cordiales.";
+        } else {
+          $this->message = "Estimado/a " . $this->recipientName . ",\n\nAdjunto encontrará los documentos asociados.\n\nSaludos cordiales.";
+        }
       }
 
       $this->fromEmail = env('MAIL_USERNAME');
@@ -112,63 +125,47 @@ class SendEmailModal extends Component
 
     $attachments = [];
 
-    if ($this->documentType == 'PROFORMA') {
-      if ($this->type == 'PRS' || $this->type == 'PRD') {
-        if ($this->type == 'PRS')
-          $type = 'sencillo';
-        else
-        if ($this->type == 'PRD')
-          $type = 'detallado';
-
-        $filePdf = Helpers::generateProformaPdf($this->transactionId, $type, 'file');
-        $attachments[] = [
-          'path' => $filePdf, // Ruta del archivo
-          'name' => $this->filename, // Nombre del archivo
-          'mime' => 'application/pdf', // Tipo MIME
-        ];
-      } else {
-        // Asociar documentos de factura electrónica
-        $filePdf = Helpers::generateComprobanteElectronicoPdf($this->transactionId, 'file');
-        $attachments[] = [
-          'path' => $filePdf, // Ruta del archivo
-          'name' => $this->filename, // Nombre del archivo
-          'mime' => 'application/pdf', // Tipo MIME
-        ];
-      }
+    if ($this->type == 'PRS' || $this->type == 'PRD') {
+      $type = ($this->type == 'PRS') ? 'sencillo' : 'detallado';
+      $filePdf = Helpers::generateProformaPdf($this->transactionId, $type, 'file');
+      $transaction = Transaction::find($this->transactionId);
+      $attachments[] = [
+        'path' => $filePdf,
+        'name' => ($this->filename ?? 'proforma_' . $transaction->proforma_no) . '.pdf',
+        'mime' => 'application/pdf',
+      ];
     } else {
-      //FACTURA ELECTRONICA
-      // 1. Adjuntar PDF de factura
+      // FE/Invoice logic
       $transaction = Transaction::find($this->transactionId);
       $filePathPdf = Helpers::generateComprobanteElectronicoPdf($this->transactionId, 'file');
       $attachments[] = [
         'path' => $filePathPdf,
-        'name' => $transaction->key . '.pdf',
+        'name' => ($this->is_proforma ? 'proforma_' . $transaction->proforma_no : $transaction->key) . '.pdf',
         'mime' => 'application/pdf',
       ];
 
-      $transaction = Transaction::find($this->transactionId);
-
-      // 2. Adjuntar XML de factura
-      $filePathXml = Helpers::generateComprobanteElectronicoXML($transaction, false, 'file');
-      $attachments[] = [
-        'path' => $filePathXml,
-        'name' => $transaction->key . '.xml',
-        'mime' => 'application/xml',
-      ];
-
-      // 3. Adjuntar XML de respuesta de Hacienda (CORRECCIÓN)
-      $xmlDirectory = storage_path("app/public/");
-      $xmlResponsePath = $xmlDirectory . $transaction->response_xml;
-
-      if (file_exists($xmlResponsePath)) {
-        $filenameResponse = $transaction->key . '_respuesta.xml';
-
-        // CORRECCIÓN: Usar la ruta del archivo directamente
+      // Only attach XMLs if it's NOT a proforma (i.e., it has key and consecutivo)
+      if (!$this->is_proforma) {
+        // 2. Adjuntar XML de factura
+        $filePathXml = Helpers::generateComprobanteElectronicoXML($transaction, false, 'file');
         $attachments[] = [
-          'path' => $xmlResponsePath,
-          'name' => $filenameResponse,
-          'mime' => 'application/xml', // MIME type corregido
+          'path' => $filePathXml,
+          'name' => $transaction->key . '.xml',
+          'mime' => 'application/xml',
         ];
+
+        // 3. Adjuntar XML de respuesta de Hacienda
+        $xmlDirectory = storage_path("app/public/");
+        $xmlResponsePath = $xmlDirectory . $transaction->response_xml;
+
+        if (file_exists($xmlResponsePath)) {
+          $filenameResponse = $transaction->key . '_respuesta.xml';
+          $attachments[] = [
+            'path' => $xmlResponsePath,
+            'name' => $filenameResponse,
+            'mime' => 'application/xml',
+          ];
+        }
       }
     }
 
