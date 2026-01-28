@@ -241,8 +241,12 @@
                 <table width="100%">
                   <tr>
                     <td align="center">
-                      <img src="{{ $qrCode }}" width="80" height="80">
-                      <p class="tm_f12 tm_text_center">Clave numérica: {{ $transaction->key }}</p>
+                      @if(!empty($qrCode))
+                        <img src="{{ $qrCode }}" width="80" height="80">
+                      @endif
+                      @if(!empty($transaction->key))
+                        <p class="tm_f12 tm_text_center">Clave numérica: {{ $transaction->key }}</p>
+                      @endif
                       <p class="tm_f12 tm_text_center">
                           Autorizado mediante la resolución de facturación electrónica No DGT-R-0027-2024 del 13-11-2024. V4.4
                       </p>

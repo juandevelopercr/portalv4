@@ -408,21 +408,24 @@ class Helpers
       if ($transaction->status == Transaction::ANULADA)
         $watermark = 'ANULADA';
 
-      // Generar QR (elige una opción)
-      $qrContent = Helpers::generateQrSvg($transaction->key ?? '-');       // SVG
+      $qrCode = null;
+      if (!empty($transaction->key) && !empty($transaction->consecutivo)) {
+        // Generar QR (elige una opción)
+        $qrContent = Helpers::generateQrSvg($transaction->key ?? '-');       // SVG
 
-      // Para incrustar en PDF
-      if (str_contains($qrContent, '<svg')) {
-        // Es SVG
-        $qrBase64 = base64_encode($qrContent);
-        $qrDataUri = 'data:image/svg+xml;base64,' . $qrBase64;
-      } else {
-        // Es PNG
-        $qrBase64 = base64_encode($qrContent);
-        $qrDataUri = 'data:image/png;base64,' . $qrBase64;
+        // Para incrustar en PDF
+        if (str_contains($qrContent, '<svg')) {
+          // Es SVG
+          $qrBase64 = base64_encode($qrContent);
+          $qrDataUri = 'data:image/svg+xml;base64,' . $qrBase64;
+        } else {
+          // Es PNG
+          $qrBase64 = base64_encode($qrContent);
+          $qrDataUri = 'data:image/png;base64,' . $qrBase64;
+        }
+
+        $qrCode = $qrDataUri;
       }
-
-      $qrCode = $qrDataUri;
 
       $showReferencia = false;
       $referencia = [];
