@@ -71,8 +71,6 @@
                 <option value="">{{ __('Seleccione...') }}</option>
                 @if ($this->is_proforma)
                   <option value="FE">{{ __('Proforma') }}</option>
-                  <option value="PRS">{{ __('Proforma Sencilla') }}</option>
-                  <option value="PRD">{{ __('Proforma Detallada') }}</option>
                 @else
                   <option value="FE">{{ __('Comprobante Electrónico') }}</option>
                 @endif
