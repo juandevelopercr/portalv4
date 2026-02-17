@@ -263,6 +263,7 @@ Route::get('/api/customers/search', function (\Illuminate\Http\Request $request)
 });
 
 // routes/web.php
+/*
 Route::get('/debug-mail', function () {
   return [
     'host' => config('mail.mailers.smtp.host'),
@@ -272,6 +273,7 @@ Route::get('/debug-mail', function () {
     'encryption' => config('mail.mailers.smtp.encryption'),
   ];
 });
+*/
 
 Route::get('/api/emisor/search', function (\Illuminate\Http\Request $request) {
     $term = $request->get('q');
@@ -287,6 +289,7 @@ Route::get('/api/emisor/search', function (\Illuminate\Http\Request $request) {
         ]);
 });
 
+/*
 Route::get('/check-session', function () {
   return response()->json([
     'session_data' => session()->all(),
@@ -307,3 +310,4 @@ Route::get('/check-assignments/{userId}', function ($userId) {
     'assignments' => $user->roleAssignments()->get()
   ]);
 });
+*/
