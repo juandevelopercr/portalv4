@@ -422,7 +422,7 @@ class Comprobante extends Model
   public function toXml(): string
   {
     $doc = new DOMDocument('1.0', 'UTF-8');
-    $doc->formatOutput = true;
+    $doc->formatOutput = false; // NO formatear: el whitespace rompe la firma digital (C14N digest cambia)
 
     $namespace = 'https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/mensajeReceptor';
     $rootElementName = 'MensajeReceptor';

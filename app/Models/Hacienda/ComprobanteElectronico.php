@@ -128,7 +128,7 @@ class ComprobanteElectronico extends ComprobanteElectronico\ComprobanteElectroni
   public function toXml(): string
   {
     $doc = new DOMDocument('1.0', 'UTF-8');
-    $doc->formatOutput = true;
+    $doc->formatOutput = false; // NO formatear: el whitespace rompe la firma digital (C14N digest cambia)
 
     switch ($this->transaction->document_type) {
       case 'FE':
