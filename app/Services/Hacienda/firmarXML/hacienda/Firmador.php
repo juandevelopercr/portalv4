@@ -81,10 +81,6 @@ class Firmador
     // Cargar la información del certificado desde el archivo *.p12
     $certInfo = $objSec->loadCertInfo($pfx, $pin);
 
-    if (is_null($certInfo) || empty($certInfo['privateKey']) || empty($certInfo['publicKey'])) {
-      throw new \Exception("No se pudo cargar el certificado digital. Verifique que el archivo exista en la ruta: [{$pfx}] y que el PIN sea correcto.");
-    }
-
     // Usar la canonicalización exclusiva de c14n.
     $objSec->setCanonicalMethod($objSec::C14N);
 
