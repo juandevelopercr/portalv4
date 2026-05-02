@@ -62,7 +62,7 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 // authentication
 Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
-Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
+// Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
 
 // Decargar factura electrónica mediante qr
 Route::get('/download-invoice/{key}', [InvoiceController::class, 'downloadByKey'])

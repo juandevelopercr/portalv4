@@ -80,12 +80,7 @@ $customizerHidden = 'customizer-hide';
             </div>
           </form>
 
-          <p class="text-center">
-            <span>New on our platform?</span>
-            <a href="{{url('auth/register-basic')}}">
-              <span>Create an account</span>
-            </a>
-          </p>
+
 
           <div class="divider my-6">
             <div class="divider-text">or</div>
