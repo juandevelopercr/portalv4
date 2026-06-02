@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
 
@@ -807,45 +808,38 @@ class ReciboPagoManager extends TransactionManager
       return;
     }
 
-    // Lógica transaccional
-    DB::beginTransaction();  // Comienza la transacción principal
+    // Fase 1: Guardar datos en DB (consecutivo, clave, tipo de documento)
+    DB::beginTransaction();
 
     try {
       $this->facturarHonorario($record);
 
-      DB::commit();  // Commit de la transacción principal
+      DB::commit(); // Commit antes del envío a Hacienda — la factura queda guardada
     } catch (\Throwable $e) {
-      DB::rollBack();  // Si ocurre un error, hacer rollback de la transacción
+      if (DB::transactionLevel() > 0) {
+        DB::rollBack();
+      }
 
-      // Enviar notificación de error
       $this->dispatch('show-notification', [
         'type' => 'error',
         'message' => __('An unexpected error occurred:') . ' ' . $e->getMessage()
       ]);
 
-      // Registrar el error en el log
       logger()->error('Error en facturar:' . ' ' . $e->getMessage(), ['exception' => $e]);
+      return;
     }
+
+    // Fase 2: Envío a Hacienda FUERA de la transacción DB
+    $this->enviarAHacienda($record);
   }
 
   private function facturarHonorario($transaction)
   {
-    /*
-    - Asignar el document_type a FE !importante para generar la key y el consecutivo
-    - Obtener la key y el consecutivo del Documento
-    - Obetener el xml del documento
-    - Firmar el documento
-    - Loguearme para obtener el token
-    - Enviar hacienda y recibir la respuesta
-    - Cambiar el estado de la factura según la respuesta de hacienda campo status
-    - Obtener el tipo de cambio y asignarlo a factura_change_type
-    */
-
-    // En este caso, no necesitamos iniciar una nueva transacción aquí
-    // Simplemente hacer la lógica y dejar que la transacción principal controle todo
-
     // Asignar el tipo de documento
     $transaction->document_type = Transaction::FACTURAELECTRONICA;
+
+    $transaction->proforma_status = Transaction::FACTURADA;
+    $transaction->status = Transaction::PENDIENTE;
 
     //Asignar la fecha de emision
     $transaction->transaction_date = Carbon::now('America/Costa_Rica')->format('Y-m-d H:i:s');
@@ -861,39 +855,51 @@ class ReciboPagoManager extends TransactionManager
 
     // Asignar el consecutivo a la transacción
     $transaction->consecutivo = $transaction->getConsecutivo($secuencia);
-    $transaction->key = $transaction->generateKey();  // Generar la clave del documento
+    $transaction->key = $transaction->generateKey();
 
-    // Obtener el xml firmado y en base64
-    $encode = true;
-    $xml = Helpers::generateComprobanteElectronicoXML($transaction, $encode, 'content');
-
-    //Loguearme en hacienda para obtener el token
-    $username = $transaction->location->api_user_hacienda;
-    $password = $transaction->location->api_password;
-    try {
-      $authService = new AuthService();
-      $token = $authService->getToken($username, $password);
-    } catch (\Exception $e) {
-      throw new \Exception("An error occurred when trying to obtain the token in the hacienda api" . ' ' . $e->getMessage());
-    }
-
-    $api = new ApiHacienda();
-    $result = $api->send($xml, $token, $transaction, $transaction->location, Transaction::REP);
-    if ($result['error'] == 0) {
-      $transaction->status = Transaction::RECIBIDA;
-      $transaction->invoice_date = \Carbon\Carbon::now();
-    } else {
-      throw new \Exception($result['mensaje']);
-    }
-
-    // Guardar la transacción
+    // Guardar la transacción (solo datos, sin Hacienda)
     if (!$transaction->save()) {
       throw new \Exception(__('An error occurred while saving the transaction'));
-    } else {
-      // Si todo fue exitoso, mostrar notificación de éxito
+    }
+  }
+
+  private function enviarAHacienda($transaction)
+  {
+    try {
+      $encode = true;
+      $xml = Helpers::generateComprobanteElectronicoXML($transaction, $encode, 'content');
+
+      $username = $transaction->location->api_user_hacienda;
+      $password = $transaction->location->api_password;
+      $authService = new AuthService();
+      $token = $authService->getToken($username, $password);
+
+      $api = new ApiHacienda();
+      $result = $api->send($xml, $token, $transaction, $transaction->location, Transaction::REP);
+
+      if ($result['error'] == 0) {
+        $transaction->status = Transaction::RECIBIDA;
+        $transaction->invoice_date = \Carbon\Carbon::now();
+        $transaction->save();
+
+        $this->dispatch('show-notification', [
+          'type' => 'success',
+          'message' => $result['mensaje'],
+        ]);
+      } else {
+        $transaction->status = Transaction::RECHAZADA;
+        $transaction->save();
+
+        $this->dispatch('show-notification', [
+          'type' => 'warning',
+          'message' => __('Recibo guardado pero Hacienda lo rechazó: ') . $result['mensaje'],
+        ]);
+      }
+    } catch (\Exception $e) {
+      Log::error('Error enviando recibo de pago a Hacienda', ['error' => $e->getMessage(), 'id' => $transaction->id]);
       $this->dispatch('show-notification', [
-        'type' => 'success',
-        'message' => $result['mensaje'],
+        'type' => 'warning',
+        'message' => __('Recibo guardado pero falló el envío a Hacienda: ') . $e->getMessage(),
       ]);
     }
   }
