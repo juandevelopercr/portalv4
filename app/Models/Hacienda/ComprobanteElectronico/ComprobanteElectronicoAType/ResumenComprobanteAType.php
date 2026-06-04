@@ -174,7 +174,18 @@ class ResumenComprobanteAType
    */
   public function __construct(Transaction $transaction)
   {
-    $tipoMoneda = new CodigoMonedaType($transaction);
+    // Para Notas de Crédito y Débito, obtener el tipo de cambio de la factura original
+    // para evitar que Hacienda rechace por tipo de cambio diferente
+    $transactionForTipoCambio = $transaction;
+    
+    if (in_array($transaction->document_type, ['NCE', 'NDE']) && !empty($transaction->RefNumero)) {
+      $originalTransaction = Transaction::where('key', trim($transaction->RefNumero))->first();
+      if ($originalTransaction) {
+        $transactionForTipoCambio = $originalTransaction;
+      }
+    }
+    
+    $tipoMoneda = new CodigoMonedaType($transactionForTipoCambio);
 
     $this->setCodigoTipoMoneda($tipoMoneda);
     $this->setTotalServGravados($transaction->totalServGravados);
