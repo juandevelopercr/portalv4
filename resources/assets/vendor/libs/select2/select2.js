@@ -5,4 +5,8 @@ try {
 } catch (e) {}
 select2();
 
+if (window.jQuery && window.jQuery.fn.select2) {
+  window.jQuery.fn.select2.defaults.set('language', 'es');
+}
+
 export { select2 };
