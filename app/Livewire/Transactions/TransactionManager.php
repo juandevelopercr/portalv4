@@ -1093,42 +1093,10 @@ abstract class TransactionManager extends BaseComponent
 
     Log::info('resultado de getStatusComprobante:', ['result' => $result]);
 
-    if ($result['estado'] == 'aceptado') {
-      $sent = Helpers::sendComprobanteElectronicoEmail($recordId);
-
-      if ($sent) {
-        $transaction->fecha_envio_email = now();
-        $transaction->save();
-
-        $menssage = __('An email has been sent to the following addresses:') . ' ' . $transaction->contact->email;
-        if (!empty($transaction->email_cc)) {
-          $menssage .= ' ' . __('with copy to') . ' ' . $transaction->email_cc;
-        }
-
-        $this->dispatch('show-notification', [
-          'type' => $result['type'],
-          'message' => $result['mensaje'] . '<br> ' . $menssage
-        ]);
-      } else {
-        $this->dispatch('show-notification', [
-          'type' => $result['type'],
-          'message' => $result['mensaje']
-        ]);
-        $this->dispatch('show-notification', [
-          'type' => 'error',
-          'message' => __('An error occurred, the email could not be sent')
-        ]);
-      }
-    } else {
-      // Mostrar mensaje de error según el resultado de la API
-      $this->dispatch('show-notification', [
-        'type' => $result['type'],
-        'message' => $result['mensaje']
-      ]);
-
-      if ($result['estado'] == 'rechazado')
-        $sent = Helpers::sendNotificationComprobanteElectronicoRejected($recordId);
-    }
+    $this->dispatch('show-notification', [
+      'type' => $result['type'],
+      'message' => $result['mensaje']
+    ]);
   }
 
   public function sendDocumentToHacienda($recordId)
