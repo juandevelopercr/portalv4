@@ -88,6 +88,7 @@ class TransactionTotals extends Component
   #[On('totalsRefreshed')]
   public function applyRefreshedTotals($data)
   {
+    \Illuminate\Support\Facades\Log::info('[TRACE] TransactionTotals::applyRefreshedTotals RECIBIDO');
     $d = is_array($data) && isset($data[0]) ? $data[0] : $data;
 
     $this->totalAditionalCharge      = Helpers::formatDecimal($d['totalAditionalCharge'] ?? 0);
@@ -122,8 +123,15 @@ class TransactionTotals extends Component
   #[On('chargeUpdated')]
   public function refreshTotal($transaction_id)
   {
+    \Illuminate\Support\Facades\Log::info('[TRACE] TransactionTotals::refreshTotal LLAMADO', [
+        'transaction_id' => $transaction_id,
+    ]);
     $transaction = Transaction::where('id', $transaction_id)->first();
     if ($transaction) {
+      \Illuminate\Support\Facades\Log::info('[TRACE] TransactionTotals::refreshTotal LEE DE DB', [
+          'totalVenta'       => $transaction->totalVenta,
+          'totalComprobante' => $transaction->totalComprobante,
+      ]);
       $this->totalAditionalCharge = Helpers::formatDecimal($transaction->totalAditionalCharge ?? 0);
       $this->totalServGravados = Helpers::formatDecimal($transaction->totalServGravados ?? 0);
       $this->totalServExentos = Helpers::formatDecimal($transaction->totalServExentos ?? 0);

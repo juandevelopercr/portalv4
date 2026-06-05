@@ -717,14 +717,22 @@ class TransactionLineManager extends BaseComponent
 
   public function updateTransactionTotals($record)
   {
+    \Illuminate\Support\Facades\Log::info('[TRACE] LineManager::updateTransactionTotals INICIO', [
+        'transaction_id' => $record->transaction_id,
+        'line_id'        => $record->id,
+    ]);
+
     $record->updateTransactionTotals($record->transaction->currency_id);
 
     // Recalcular y persistir los totales de la transacción padre
     $transaction = $record->transaction;
     if ($transaction) {
-      // Método existente en el modelo Transaction
       $transaction->recalculeteTotals();
     }
+
+    \Illuminate\Support\Facades\Log::info('[TRACE] LineManager::updateTransactionTotals FIN — despachando productUpdated', [
+        'transaction_id' => $record->transaction_id,
+    ]);
 
     $this->dispatch('productUpdated', $record->transaction_id);  // Emitir evento para otros componentes
   }

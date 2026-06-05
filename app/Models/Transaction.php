@@ -2169,6 +2169,13 @@ class Transaction extends TenantModel implements HasMedia
         $this->totalComprobante = $this->totalVentaNeta + $this->totalImpuesto + $this->totalOtrosCargos;
 
         $this->save();
+
+        \Illuminate\Support\Facades\Log::info('[TRACE] Transaction::recalculeteTotals GUARDADO', [
+            'transaction_id'   => $this->id,
+            'totalVenta'       => $this->totalVenta,
+            'totalNoSujeto'    => $this->totalNoSujeto,
+            'totalComprobante' => $this->totalComprobante,
+        ]);
     }
   }
 

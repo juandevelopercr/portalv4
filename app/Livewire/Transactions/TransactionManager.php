@@ -257,7 +257,10 @@ abstract class TransactionManager extends BaseComponent
 
   public function refreshTotalByProduct($transaction_id, $activeTabProduct = true)
   {
-    // Si es null es que se actualizó el pproducto
+    \Illuminate\Support\Facades\Log::info('[TRACE] TransactionManager::refreshTotalByProduct LLAMADO', [
+        'transaction_id' => $transaction_id,
+        'component'      => get_class($this),
+    ]);
     if ($activeTabProduct)
       $this->activeTab = 'product';
     $this->recalculeteTotals($transaction_id);
