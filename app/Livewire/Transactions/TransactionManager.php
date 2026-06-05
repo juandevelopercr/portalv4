@@ -1159,68 +1159,75 @@ abstract class TransactionManager extends BaseComponent
       return;
     }
 
-    //Asignar la fecha de emision
-    $transaction->transaction_date = Carbon::now('America/Costa_Rica')->format('Y-m-d H:i:s');
+    // ── FASE 1: Guardar consecutivo y clave en DB antes de tocar Hacienda ──
+    try {
+      DB::beginTransaction();
 
-    // Tipo de cambio del día
-    $transaction->factura_change_type = Session::get('exchange_rate');
-    if (!$transaction->factura_change_type)
-       $transaction->factura_change_type = $transaction->proforma_change_type;
+      $transaction = Transaction::lockForUpdate()->findOrFail($recordId);
 
-    // Obtener la secuencia que le corresponde según tipo de comprobante
-    $secuencia = DocumentSequenceService::generateConsecutive(
-      $transaction->document_type,
-      $transaction->location_id
-    );
+      $transaction->transaction_date = Carbon::now('America/Costa_Rica')->format('Y-m-d H:i:s');
 
-    // Asignar el consecutivo a la transacción
-    $transaction->consecutivo = $transaction->getConsecutivo($secuencia);
-    $transaction->key = $transaction->generateKey();  // Generar la clave del documento
+      $transaction->factura_change_type = Session::get('exchange_rate');
+      if (!$transaction->factura_change_type)
+        $transaction->factura_change_type = $transaction->proforma_change_type;
 
-    // Obtener el xml firmado y en base64
+      if (!$transaction->consecutivo || !$transaction->key) {
+        $secuencia = DocumentSequenceService::generateConsecutive(
+          $transaction->document_type,
+          $transaction->location_id
+        );
+        $transaction->consecutivo = $transaction->getConsecutivo($secuencia);
+        $transaction->key = $transaction->generateKey();
+      }
+
+      $transaction->save();
+      DB::commit();
+    } catch (\Exception $e) {
+      DB::rollBack();
+      $this->dispatch('show-notification', [
+        'type' => 'error',
+        'message' => 'Error al generar el consecutivo/clave: ' . $e->getMessage(),
+      ]);
+      return;
+    }
+
+    // ── FASE 2: Enviar a Hacienda fuera de la transacción DB ──
     $encode = true;
     $xml = Helpers::generateComprobanteElectronicoXML($transaction, $encode, 'content');
 
-    //Loguearme en hacienda para obtener el token
     $username = $transaction->location->api_user_hacienda;
     $password = $transaction->location->api_password;
     try {
       $authService = new AuthService();
       $token = $authService->getToken($username, $password);
     } catch (\Exception $e) {
-      //throw new \Exception("An error occurred when trying to obtain the token in the hacienda api" . ' ' . $e->getMessage());
       $this->dispatch('show-notification', [
         'type' => 'error',
         'message' => "Ha ocurrido un error al intentar identificarse en la api de hacienda",
       ]);
+      return;
     }
 
     $tipoDocumento = $this->getTipoDocumento($transaction->document_type);
 
     $api = new ApiHacienda();
     $result = $api->send($xml, $token, $transaction, $transaction->location, $tipoDocumento);
+
     if ($result['error'] == 0) {
       $transaction->status = Transaction::RECIBIDA;
       $transaction->invoice_date = \Carbon\Carbon::now();
-    } else {
-      //throw new \Exception($result['mensaje']);
-      $this->dispatch('show-notification', [
-        'type' => 'error',
-        'message' => $result['mensaje'],
-      ]);
-    }
+      $transaction->save();
 
-    // Guardar la transacción
-    if (!$transaction->save()) {
-      //throw new \Exception(__('Un error ha ocurrido al enviar el comprobante a Hacienda'));
-      $this->dispatch('show-notification', [
-        'type' => 'error',
-        'message' => 'Un error ha ocurrido al guardar la transación',
-      ]);
-    } else {
-      // Si todo fue exitoso, mostrar notificación de éxito
       $this->dispatch('show-notification', [
         'type' => 'success',
+        'message' => $result['mensaje'],
+      ]);
+    } else {
+      $transaction->response_xml = $result['mensaje'];
+      $transaction->save();
+
+      $this->dispatch('show-notification', [
+        'type' => 'error',
         'message' => $result['mensaje'],
       ]);
     }
