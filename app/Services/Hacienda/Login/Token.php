@@ -114,6 +114,13 @@ class Token
 
       // 🚨 Si la respuesta es 401 => credenciales inválidas
       if ($response->status() === 401) {
+        Log::error('Hacienda IDP 401', [
+          'username'      => $username,
+          'password_len'  => strlen((string) $password),
+          'client_id'     => $this->clientId,
+          'auth_url'      => $this->authUrl,
+          'response_body' => $response->body(),
+        ]);
         throw new \Exception("Error de autenticación: credenciales inválidas al intentar obtener el token.");
       }
 
