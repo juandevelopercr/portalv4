@@ -114,27 +114,23 @@
   </div>
 </div>
 
-@if($modalCustomerOpen)
-<div id="customer-modal" class="modal fade show d-block" style="background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ __('Select Customer') }}</h5>
-        <button type="button" class="btn-close" wire:click="closeCustomerModal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        @livewire('contacts.contact-manager', [
-                    'enabledSelectedValue' => true,
-                    'type' => 'customer'
-                  ],
-                  key('contact-manager'.$this->recordId))
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" wire:click="closeCustomerModal">
-          {{ __('Close') }}
-        </button>
+<div wire:key="debit-note-customer-modal-wrapper" x-show="$wire.modalCustomerOpen" style="display:none;">
+  <div id="customer-modal" class="modal fade show d-block" style="background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ __('Select Customer') }}</h5>
+          <button type="button" class="btn-close" wire:click="closeCustomerModal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          @livewire('contacts.contact-manager', ['enabledSelectedValue' => true, 'type' => 'customer'], key('debit-note-contact-manager-modal'))
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" wire:click="closeCustomerModal">
+            {{ __('Close') }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-@endif

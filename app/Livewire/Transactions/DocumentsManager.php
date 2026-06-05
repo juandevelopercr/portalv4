@@ -68,6 +68,10 @@ class DocumentsManager extends Component
 
   public function loadDocuments()
   {
+    if (!$this->transaction_id) {
+      $this->documents = [];
+      return;
+    }
     $transaction = Transaction::findOrFail($this->transaction_id);
     $this->documents = $transaction->getMedia('documents')->map(function ($doc) {
       return [

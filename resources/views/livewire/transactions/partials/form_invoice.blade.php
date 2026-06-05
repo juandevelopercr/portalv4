@@ -158,26 +158,24 @@
     </div>
 </div>
 
-<div>
-    @if ($modalCustomerOpen)
-        <div class="modal fade show d-block" style="background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">{{ __('Select Customer') }}</h5>
-                        <button type="button" class="btn-close" wire:click="closeCustomerModal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <livewire:contacts.contact-manager enabledSelectedValue=true />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" wire:click="closeCustomerModal">
-                            {{ __('Close') }}
-                        </button>
-                    </div>
+<div wire:key="invoice-customer-modal-wrapper" x-show="$wire.modalCustomerOpen" style="display:none;">
+    <div class="modal fade show d-block" style="background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ __('Select Customer') }}</h5>
+                    <button type="button" class="btn-close" wire:click="closeCustomerModal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @livewire('contacts.contact-manager', ['enabledSelectedValue' => true], key('invoice-contact-manager-modal'))
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" wire:click="closeCustomerModal">
+                        {{ __('Close') }}
+                    </button>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
 </div>

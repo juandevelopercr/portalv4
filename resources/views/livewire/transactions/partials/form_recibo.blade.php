@@ -94,31 +94,6 @@
                   </div>
                 </div>
 
-                @php
-                /*
-                @if($this->recordId)
-                  @livewire('transactions-lines.transaction-line-manager', [
-                    'transaction_id' => $this->recordId,
-                    'department_id' => $this->department_id,
-                    'bank_id' => $bank_id,
-                    'type_notarial_act' => $this->proforma_type,
-                    'canview'   => auth()->user()->can('view-lineas-proformas'),
-                    'cancreate' => auth()->user()->can('create-lineas-proformas'),
-                    'canedit'   => auth()->user()->can('edit-lineas-proformas'),
-                    'candelete' => auth()->user()->can('delete-lineas-proformas'),
-                    'canexport' => auth()->user()->can('export-lineas-proformas'),
-                  ],
-                  key('transaction-line-'.$this->recordId))
-                @else
-                <div class="alert alert-solid-warning d-flex align-items-center" role="alert">
-                  <span class="alert-icon rounded-circle">
-                    <i class="bx bx-xs bx-wallet"></i>
-                  </span>
-                  {{ __('Information will be displayed here after you have created the proforma') }}
-                </div>
-                @endif
-                */
-                @endphp
               </div>
               <div class="tab-pane fade @if ($this->activeTab == 'charges') show active @endif"
                 id="navs-justified-charge" role="tabpanel">
@@ -167,59 +142,23 @@
   </div>
 </div>
 
-@if($modalCustomerOpen)
-<div id="customer-modal" class="modal fade show d-block" style="background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ __('Select Customer') }}</h5>
-        <button type="button" class="btn-close" wire:click="closeCustomerModal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        @livewire('contacts.contact-manager', [
-                    'enabledSelectedValue' => true,
-                    'type' => 'customer'
-                  ],
-                  key('contact-manager'.$this->recordId))
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" wire:click="closeCustomerModal">
-          {{ __('Close') }}
-        </button>
+<div wire:key="recibo-customer-modal-wrapper" x-show="$wire.modalCustomerOpen" style="display:none;">
+  <div id="customer-modal" class="modal fade show d-block" style="background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ __('Select Customer') }}</h5>
+          <button type="button" class="btn-close" wire:click="closeCustomerModal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          @livewire('contacts.contact-manager', ['enabledSelectedValue' => true, 'type' => 'customer'], key('recibo-contact-manager-modal'))
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" wire:click="closeCustomerModal">
+            {{ __('Close') }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-@endif
-
-@php
-  /*
-<div
-  id="customer-modal"
-  class="modal fade {{ $modalCustomerOpen ? 'show d-block' : 'd-none' }}"
-  style="background-color: rgba(0, 0, 0, 0.5);"
-  tabindex="-1"
->
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ __('Select Customer') }}</h5>
-        <button type="button" class="btn-close" wire:click="closeCustomerModal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        @livewire('contacts.contact-manager', [
-                    'enabledSelectedValue' => true,
-                    'type' => 'customer'
-                  ],
-                  key('contact-manager-'.$this->recordId))
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" wire:click="closeCustomerModal">
-          {{ __('Close') }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-*/
-@endphp
