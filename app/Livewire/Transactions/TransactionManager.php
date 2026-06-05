@@ -402,6 +402,34 @@ abstract class TransactionManager extends BaseComponent
         $this->totalIVADevuelto = $transaction->totalIVADevuelto;
         $this->totalOtrosCargos = $transaction->totalOtrosCargos;
         $this->totalComprobante = $transaction->totalComprobante;
+
+        // Disparar evento con los totales ya calculados para que TransactionTotals
+        // los reciba directamente sin leer de DB (elimina condición de carrera)
+        $this->dispatch('totalsRefreshed', [
+            'transaction_id'            => $transaction->id,
+            'totalAditionalCharge'      => $transaction->totalAditionalCharge,
+            'totalServGravados'         => $transaction->totalServGravados,
+            'totalServExentos'          => $transaction->totalServExentos,
+            'totalServExonerado'        => $transaction->totalServExonerado,
+            'totalServNoSujeto'         => $transaction->totalServNoSujeto,
+            'totalMercGravadas'         => $transaction->totalMercGravadas,
+            'totalMercExentas'          => $transaction->totalMercExentas,
+            'totalMercExonerada'        => $transaction->totalMercExonerada,
+            'totalMercNoSujeta'         => $transaction->totalMercNoSujeta,
+            'totalGravado'              => $transaction->totalGravado,
+            'totalExento'               => $transaction->totalExento,
+            'totalExonerado'            => $transaction->totalExonerado,
+            'totalNoSujeto'             => $transaction->totalNoSujeto,
+            'totalVenta'                => $transaction->totalVenta,
+            'totalDiscount'             => $transaction->totalDiscount,
+            'totalVentaNeta'            => $transaction->totalVentaNeta,
+            'totalImpuesto'             => $transaction->totalImpuesto,
+            'totalImpAsumEmisorFabrica' => $transaction->totalImpAsumEmisorFabrica,
+            'totalIVADevuelto'          => $transaction->totalIVADevuelto,
+            'totalOtrosCargos'          => $transaction->totalOtrosCargos,
+            'totalComprobante'          => $transaction->totalComprobante,
+            'currencyCode'              => $transaction->currency->code ?? '',
+        ]);
     }
   }
 
