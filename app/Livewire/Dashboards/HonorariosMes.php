@@ -529,7 +529,7 @@ class HonorariosMes extends Component
   {
     // Función para formatear valores monetarios
     $formatMoney = function ($value) {
-      return '$' . number_format($value, 2, ',', '.');
+      return '$' . number_format($value ?? 0, 2, ',', '.');
     };
 
     // Definir colores para cada indicador
