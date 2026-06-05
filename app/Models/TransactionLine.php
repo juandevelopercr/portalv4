@@ -198,24 +198,47 @@ class TransactionLine extends TenantModel
 
     $this->impuestoAsumidoEmisorFabrica = $this->transaction->document_type == 'FEC' ? 0 : $this->getImpuestoAsumidoEmisorFabrica();
 
-    // Servicios
-    $this->servNoSujeto = $this->getServNoSujeto() ?? 0;
+    // ── Categorías mutuamente exclusivas ─────────────────────────────
+    // Una línea va a EXACTAMENTE UNA categoría. El orden de prioridad es:
+    // 1. Exonerado (tiene documento de exoneración)
+    // 2. No Sujeto (tarifa 0% con código '01' o '11')
+    // 3. Gravado (IVA calculado > 0)
+    // 4. Exento (todo lo demás con tax = 0)
+    $this->servGravados   = 0;
+    $this->servExentos    = 0;
+    $this->servExonerados = 0;
+    $this->servNoSujeto   = 0;
+    $this->mercGravadas   = 0;
+    $this->mercExentas    = 0;
+    $this->mercExoneradas = 0;
+    $this->mercNoSujeta   = 0;
 
-    $this->servExonerados = $this->getServExonerado() ?? 0;
+    $isService       = $this->product->type == 'service';
+    $subtotalVal     = (float)$this->subtotal;
+    $exoneracion     = $this->calculaMontoImpuestoExonerado();
+    $taxes           = $this->taxes;
 
-    $this->servGravados = $this->getServGravado() ?? 0;
+    $hasNoSujetoCode = false;
+    foreach ($taxes as $tax) {
+        if (in_array($tax->taxRate->code ?? '', ['01', '11'])) {
+            $hasNoSujetoCode = true;
+            break;
+        }
+    }
 
-    $this->servExentos = $this->getServExento() ?? 0;
-
-
-    // Mercancias
-    $this->mercNoSujeta = $this->getMercNoSujeta() ?? 0;
-
-    $this->mercExoneradas = $this->getMercExonerada() ?? 0;
-
-    $this->mercGravadas = $this->getMercanciaGravada() ?? 0;
-
-    $this->mercExentas = $this->getMercanciaExenta() ?? 0;
+    if ($exoneracion > 0) {
+        if ($isService) $this->servExonerados = $exoneracion;
+        else            $this->mercExoneradas = $exoneracion;
+    } elseif ($hasNoSujetoCode) {
+        if ($isService) $this->servNoSujeto = $subtotalVal;
+        else            $this->mercNoSujeta  = $subtotalVal;
+    } elseif ((float)$this->tax > 0) {
+        if ($isService) $this->servGravados = $subtotalVal;
+        else            $this->mercGravadas  = $subtotalVal;
+    } else {
+        if ($isService) $this->servExentos = $subtotalVal;
+        else            $this->mercExentas  = $subtotalVal;
+    }
 
     $this->exoneration = $this->servExonerados + $this->mercExoneradas;
 
