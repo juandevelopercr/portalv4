@@ -81,7 +81,7 @@
                     'canedit'   => auth()->user()->can('edit-lineas-cotizaciones'),
                     'candelete' => auth()->user()->can('delete-lineas-cotizaciones'),
                     'canexport' => auth()->user()->can('export-lineas-cotizaciones')
-                    ], key('transaction-line-manager-' . $this->recordId))
+                    ], key('transaction-line-manager'))
                 </div>
 
                 <div class="{{ $this->recordId ? 'd-none' : '' }}">
@@ -118,8 +118,9 @@
               </div>
               <div class="tab-pane fade @if ($this->activeTab == 'documentos') show active @endif" id="navs-justified-document" role="tabpanel">
 
-                @if($this->recordId)
-                  @livewire('transactions.documents-manager', [
+                <div wire:key="transaction-documents-manager-container" class="{{ $this->recordId ? '' : 'd-none' }}">
+                  
+@livewire('transactions.documents-manager', [
                     'transaction_id' => $this->recordId,
                     'onlyview' => false,
                     'canview'   => auth()->user()->can('view-documento-cotizaciones'),
@@ -128,15 +129,9 @@
                     'candelete' => auth()->user()->can('delete-documento-cotizaciones'),
                     'canexport' => auth()->user()->can('export-documento-cotizaciones'),
 
-                  ], key('transaction-documents-'.$this->recordId))
-                  @else
-                  <div class="alert alert-solid-warning d-flex align-items-center" role="alert">
-                    <span class="alert-icon rounded-circle">
-                      <i class="bx bx-file bx-lg d-sm-none"></i>
-                    </span>
-                    {{ __('La información será mostrada después de haber creado la cotización') }}
-                  </div>
-                @endif
+                  ], key('transaction-documents'))
+</div>
+
               </div>
             </div>
           </div>

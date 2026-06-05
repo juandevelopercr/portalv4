@@ -82,7 +82,7 @@
                     'canedit'   => auth()->user()->can('edit-lineas-proformas'),
                     'candelete' => auth()->user()->can('delete-lineas-proformas'),
                     'canexport' => auth()->user()->can('export-lineas-proformas'),
-                  ], key('transaction-line-manager-' . $this->recordId))
+                  ], key('transaction-line-manager'))
                 </div>
 
                 <div class="{{ $this->recordId ? 'd-none' : '' }}">
@@ -119,8 +119,9 @@
               </div>
               <div class="tab-pane fade" id="navs-justified-document" role="tabpanel">
 
-                @if($this->recordId)
-                  @livewire('transactions.documents-manager', [
+                <div wire:key="transaction-documents-manager-container" class="{{ $this->recordId ? '' : 'd-none' }}">
+                  
+@livewire('transactions.documents-manager', [
                     'transaction_id' => $this->recordId,
                     'onlyview' => false,
                     'canview'   => auth()->user()->can('view-documento-proformas'),
@@ -129,15 +130,9 @@
                     'candelete' => auth()->user()->can('delete-documento-proformas'),
                     'canexport' => auth()->user()->can('export-documento-proformas'),
 
-                  ], key('transaction-documents-'.$this->recordId))
-                  @else
-                  <div class="alert alert-solid-warning d-flex align-items-center" role="alert">
-                    <span class="alert-icon rounded-circle">
-                      <i class="bx bx-file bx-lg d-sm-none"></i>
-                    </span>
-                    {{ __('Information will be displayed here after you have created the proforma') }}
-                  </div>
-                @endif
+                  ], key('transaction-documents'))
+</div>
+
               </div>
             </div>
           </div>
