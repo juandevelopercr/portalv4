@@ -214,7 +214,10 @@ class TransactionLine extends TenantModel
     $this->mercNoSujeta   = 0;
 
     $isService       = $this->product->type == 'service';
-    $subtotalVal     = (float)$this->subtotal;
+    // montoVal = precio × cantidad ANTES de descuentos, para que
+    // totalVenta = SUM(montos) y totalVentaNeta = totalVenta - totalDiscount
+    // según el esquema de Hacienda (TotalVenta es pre-descuento).
+    $montoVal        = (float)$this->getMonto();
     $exoneracion     = $this->calculaMontoImpuestoExonerado();
     $taxes           = $this->taxes;
 
@@ -230,14 +233,14 @@ class TransactionLine extends TenantModel
         if ($isService) $this->servExonerados = $exoneracion;
         else            $this->mercExoneradas = $exoneracion;
     } elseif ($hasNoSujetoCode) {
-        if ($isService) $this->servNoSujeto = $subtotalVal;
-        else            $this->mercNoSujeta  = $subtotalVal;
+        if ($isService) $this->servNoSujeto = $montoVal;
+        else            $this->mercNoSujeta  = $montoVal;
     } elseif ((float)$this->tax > 0) {
-        if ($isService) $this->servGravados = $subtotalVal;
-        else            $this->mercGravadas  = $subtotalVal;
+        if ($isService) $this->servGravados = $montoVal;
+        else            $this->mercGravadas  = $montoVal;
     } else {
-        if ($isService) $this->servExentos = $subtotalVal;
-        else            $this->mercExentas  = $subtotalVal;
+        if ($isService) $this->servExentos = $montoVal;
+        else            $this->mercExentas  = $montoVal;
     }
 
     $this->exoneration = $this->servExonerados + $this->mercExoneradas;
