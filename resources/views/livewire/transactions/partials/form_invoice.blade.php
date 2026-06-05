@@ -79,6 +79,7 @@
                                 id="navs-justified-services" role="tabpanel">
                                 <div wire:key="invoice-transaction-lines-wrapper"
                                     class="{{ $this->recordId ? '' : 'd-none' }}">
+                                    @if($this->recordId)
                                     @livewire(
                                         'transactions-lines.transaction-line-manager',
                                         [
@@ -90,6 +91,7 @@
                                         ],
                                         key('transaction-line-manager')
                                     )
+                                    @endif
                                 </div>
 
                                 <div class="{{ $this->recordId ? 'd-none' : '' }}">
@@ -104,6 +106,7 @@
                             <div class="tab-pane fade @if ($this->activeTab == 'charges') show active @endif"
                                 id="navs-justified-charge" role="tabpanel">
                                 <div class="{{ $this->recordId ? '' : 'd-none' }}">
+                                    @if($this->recordId)
                                     @livewire('transactions-charges.transaction-charge-manager', [
                                         'transaction_id' => $this->recordId,
                                         'canview' => auth()->user()->can('view-cargos-electronicinvoices'),
@@ -112,6 +115,7 @@
                                         'candelete' => auth()->user()->can('delete-cargos-electronicinvoices'),
                                         'canexport' => auth()->user()->can('export-cargos-electronicinvoices'),
                                     ])
+                                    @endif
                                 </div>
                                 <div class="{{ $this->recordId ? 'd-none' : '' }}">
                                     <div class="alert alert-solid-warning d-flex align-items-center" role="alert">
@@ -126,6 +130,7 @@
                                 id="navs-justified-document" role="tabpanel">
                                 <div wire:key="transaction-documents-manager-container"
                                     class="{{ $this->recordId ? '' : 'd-none' }}">
+                                    @if($this->recordId)
                                     @livewire(
                                         'transactions.documents-manager',
                                         [
@@ -139,6 +144,7 @@
                                         ],
                                         key('transaction-documents')
                                     )
+                                    @endif
                                 </div>
 
                                 <div class="{{ $this->recordId ? 'd-none' : '' }}">
@@ -168,7 +174,9 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    @if($this->modalCustomerOpen)
                     @livewire('contacts.contact-manager', ['enabledSelectedValue' => true], key('invoice-contact-manager-modal'))
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" wire:click="closeCustomerModal">

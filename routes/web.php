@@ -251,7 +251,7 @@ Route::prefix('api')->group(function () {
 // routes/web.php o routes/api.php
 Route::get('/api/customers/search', function (\Illuminate\Http\Request $request) {
   $term = $request->get('q');
-  return Contact::query()
+  return \App\Models\Contact::query()
     ->where('name', 'like', "%{$term}%")
     ->orWhere('identification', 'like', "%{$term}%")
     ->limit(20)
