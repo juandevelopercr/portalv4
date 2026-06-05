@@ -75,7 +75,7 @@
               <div class="tab-pane fade @if ($this->activeTab == 'product') show active @endif"
                 id="navs-justified-services" role="tabpanel">
 
-                <div class="{{ $this->recordId ? '' : 'd-none' }}">
+                <div wire:key="credit-note-transaction-lines-wrapper" class="{{ $this->recordId ? '' : 'd-none' }}">
                   @livewire('transactions-lines.transaction-line-manager', [
                     'canview'   => auth()->user()->can('view-lineas-proformas'),
                     'cancreate' => auth()->user()->can('create-lineas-proformas'),

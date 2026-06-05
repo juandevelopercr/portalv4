@@ -312,6 +312,9 @@ class NotaCreditoElectronicaManager extends TransactionManager
         foreach ($lines as $line) {
           $line->updateTransactionTotals($this->currency_id);
         }
+
+        // Recalcular totales de la transacción y persistir
+        $transacion->recalculeteTotals();
       }
       $activeTabProduct = false;
 

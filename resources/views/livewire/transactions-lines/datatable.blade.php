@@ -1,4 +1,4 @@
-<div>
+<div wire:key="transaction-line-manager-root">
   @if($action == 'list')
     <!-- DataTable with Buttons -->
     <div class="card">
@@ -171,7 +171,7 @@
   */
   @endphp
 
-  @livewire('transactions.transaction-totals', ['transaction_id' => $this->transaction_id], key('transaction-totals-' . $this->transaction_id))
+  @livewire('transactions.transaction-totals', ['transaction_id' => $this->transaction_id], key('transaction-totals'))
 
 </div>
 

@@ -719,6 +719,13 @@ class TransactionLineManager extends BaseComponent
   {
     $record->updateTransactionTotals($record->transaction->currency_id);
 
+    // Recalcular y persistir los totales de la transacción padre
+    $transaction = $record->transaction;
+    if ($transaction) {
+      // Método existente en el modelo Transaction
+      $transaction->recalculeteTotals();
+    }
+
     $this->dispatch('productUpdated', $record->transaction_id);  // Emitir evento para otros componentes
   }
 
@@ -773,6 +780,12 @@ class TransactionLineManager extends BaseComponent
 
         // Emitir actualización
         $this->dispatch('updateSelectedIds', $this->selectedIds);
+
+        // Recalcular totales de la transacción padre después de eliminar la línea
+        $transaction = \App\Models\Transaction::find($transaction_id);
+        if ($transaction) {
+          $transaction->recalculeteTotals();
+        }
 
         $this->dispatch('productUpdated', $transaction_id);  // Emitir evento para otros componentes
 

@@ -434,6 +434,9 @@ class InvoiceManager extends TransactionManager
         foreach ($lines as $line) {
           $line->updateTransactionTotals($this->currency_id);
         }
+
+        // Recalcular totales de la transacción y persistir
+        $transacion->recalculeteTotals();
       }
       $activeTabProduct = false;
 
@@ -1292,7 +1295,7 @@ class InvoiceManager extends TransactionManager
     $this->totalGravado = $record->totalGravado;
     $this->totalExento = $record->totalExento;
     $this->totalExonerado = $record->totalExonerado;
-    $this->totalNoSujeto = $record->totalExonerado;
+    $this->totalNoSujeto = $record->totalNoSujeto;
 
     $this->totalVenta = $record->totalVenta;
     $this->totalDiscount = $record->totalDiscount;
