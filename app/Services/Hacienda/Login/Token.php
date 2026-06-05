@@ -29,7 +29,7 @@ class Token
   public function __construct()
   {
     // Configuración según el entorno
-    if (env('HACIENDA_ENVIRONMENT') == 'prod') {
+    if (config('services.hacienda.environment') == 'prod') {
       $this->authUrl = 'https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect/token';
       $this->clientId = 'api-prod';
     } else {
@@ -78,7 +78,7 @@ class Token
   protected function requestNewToken($username, $password)
   {
     try {
-      if (env('HACIENDA_ENVIRONMENT') == 'prod') {
+      if (config('services.hacienda.environment') == 'prod') {
         $response = Http::withOptions([
           'verify' => false,  // Deshabilitar la verificación SSL si es necesario
         ])
@@ -169,7 +169,7 @@ class Token
    */
   protected function refreshToken($issuerId, $refreshToken)
   {
-    if (env('HACIENDA_ENVIRONMENT') == 'prod') {
+    if (config('services.hacienda.environment') == 'prod') {
       $response = Http::withOptions([
         'verify' => false,  // Deshabilitar la verificación SSL si es necesario
       ])
