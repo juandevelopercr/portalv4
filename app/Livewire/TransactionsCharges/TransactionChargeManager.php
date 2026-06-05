@@ -85,16 +85,11 @@ class TransactionChargeManager extends Component
   public function handleUpdateContext($data)
   {
     $this->transaction_id = $data['transaction_id'];
-    // Aquí puedes recargar los datos si es necesario
+    $this->resetPage();
   }
 
   public function mount($transaction_id, $canview, $cancreate, $canedit, $candelete, $canexport)
   {
-    // Intentar obtener de sesión primero
-    if (session()->has('transaction_context')) {
-      $this->handleUpdateContext(session()->get('transaction_context'));
-    }
-
     $this->transaction_id = $transaction_id;
 
     $this->chargeTypes = AdditionalChargeType::orderBy('code', 'ASC')->get();

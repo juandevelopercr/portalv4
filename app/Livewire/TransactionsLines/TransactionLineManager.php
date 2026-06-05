@@ -41,6 +41,10 @@ class TransactionLineManager extends BaseComponent
   use WithFileUploads;
   use WithPagination;
 
+  // Nombre único de paginación para evitar conflictos con otros paginadores en la misma página
+  protected $paginationTheme = 'bootstrap';
+  protected string $paginationName = 'linesPage';
+
   #[Url(as: 'ptSearch', history: true)]
   public $search = '';
 
@@ -162,11 +166,10 @@ class TransactionLineManager extends BaseComponent
   #[On('updateTransactionContext')]
   public function handleUpdateContext($data)
   {
-    // Aqui si entra cuando edito
     $this->transaction_id = $data['transaction_id'];
-    // Aquí puedes recargar los datos si es necesario
-
     $this->search = '';
+    $this->resetPage();
+    $this->reset('filters');
   }
 
   public function mount($canview, $cancreate, $canedit, $candelete, $canexport, $facturaCompra = false)
@@ -179,10 +182,8 @@ class TransactionLineManager extends BaseComponent
     $this->canexport = $canexport;
     $this->facturaCompra = $facturaCompra;
 
-    // Intentar obtener de sesión primero
-    if (session()->has('transaction_context')) {
-      $this->handleUpdateContext(session()->get('transaction_context'));
-    }
+    // transaction_id se recibe vía updateTransactionContext (no session)
+    // para evitar contaminación entre usuarios y pestañas
 
     $this->refresDatatable();
   }
