@@ -82,7 +82,7 @@
                     'candelete' => auth()->user()->can('delete-lineas-proformas'),
                     'canexport' => auth()->user()->can('export-lineas-proformas'),
                     'facturaCompra' => true
-                  ])
+                    ], key('transaction-line-manager-' . $this->recordId))
                 </div>
 
                 <div class="{{ $this->recordId ? 'd-none' : '' }}">

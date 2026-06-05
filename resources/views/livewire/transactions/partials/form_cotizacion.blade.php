@@ -81,7 +81,7 @@
                     'canedit'   => auth()->user()->can('edit-lineas-cotizaciones'),
                     'candelete' => auth()->user()->can('delete-lineas-cotizaciones'),
                     'canexport' => auth()->user()->can('export-lineas-cotizaciones')
-                  ])
+                    ], key('transaction-line-manager-' . $this->recordId))
                 </div>
 
                 <div class="{{ $this->recordId ? 'd-none' : '' }}">

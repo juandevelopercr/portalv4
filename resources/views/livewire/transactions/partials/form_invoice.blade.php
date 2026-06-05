@@ -78,7 +78,7 @@
                     'canedit'   => auth()->user()->can('edit-lineas-electronicinvoices'),
                     'candelete' => auth()->user()->can('delete-lineas-electronicinvoices'),
                     'canexport' => auth()->user()->can('export-lineas-electronicinvoices')
-                  ])
+                  ], key('transaction-line-manager-' . $this->recordId))
                 </div>
 
                 <div class="{{ $this->recordId ? 'd-none' : '' }}">

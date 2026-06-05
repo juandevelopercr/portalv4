@@ -84,7 +84,7 @@ use App\Models\User;
                     'canedit'   => auth()->user()->can('edit-lineas-proformas'),
                     'candelete' => auth()->user()->can('delete-lineas-proformas'),
                     'canexport' => auth()->user()->can('export-lineas-proformas')
-                  ])
+                  ], key('transaction-line-manager-' . $this->recordId))
                 </div>
 
                 <div class="{{ $this->recordId ? 'd-none' : '' }}">
