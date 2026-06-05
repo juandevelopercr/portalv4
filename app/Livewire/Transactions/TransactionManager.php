@@ -431,7 +431,7 @@ abstract class TransactionManager extends BaseComponent
             'totalIVADevuelto'          => $transaction->totalIVADevuelto,
             'totalOtrosCargos'          => $transaction->totalOtrosCargos,
             'totalComprobante'          => $transaction->totalComprobante,
-            'currencyCode'              => $transaction->currency->code ?? '',
+            'currencyCode'              => optional($transaction->currency)->code ?? '',
         ]);
     }
   }
