@@ -106,7 +106,7 @@ class SendEmailModal extends Component
         }
       }
 
-      $this->fromEmail = env('MAIL_USERNAME');
+      $this->fromEmail = config('mail.mailers.smtp.username');
     }
 
     $this->showModal = true;

@@ -339,9 +339,9 @@ class Helpers
     // Generar PDF
     try {
       Browsershot::html($html)
-        ->setNodeBinary(env('BROWSERSHOT_NODE_BINARY'))
-        ->setNpmBinary(env('BROWSERSHOT_NPM_BINARY'))
-        ->setChromePath(env('BROWSERSHOT_CHROMIUM_BINARY'))
+        ->setNodeBinary(config('services.browsershot.node_binary'))
+        ->setNpmBinary(config('services.browsershot.npm_binary'))
+        ->setChromePath(config('services.browsershot.chromium_binary'))
         ->setOption('args', [
           '--disable-gpu',
           '--no-sandbox',
@@ -507,9 +507,9 @@ class Helpers
       }
 
       Browsershot::html($html)
-        ->setNodeBinary(env('BROWSERSHOT_NODE_BINARY'))
-        ->setNpmBinary(env('BROWSERSHOT_NPM_BINARY'))
-        ->setChromePath(env('BROWSERSHOT_CHROMIUM_BINARY'))
+        ->setNodeBinary(config('services.browsershot.node_binary'))
+        ->setNpmBinary(config('services.browsershot.npm_binary'))
+        ->setChromePath(config('services.browsershot.chromium_binary'))
         ->setOption('args', [
           '--disable-gpu',
           '--no-sandbox',
@@ -805,7 +805,7 @@ class Helpers
       $recipientName = $transaction->contact->name;
     }
     $ccEmails = $transaction->email_cc;
-    $fromEmail = env('MAIL_USERNAME');
+    $fromEmail = config('mail.mailers.smtp.username');
     $message = "Estimado/a " . $recipientName . ",\n\nAdjunto encontrará el comprobante electrónico.\n\nSaludos cordiales.";
 
     $data = [
@@ -953,7 +953,7 @@ class Helpers
     $allCC = array_merge($additionalCC, $transactionCC);
     $allCC = array_unique($allCC);  // Eliminar duplicados
 
-    $fromEmail = env('MAIL_USERNAME');
+    $fromEmail = config('mail.mailers.smtp.username');
     $subject = 'Comprobante electrónico rechazado';
     $message = "Estimado/a,\n\nAdjunto encontrará el documento electrónico rechazado por hacienda.\n\nSaludos cordiales.";
 
@@ -1120,7 +1120,7 @@ class Helpers
     $recipientEmail = $email;
     $recipientName = $name;
 
-    $fromEmail = env('MAIL_USERNAME');
+    $fromEmail = config('mail.mailers.smtp.username');
     $subject = __('Portal de facturación electrónica, información de acceso');
 
     $bussines = Business::find(1);
@@ -1502,7 +1502,7 @@ class Helpers
     $recipientName = '';
     $ccEmails = '';
 
-    $fromEmail = env('MAIL_USERNAME');
+    $fromEmail = config('mail.mailers.smtp.username');
     $subject   = 'Solicitud de factura por honorarios profesionales';
     $message   = '';
 
@@ -1745,9 +1745,9 @@ class Helpers
 
     try {
       Browsershot::html($html)
-        ->setNodeBinary(env('BROWSERSHOT_NODE_BINARY'))
-        ->setNpmBinary(env('BROWSERSHOT_NPM_BINARY'))
-        ->setChromePath(env('BROWSERSHOT_CHROMIUM_BINARY'))
+        ->setNodeBinary(config('services.browsershot.node_binary'))
+        ->setNpmBinary(config('services.browsershot.npm_binary'))
+        ->setChromePath(config('services.browsershot.chromium_binary'))
         ->setOption('args', [
           '--disable-gpu',
           '--no-sandbox',
@@ -2037,7 +2037,7 @@ class Helpers
     $allCC = array_merge($additionalCC, $transactionCC);
     $allCC = array_unique($allCC);  // Eliminar duplicados
 
-    $fromEmail = env('MAIL_USERNAME');
+    $fromEmail = config('mail.mailers.smtp.username');
     $subject = 'Comprobante electrónico rechazado';
     $message = "Estimado/a,\n\nAdjunto encontrará el documento electrónico rechazado por hacienda.\n\nSaludos cordiales.";
 
