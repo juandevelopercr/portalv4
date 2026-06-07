@@ -1,3 +1,22 @@
+document.addEventListener('livewire:initialized', () => {
+  Livewire.hook('request', ({ fail }) => {
+    fail(({ status, preventDefault }) => {
+      if (status === 419 || status === 500 || status === 503) {
+        preventDefault();
+        const toastEl  = document.querySelector('.toast-ex');
+        const toastMsg = document.querySelector('#toast-message');
+        if (toastEl && toastMsg) {
+          toastEl.classList.remove('bg-success', 'bg-danger', 'bg-primary', 'bg-warning', 'bg-info');
+          toastEl.classList.add('bg-warning', 'top-0', 'end-0');
+          toastMsg.innerHTML = '&#9888; La sesión fue interrumpida por el servidor. Recargando en 3 segundos...';
+          new bootstrap.Toast(toastEl, { delay: 4000 }).show();
+        }
+        setTimeout(() => window.location.reload(), 3000);
+      }
+    });
+  });
+});
+
 Livewire.on('scroll-to-top', () => {
   jQuery(document).ready(function () {
     console.log('Se hace scroll');
