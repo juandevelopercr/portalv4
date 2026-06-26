@@ -126,7 +126,7 @@
                     <thead>
                       <tr class="tm_accent_bg">
                         <th class="tm_width_4 tm_semi_bold tm_white_color">Asunto / Descripción</th>
-                        <th class="tm_width_2 tm_semi_bold tm_white_color">Precio unit.</th>
+                        <th class="tm_width_2 tm_semi_bold tm_white_color">Precio Unit.</th>
                         <th class="tm_width_1 tm_semi_bold tm_white_color">Cantidad</th>
                         <th class="tm_width_2 tm_semi_bold tm_white_color tm_text_right">Total</th>
                       </tr>
