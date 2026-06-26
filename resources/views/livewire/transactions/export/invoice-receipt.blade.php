@@ -148,7 +148,7 @@
                           @php
                           $monto = $line->price * $line->quantity;
                           @endphp
-                          {{ $transaction->currency->symbol }} {{ Helper::formatDecimal($monto) }}
+                          {{ $transaction->currency->symbol }} {{ Helper::formatDecimal($line->price) }}
                         </td>
                         <td class="tm_width_1 tm_text_center">{{ (int)$line->quantity }}</td>
                         <td class="tm_width_2 tm_text_right">
