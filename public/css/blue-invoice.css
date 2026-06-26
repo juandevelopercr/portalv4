@@ -2712,3 +2712,10 @@ hr {
     pointer-events: none;
     white-space: nowrap;
 }
+
+.tm_detail_cell {
+    word-break: break-word;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 0;
+}

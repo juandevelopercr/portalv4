@@ -122,7 +122,7 @@
             <div class="tm_table tm_style1">
               <div class="">
                 <div class="tm_table_responsive">
-                  <table>
+                  <table style="table-layout: fixed; width: 100%;">
                     <thead>
                       <tr class="tm_accent_bg">
                         <th class="tm_width_4 tm_semi_bold tm_white_color">Asunto / Descripción</th>
@@ -143,7 +143,7 @@
 
                       @foreach ($transaction_lines as $index => $line)
                       <tr>
-                        <td class="tm_width_4">{!! html_entity_decode($line->detail) !!}</td>
+                        <td class="tm_width_4 tm_detail_cell">{!! html_entity_decode($line->detail) !!}</td>
                         <td class="tm_width_2">
                           @php
                           $monto = $line->price * $line->quantity;
