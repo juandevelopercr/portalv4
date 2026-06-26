@@ -2,17 +2,11 @@
 
 namespace App\Livewire\Transactions;
 
-use App\Mail\CustomEmail;
 use App\Mail\ProformaMail;
-use App\Models\Proforma;
 use App\Models\Transaction;
-use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Livewire\Component;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use App\Helpers\Helpers;
 
 class SendEmailModal extends Component
@@ -72,7 +66,6 @@ class SendEmailModal extends Component
         $this->type = 'FE';
       }
 
-      $prefijo_nombre = '';
       $prefijo_asunto = '';
       $titulo = '';
 
@@ -168,22 +161,6 @@ class SendEmailModal extends Component
         }
       }
     }
-
-    // Obtener los documentos adjuntos
-    $transaction = Transaction::where('id', $this->transactionId)->first();
-    $mediaAttachments = $transaction->media
-      ->filter(fn($media) => $media->getCustomProperty('attach_to_email', false) === true)
-      ->map(fn($media) => [
-        'path' => $media->getPath(), // Ruta del archivo
-        //'name' => $media->file_name, // Nombre del archivo
-        'name' => Str::slug($media->name) . '.' . pathinfo($media->file_name, PATHINFO_EXTENSION), // Nombre del archivo
-        'mime' => $media->mime_type, // Tipo MIME
-      ])
-      ->values() // Esto reinicia las claves del array
-      ->toArray();
-
-    // **Fusionamos los adjuntos sin sobrescribir `$attachments`**
-    $attachments = array_merge($attachments, $mediaAttachments);
 
     $data = [
       'id'      => $this->transactionId,

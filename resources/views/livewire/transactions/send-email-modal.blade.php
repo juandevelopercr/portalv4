@@ -84,26 +84,6 @@
           </div>
 
 
-          <div class="row">
-            <div class="col">
-              <br>
-                @if($this->documentType && $this->has_documents && $canview)
-                <p><strong>{{ __("Associated Documents") }}</strong></p>
-              @endif
-
-              @livewire('transactions.documents-manager', [
-                    'transaction_id' => $this->transactionId,
-                    'onlyview'  => true,
-                    'canview'   => $canview,
-                    'cancreate' => $cancreate,
-                    'canedit'   => $canedit,
-                    'candelete' => auth()->user()->can('delete-documento-proformas'),
-                    'canexport' => auth()->user()->can('export-documento-proformas'),
-
-              ], key('transaction-documents-'.$this->transactionId))
-
-            </div>
-          </div>
         </div>
         <div class="modal-footer">
 
